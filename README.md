@@ -22,11 +22,17 @@ python examine_h5.py data/scannet.h5
 ```
 
 To convert the H5 data file into individual point cloud files (PLY) in format, run the script as follows.
-The *--rgb* flag will render the point clouds in original color whereas the *--seg* flag will color the point clouds according to segmentation ID.
 PLY files can be opened using the [CloudCompare](https://www.danielgm.net/cc/) program
 
-```
+```bash
+#Render the point clouds in original RGB color
 python h5_to_ply.py data/s3dis_area3.h5 --rgb
+#Render the point clouds colored according to segmentation ID
 python h5_to_ply.py data/s3dis_area3.h5 --seg
 ```
 
+```
+...
+Saved to data/viz/22.ply: (18464 points)
+Saved to data/viz/23.ply: (20749 points)
+```

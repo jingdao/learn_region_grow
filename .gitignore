@@ -1,2 +1,3 @@
-data
+data/*.h5
+data/viz/*.ply
 **/.*.swp

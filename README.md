@@ -1,5 +1,13 @@
 # Learnable Region Growing for Point Cloud Segmentation
 
+## Prerequisites
+
+1. numpy
+2. scipy
+3. scikit-learn
+4. tensorflow
+5. h5py
+
 ## Data Staging
 
 Run the following script to download the necessary point cloud files in H5 format to the *data* folder.

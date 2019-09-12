@@ -44,3 +44,11 @@ python h5_to_ply.py data/s3dis_area3.h5 --seg
 Saved to data/viz/22.ply: (18464 points)
 Saved to data/viz/23.ply: (20749 points)
 ```
+
+## Benchmarks
+
+Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *pointnet*, *sgpn*, *mcpnet*.
+
+```bash
+python benchmark.py --mode normal --area 1,2,3,4,5,6,scannet --threshold 0.99 --save
+```

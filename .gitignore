@@ -1,3 +1,6 @@
 data/*.h5
 data/viz/*.ply
+data/results/*.ply
+data/normal/*.ply
 **/.*.swp
+*.pyc

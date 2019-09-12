@@ -59,7 +59,8 @@ for room_id in range(len(all_points)):
 		points[:,3:6] = (points[:,3:6]+0.5)*255
 		savePLY('data/viz/%d.ply'%room_id, points)
 	elif mode=='seg':
-		obj_color = numpy.random.randint(0,255,(numpy.max(obj_id)+1,3))
+		color_sample_state = numpy.random.RandomState(0)
+		obj_color = color_sample_state.randint(0,255,(numpy.max(obj_id)+1,3))
 		obj_color[0,:] = [200,200,200]
 		points[:,3:6] = obj_color[obj_id,:]
 		savePLY('data/viz/%d.ply'%room_id, points)

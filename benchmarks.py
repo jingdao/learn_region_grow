@@ -15,6 +15,7 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
+from train_pointnet import PointNet
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -60,6 +61,7 @@ numpy.random.seed(0)
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
 feature_size = 9
+NUM_POINT = 1024
 mode = 'normal'
 if mode=='normal':
 	threshold = 0.99
@@ -91,7 +93,19 @@ for i in range(len(sys.argv)):
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
 	if mode=='pointnet':
-		pass
+		if AREA == 'scannet':
+			MODEL_PATH = 'models/pointnet_model3.ckpt'
+		else:
+			MODEL_PATH = 'models/pointnet_model'+str(AREA)+'.ckpt'
+		config = tf.ConfigProto()
+		config.gpu_options.allow_growth = True
+		config.allow_soft_placement = True
+		config.log_device_placement = False
+		sess = tf.Session(config=config)
+		net = PointNet(1,NUM_POINT,len(classes)) 
+		saver = tf.train.Saver()
+		saver.restore(sess, MODEL_PATH)
+		print('Restored from %s'%MODEL_PATH)
 	elif mode=='sgpn':
 		pass
 	elif mode=='mcpnet':
@@ -168,7 +182,32 @@ for AREA in TEST_AREAS:
 						if kk in voxel_map and numpy.sum((points[voxel_map[kk],3:6] - points[i,3:6])**2) < threshold:
 							edges.append([i, voxel_map[kk]])
 		elif mode=='pointnet':
-			pass
+			class_labels = numpy.zeros(len(points))
+			grid_resolution = 1.0
+			grid = numpy.round(points[:,:2]/grid_resolution).astype(int)
+			grid_set = set([tuple(g) for g in grid])
+			for g in grid_set:
+				grid_mask = numpy.all(grid==g, axis=1)
+				grid_points = points[grid_mask, :]
+				centroid_xy = numpy.array(g)*grid_resolution
+				centroid_z = grid_points[:,2].min()
+				grid_points[:,:2] -= centroid_xy
+				grid_points[:,2] -= centroid_z
+				input_points = numpy.zeros((1, NUM_POINT, 6))
+				input_points[0,:len(grid_points),:] = grid_points[:NUM_POINT,:6]
+				input_points[0,len(grid_points):,:] = grid_points[0,:6]
+				cls, = sess.run([net.output], feed_dict={net.pointclouds_pl: input_points, net.is_training_pl: False})
+				cls = cls[0].argmax(axis=1)
+				class_labels[grid_mask] = cls[:len(grid_points)]
+
+			for i in range(len(point_voxels)):
+				k = tuple(point_voxels[i])
+				for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+					if offset!=(0,0,0):
+						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+						if kk in voxel_map and class_labels[voxel_map[kk]]==class_labels[i]:
+							edges.append([i, voxel_map[kk]])
+
 		elif mode=='sgpn':
 			pass
 		elif mode=='mcpnet':
@@ -227,6 +266,9 @@ for AREA in TEST_AREAS:
 			if mode=='normal':
 				points[:,3:6] = normals*255
 				savePLY('data/normal/%d.ply'%save_id, points)
+			elif mode=='pointnet':
+				points[:,3:6] = [class_to_color_rgb[c] for c in class_labels]
+				savePLY('data/class/%d.ply'%save_id, points)
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
 			points[:,3:6] = obj_color[cluster_label2,:]

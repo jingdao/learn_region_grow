@@ -58,5 +58,5 @@ done
 Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *pointnet*, *sgpn*, *mcpnet*.
 
 ```bash
-python benchmark.py --mode normal --area 1,2,3,4,5,6,scannet --threshold 0.99 --save
+python benchmarks.py --mode normal --area 1,2,3,4,5,6,scannet --threshold 0.99 --save
 ```

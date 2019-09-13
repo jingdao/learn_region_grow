@@ -11,17 +11,12 @@ NUM_CONV_LAYERS = len(NUM_FEATURE_CHANNELS)
 NUM_FC_CHANNELS = [512]
 NUM_FC_LAYERS = len(NUM_FC_CHANNELS)
 
-VAL_AREA = 1
-for i in range(len(sys.argv)):
-	if sys.argv[i]=='--area':
-		VAL_AREA = int(sys.argv[i+1])
 BATCH_SIZE = 100
 NUM_POINT = 1024
 NUM_CLASSES = len(classes)
 MAX_EPOCH = 50
 VAL_STEP = 10
 GPU_INDEX = 0
-MODEL_PATH = 'models/pointnet_model'+str(VAL_AREA)+'.ckpt'
 
 class PointNet():
 	def __init__(self,batch_size,num_point,num_class):
@@ -141,6 +136,12 @@ def jitter_data(points, labels):
 	return output_points, output_labels
 
 if __name__=='__main__':
+
+	VAL_AREA = 1
+	for i in range(len(sys.argv)):
+		if sys.argv[i]=='--area':
+			VAL_AREA = int(sys.argv[i+1])
+	MODEL_PATH = 'models/pointnet_model'+str(VAL_AREA)+'.ckpt'
 
 	#arrange points into batches of 2048x6
 	train_points = []

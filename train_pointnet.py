@@ -100,6 +100,10 @@ class PointNet():
 		self.optimizer = tf.train.AdamOptimizer(self.learning_rate)
 		self.train_op = self.optimizer.minimize(self.loss, global_step=self.batch)
 
+class PointNet2():
+	def __init__(self,batch_size,num_point,num_class):
+		pass
+
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
 	all_points = f['points'][:]

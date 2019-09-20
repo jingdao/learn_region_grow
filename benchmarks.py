@@ -140,6 +140,7 @@ for AREA in TEST_AREAS:
 		#compute normals
 		if mode=='normal':
 			normals = []
+			curvatures = []
 			for i in range(len(points)):
 				k = tuple(numpy.round(points[i,:3]/resolution).astype(int))
 				neighbors = []
@@ -155,8 +156,11 @@ for AREA in TEST_AREAS:
 					accB += p
 				cov = accA / len(neighbors) - numpy.outer(accB, accB) / len(neighbors)**2
 				U,S,V = numpy.linalg.svd(cov)
+				curvature = S[2] / (S[0] + S[1] + S[2])
 				normals.append(numpy.fabs(V[2]))
+				curvatures.append(curvature)
 			normals = numpy.array(normals)
+			curvatures = numpy.array(curvatures)
 			points = numpy.hstack((points, normals)).astype(numpy.float32)
 
 		#find connected edges on a voxel grid

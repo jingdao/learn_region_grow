@@ -2,9 +2,9 @@ from learn_region_grow_util import *
 import itertools
 import sys
 
-num_samples_per_instance = 1
 resolution = 0.1
 numpy.random.seed(0)
+repeats_per_room = 1
 
 for AREA in range(1,7):
 #for AREA in [3]:
@@ -17,8 +17,8 @@ for AREA in range(1,7):
 	stacked_steps = []
 	stacked_complete = []
 
-	for room_id in range(len(all_points)):
-#	for room_id in [0]:
+#	for room_id in range(len(all_points)):
+	for room_id in [0]:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
@@ -61,25 +61,25 @@ for AREA in range(1,7):
 		points = numpy.hstack((points, normals)).astype(numpy.float32)
 
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
-		#iterate over each object in the room
-		for target_id in range(obj_id.min(), obj_id.max()+1):
-			if numpy.sum(obj_id==target_id)==0:
-				continue #no points found with this particular ID
-			obj_voxels = point_voxels[obj_id==target_id, :]
-			gt_mask = obj_id==target_id
-			original_minDims = obj_voxels.min(axis=0)
-			original_maxDims = obj_voxels.max(axis=0)
-#			print('original',numpy.sum(gt_mask), original_minDims, original_maxDims)
-			mask = numpy.logical_and(numpy.all(point_voxels>=original_minDims,axis=1), numpy.all(point_voxels<=original_maxDims, axis=1))
-			originalScore = 1.0 * numpy.sum(numpy.logical_and(gt_mask,mask)) / numpy.sum(numpy.logical_or(gt_mask,mask))
-
-			for sample_id in range(num_samples_per_instance):
+		for i in range(repeats_per_room):
+			visited = numpy.zeros(len(point_voxels), dtype=bool)
+			#iterate over each voxel in the room
+			for seed_id in numpy.random.choice(range(len(points)), len(points), replace=False):
+				if visited[seed_id]:
+					continue
+				target_id = obj_id[seed_id]
+				obj_voxels = point_voxels[obj_id==target_id, :]
+				gt_mask = obj_id==target_id
+				original_minDims = obj_voxels.min(axis=0)
+				original_maxDims = obj_voxels.max(axis=0)
+				#print('original',numpy.sum(gt_mask), original_minDims, original_maxDims)
+				mask = numpy.logical_and(numpy.all(point_voxels>=original_minDims,axis=1), numpy.all(point_voxels<=original_maxDims, axis=1))
+				originalScore = 1.0 * numpy.sum(numpy.logical_and(gt_mask,mask)) / numpy.sum(numpy.logical_or(gt_mask,mask))
 
 				#initialize the seed voxel
-				seed_id = numpy.random.randint(len(obj_voxels))
-				seed_voxel = obj_voxels[seed_id]
+				seed_voxel = point_voxels[seed_id]
 				currentMask = numpy.zeros(len(points), dtype=bool)
-				currentMask[numpy.nonzero(obj_id==target_id)[0][seed_id]] = True
+				currentMask[seed_id] = True
 				minDims = seed_voxel.copy()
 				maxDims = seed_voxel.copy()
 				steps = 0
@@ -104,9 +104,9 @@ for AREA in range(1,7):
 							else:
 								newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
 							mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
-						expandPoints[a-1] = points[mask,:].copy()
+						expandPoints[a] = points[mask,:].copy()
 						#determine which neighboring points should be added
-						expandClass[a-1] = obj_id[mask] == target_id
+						expandClass[a] = obj_id[mask] == target_id
 						currentMask = numpy.logical_or(currentMask, numpy.logical_and(mask, obj_id==target_id))
 
 					stacked_points.append(currentPoints)
@@ -116,27 +116,26 @@ for AREA in range(1,7):
 					stacked_class.extend(expandClass)
 					steps += 1
 
-					if numpy.sum(currentMask) < numpy.sum(gt_mask): #continue growing
-						stacked_complete.append(0)
-						if numpy.any(numpy.hstack(expandClass)): #has matching neighbors: expand in those directions
-							minDims = point_voxels[currentMask, :].min(axis=0)
-							maxDims = point_voxels[currentMask, :].max(axis=0)
-						else: #no matching neighbors: expand in random valid direction
-							for a in numpy.random.choice(range(1,len(action_map)), 6, replace=False):
-								newMinDims = minDims + action_map[a][:3]
-								newMaxDims = maxDims + action_map[a][3:]
-								if numpy.any(numpy.abs(newMinDims - original_minDims) < numpy.abs(minDims - original_minDims)) \
-									or numpy.any(numpy.abs(newMaxDims - original_maxDims) < numpy.abs(maxDims - original_maxDims)):
-										break
-							minDims = newMinDims
-							maxDims = newMaxDims
-#						print(numpy.sum(currentMask),minDims, maxDims)
-					else: #completed
+					if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
+						visited[currentMask] = True
 						stacked_complete.append(1)
 						stacked_steps.append(steps)
 						finalScore = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-						print('AREA %d room %d target %d: %d steps (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, finalScore, originalScore))
+						print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), finalScore, originalScore))
 						break 
+					else:
+						if numpy.any(numpy.hstack(expandClass)): #continue growing
+							stacked_complete.append(0)
+							#has matching neighbors: expand in those directions
+							minDims = point_voxels[currentMask, :].min(axis=0)
+							maxDims = point_voxels[currentMask, :].max(axis=0)
+						else: #no matching neighbors (early termination)
+							visited[currentMask] = True
+							stacked_complete.append(0)
+							stacked_steps.append(steps)
+							finalScore = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
+							print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), finalScore, originalScore))
+							break 
 
 	normalize(stacked_points, stacked_neighbor_points)
 	h5_fout = h5py.File('data/staged_area%s.h5'%AREA,'w')

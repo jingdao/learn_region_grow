@@ -92,7 +92,7 @@ def normalize(stacked_points, stacked_neighbor_points):
 			stacked_neighbor_points[i*step + j][:,6:9] -= normal_center
 
 class LrgNet:
-	def __init__(self,batch_size, num_points, feature_size, num_class, num_context_cloud, num_context_points):
+	def __init__(self,batch_size, num_points, feature_size, num_context_cloud, num_context_points):
 		CONV_CHANNELS = [64,64,64,128,128]
 		CONV2_CHANNELS = [256, 128]
 		FC_CHANNELS = [256, 128]
@@ -176,11 +176,18 @@ class LrgNet:
 		#LOSS FUNCTIONS
 		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=class_output_masked, labels=class_pl_masked))
 		self.class_acc = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(class_output_masked, -1), tf.to_int64(class_pl_masked)), tf.float32))
-		self.completeness_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.completeness_output, labels=self.completeness_pl))
+		pos_mask = tf.where(tf.cast(self.completeness_pl, tf.bool))
+		neg_mask = tf.where(tf.cast(1 - self.completeness_pl, tf.bool))
+		self.pos_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.gather_nd(self.completeness_output, pos_mask), labels=tf.gather_nd(self.completeness_pl, pos_mask)))
+		self.neg_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.gather_nd(self.completeness_output, neg_mask), labels=tf.gather_nd(self.completeness_pl, neg_mask)))
+		self.pos_loss = tf.cond(tf.is_nan(self.pos_loss), lambda: 0.0, lambda: self.pos_loss)
+		self.neg_loss = tf.cond(tf.is_nan(self.neg_loss), lambda: 0.0, lambda: self.neg_loss)
+		self.completeness_loss = self.pos_loss + self.neg_loss
+#		self.completeness_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.completeness_output, labels=self.completeness_pl))
 		correct = tf.equal(tf.argmax(self.completeness_output, -1), tf.to_int64(self.completeness_pl))
 		self.completeness_acc = tf.reduce_mean(tf.cast(correct, tf.float32))
 		self.loss = self.class_loss + self.completeness_loss
 		batch = tf.Variable(0)
-		optimizer = tf.train.AdamOptimizer(1e-5)
+		optimizer = tf.train.AdamOptimizer(1e-4)
 		self.train_op = optimizer.minimize(self.loss, global_step=batch)
 

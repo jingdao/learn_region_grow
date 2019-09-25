@@ -1,12 +1,10 @@
 from learn_region_grow_util import *
 import sys
-from class_util import classes
 
 BATCH_SIZE = 100
 NUM_POINT = 256
 NUM_CONTEXT_POINT = 32
-NUM_CLASSES = len(classes)
-MAX_EPOCH = 50
+MAX_EPOCH = 100
 VAL_STEP = 10
 VAL_AREA = 1
 FEATURE_SIZE = 9
@@ -19,7 +17,7 @@ config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-net = LrgNet(BATCH_SIZE, NUM_POINT, FEATURE_SIZE, NUM_CLASSES, 7, NUM_CONTEXT_POINT)
+net = LrgNet(BATCH_SIZE, NUM_POINT, FEATURE_SIZE, 7, NUM_CONTEXT_POINT)
 saver = tf.train.Saver()
 MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 

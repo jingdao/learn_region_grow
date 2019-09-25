@@ -1,6 +1,7 @@
 from learn_region_grow_util import *
 import itertools
 import sys
+from class_util import classes
 
 resolution = 0.1
 numpy.random.seed(0)
@@ -17,8 +18,8 @@ for AREA in range(1,7):
 	stacked_steps = []
 	stacked_complete = []
 
-#	for room_id in range(len(all_points)):
-	for room_id in [0]:
+	for room_id in range(len(all_points)):
+#	for room_id in [0]:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
@@ -89,8 +90,8 @@ for AREA in range(1,7):
 
 					#determine the current points and the neighboring points
 					currentPoints = points[currentMask, :].copy()
-					expandPoints = [None]*len(action_map)
-					expandClass = [None]*len(action_map)
+					expandPoints = []
+					expandClass = []
 					for a in range(len(action_map)):
 						if a==0:
 							mask = numpy.logical_and(numpy.all(point_voxels>=minDims,axis=1), numpy.all(point_voxels<=maxDims, axis=1))
@@ -104,15 +105,18 @@ for AREA in range(1,7):
 							else:
 								newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
 							mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
-						expandPoints[a] = points[mask,:].copy()
+						expandPoints.extend(points[mask,:].copy())
 						#determine which neighboring points should be added
-						expandClass[a] = obj_id[mask] == target_id
+						expandClass.extend(obj_id[mask] == target_id)
 						currentMask = numpy.logical_or(currentMask, numpy.logical_and(mask, obj_id==target_id))
 
 					stacked_points.append(currentPoints)
 					stacked_count.append(len(currentPoints))
-					stacked_neighbor_points.extend(expandPoints)
-					stacked_neighbor_count.extend([len(p) for p in expandPoints])
+					if len(expandPoints) > 0:
+						stacked_neighbor_points.append(numpy.array(expandPoints))
+					else:
+						stacked_neighbor_points.append(numpy.zeros((0,currentPoints.shape[-1])))
+					stacked_neighbor_count.append(len(expandPoints))
 					stacked_class.extend(expandClass)
 					steps += 1
 
@@ -124,7 +128,7 @@ for AREA in range(1,7):
 						print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), finalScore, originalScore))
 						break 
 					else:
-						if numpy.any(numpy.hstack(expandClass)): #continue growing
+						if numpy.any(expandClass): #continue growing
 							stacked_complete.append(0)
 							#has matching neighbors: expand in those directions
 							minDims = point_voxels[currentMask, :].min(axis=0)
@@ -143,7 +147,7 @@ for AREA in range(1,7):
 	h5_fout.create_dataset( 'count', data=stacked_count, compression='gzip', compression_opts=4, dtype=numpy.int32)
 	h5_fout.create_dataset( 'neighbor_points', data=numpy.vstack(stacked_neighbor_points), compression='gzip', compression_opts=4, dtype=numpy.float32)
 	h5_fout.create_dataset( 'neighbor_count', data=stacked_neighbor_count, compression='gzip', compression_opts=4, dtype=numpy.int32)
-	h5_fout.create_dataset( 'class', data=numpy.hstack(stacked_class), compression='gzip', compression_opts=4, dtype=numpy.int32)
+	h5_fout.create_dataset( 'class', data=stacked_class, compression='gzip', compression_opts=4, dtype=numpy.int32)
 	h5_fout.create_dataset( 'steps', data=stacked_steps, compression='gzip', compression_opts=4, dtype=numpy.int32)
 	h5_fout.create_dataset( 'complete', data=stacked_complete, compression='gzip', compression_opts=4, dtype=numpy.int32)
 	h5_fout.close()

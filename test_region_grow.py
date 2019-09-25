@@ -18,8 +18,8 @@ import scipy.special
 from learn_region_grow_util import *
 
 numpy.random.seed(0)
-NUM_POINT = 256
-NUM_CONTEXT_POINT = 32
+NUM_POINT = 512
+NUM_NEIGHBOR_POINT = 512
 FEATURE_SIZE = 9
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
@@ -47,7 +47,7 @@ for AREA in TEST_AREAS:
 	config.allow_soft_placement = True
 	config.log_device_placement = False
 	sess = tf.Session(config=config)
-	net = LrgNet(1, NUM_POINT, FEATURE_SIZE, 7, NUM_CONTEXT_POINT)
+	net = LrgNet(1, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 	saver = tf.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
@@ -105,9 +105,8 @@ for AREA in TEST_AREAS:
 		cluster_id = 1
 		visited = numpy.zeros(len(point_voxels), dtype=bool)
 		input_points = numpy.zeros((1, NUM_POINT, FEATURE_SIZE), dtype=numpy.float32)
-		context_points = numpy.zeros((1, 7, NUM_CONTEXT_POINT, FEATURE_SIZE), dtype=numpy.float32)
-		input_classes = numpy.zeros((1, 7, NUM_CONTEXT_POINT), dtype=numpy.int32)
-		input_mask = numpy.zeros((1, 7, NUM_CONTEXT_POINT), dtype=numpy.int32)
+		neighbor_points = numpy.zeros((1, NUM_NEIGHBOR_POINT, FEATURE_SIZE), dtype=numpy.float32)
+		input_classes = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 		#iterate over each object in the room
 		for seed_id in range(len(point_voxels)):
 			if visited[seed_id]:
@@ -131,8 +130,8 @@ for AREA in TEST_AREAS:
 
 				#determine the current points and the neighboring points
 				currentPoints = points[currentMask, :].copy()
-				expandPoints = [None]*len(action_map)
-				expandClass = [None]*len(action_map)
+				expandPoints = []
+				expandClass = []
 				for a in range(len(action_map)):
 					if a==0:
 						mask = numpy.logical_and(numpy.all(point_voxels>=minDims,axis=1), numpy.all(point_voxels<=maxDims, axis=1))
@@ -146,37 +145,44 @@ for AREA in TEST_AREAS:
 						else:
 							newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
 						mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
-					expandPoints[a] = points[mask,:].copy()
+					expandPoints.extend(points[mask,:].copy())
 					#determine which neighboring points should be added
-					expandClass[a] = obj_id[mask] == target_id
+					expandClass.extend(obj_id[mask] == target_id)
 
 				subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
 				input_points[0,:,:] = currentPoints[subset, :]
-				for j in range(len(action_map)):
-					if len(expandPoints[j]) > 0:
-						subset = numpy.random.choice(len(expandPoints[j]), NUM_CONTEXT_POINT, replace=len(expandPoints[j])<NUM_CONTEXT_POINT)
-						context_points[0,j,:,:] = expandPoints[j][subset, :]
-						input_classes[0,j,:] = expandClass[j][subset]
-						input_mask[0,j,:] = 1
-					else:
-						input_mask[0,j,:] = 0
+				center = numpy.mean(input_points[0,:,:2], axis=0)
+				rgb_center = numpy.mean(input_points[0,:,3:6], axis=0)
+				normal_center = numpy.mean(input_points[0,:,6:9], axis=0)
+				if len(expandPoints) >= NUM_NEIGHBOR_POINT:
+					subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
+				else:
+					subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
+				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
+				input_points[0,:,:2] -= center
+				neighbor_points[0,:,:2] -= center
+				neighbor_points[0,:,3:6] -= rgb_center
+				neighbor_points[0,:,6:9] -= normal_center
+				input_classes[0,:] = numpy.array(expandClass)[subset]
 				input_complete = numpy.zeros(1,dtype=numpy.int32)
 				ls, cls, cls_acc, cmpl, cmpl_acc = sess.run([net.loss, net.class_output, net.class_acc, net.completeness_output, net.completeness_acc],
-					{net.input_pl:input_points, net.context_pl:context_points, net.mask_pl:input_mask, net.completeness_pl:input_complete, net.class_pl:input_classes})
+					{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
 
-				cls_conf = scipy.special.softmax(cls[0], axis=-1)[:,:,1]
-#				cls_mask = numpy.logical_and(cls_conf > threshold, input_mask[0])
-				cls_mask = numpy.logical_and(input_classes[0], input_mask[0])
+				cls_conf = scipy.special.softmax(cls[0], axis=-1)[:,1]
+				cls_mask = cls_conf > threshold
+#				cls_mask = input_classes[0].astype(bool)
 				cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
-				print(cls_acc, cmpl_conf)
-				validPoints = context_points[0,:,:,:][cls_mask]
+				validPoints = neighbor_points[0,:,:][cls_mask]
+				validPoints[:,:2] += center
 				validVoxels = numpy.round(validPoints[:,:3]/resolution).astype(int)
 				expandSet = set([tuple(p) for p in validVoxels])
 				for i in range(len(point_voxels)):
 					if tuple(point_voxels[i]) in expandSet:
 						currentMask[i] = True
+				print(numpy.sum(currentMask), numpy.sum(gt_mask), len(expandPoints), numpy.sum(expandClass), numpy.sum(input_classes),len(expandSet), cls_acc, cmpl_conf)
 
-				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
+#				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
+				if cmpl_conf > 0.5:
 					visited[currentMask] = True
 					cluster_label[currentMask] = cluster_id
 					cluster_id += 1

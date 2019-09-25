@@ -2,8 +2,8 @@ from learn_region_grow_util import *
 import sys
 
 BATCH_SIZE = 100
-NUM_POINT = 256
-NUM_CONTEXT_POINT = 32
+NUM_POINT = 512
+NUM_NEIGHBOR_POINT = 512
 MAX_EPOCH = 100
 VAL_STEP = 10
 VAL_AREA = 1
@@ -17,7 +17,7 @@ config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-net = LrgNet(BATCH_SIZE, NUM_POINT, FEATURE_SIZE, 7, NUM_CONTEXT_POINT)
+net = LrgNet(BATCH_SIZE, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
 MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 
@@ -66,6 +66,19 @@ for AREA in range(1,7):
 			idp += neighbor_count[i]
 	f.close()
 
+#filter out instances where the neighbor array is empty
+train_points = [train_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+train_count = [train_count[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+train_neighbor_points = [train_neighbor_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+train_complete = [train_complete[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+train_class = [train_class[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+train_neighbor_count = [train_neighbor_count[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+val_points = [val_points[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+val_count = [val_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+val_neighbor_points = [val_neighbor_points[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+val_complete = [val_complete[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+val_class = [val_class[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+val_neighbor_count = [val_neighbor_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
 train_complete = numpy.array(train_complete)
 val_complete = numpy.array(val_complete)
 print('train',len(train_points),len(train_neighbor_points), train_complete.shape)
@@ -77,9 +90,8 @@ for epoch in range(MAX_EPOCH):
 	idx = numpy.arange(len(train_points))
 	numpy.random.shuffle(idx)
 	input_points = numpy.zeros((BATCH_SIZE, NUM_POINT, FEATURE_SIZE))
-	context_points = numpy.zeros((BATCH_SIZE, 7, NUM_CONTEXT_POINT, FEATURE_SIZE))
-	input_classes = numpy.zeros((BATCH_SIZE, 7, NUM_CONTEXT_POINT), dtype=numpy.int32)
-	input_mask = numpy.zeros((BATCH_SIZE, 7, NUM_CONTEXT_POINT), dtype=numpy.int32)
+	neighbor_points = numpy.zeros((BATCH_SIZE, NUM_NEIGHBOR_POINT, FEATURE_SIZE))
+	input_classes = numpy.zeros((BATCH_SIZE, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 
 	loss_arr = []
 	cls_arr = []
@@ -92,17 +104,12 @@ for epoch in range(MAX_EPOCH):
 			points_idx = idx[start_idx+i]
 			subset = numpy.random.choice(train_count[points_idx], NUM_POINT, replace=train_count[points_idx]<NUM_POINT)
 			input_points[i,:,:] = train_points[points_idx][subset, :]
-			for j in range(7):
-				if train_neighbor_count[points_idx*7+j]>0:
-					subset = numpy.random.choice(train_neighbor_count[points_idx*7+j], NUM_CONTEXT_POINT, replace=train_neighbor_count[points_idx*7+j]<NUM_CONTEXT_POINT)
-					context_points[i,j,:,:] = train_neighbor_points[points_idx*7+j][subset, :]
-					input_classes[i,j,:] = train_class[points_idx*7+j][subset]
-					input_mask[i,j,:] = 1
-				else:
-					input_mask[i,j,:] = 0
+			subset = numpy.random.choice(train_neighbor_count[points_idx], NUM_NEIGHBOR_POINT, replace=train_neighbor_count[points_idx]<NUM_NEIGHBOR_POINT)
+			neighbor_points[i,:,:] = train_neighbor_points[points_idx][subset, :]
+			input_classes[i,:] = train_class[points_idx][subset]
 		input_complete = train_complete[idx[start_idx:end_idx]]
 		_, ls, cls, cmpl = sess.run([net.train_op, net.loss, net.class_acc, net.completeness_acc],
-			{net.input_pl:input_points, net.context_pl:context_points, net.mask_pl:input_mask, net.completeness_pl:input_complete, net.class_pl:input_classes})
+			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
 		loss_arr.append(ls)
 		cls_arr.append(cls)
 		cmp_arr.append(cmpl)
@@ -120,17 +127,12 @@ for epoch in range(MAX_EPOCH):
 				points_idx = start_idx+i
 				subset = numpy.random.choice(val_count[points_idx], NUM_POINT, replace=val_count[points_idx]<NUM_POINT)
 				input_points[i,:,:] = val_points[points_idx][subset, :]
-				for j in range(7):
-					if val_neighbor_count[points_idx*7+j]>0:
-						subset = numpy.random.choice(val_neighbor_count[points_idx*7+j], NUM_CONTEXT_POINT, replace=val_neighbor_count[points_idx*7+j]<NUM_CONTEXT_POINT)
-						context_points[i,j,:,:] = val_neighbor_points[points_idx*7+j][subset, :]
-						input_classes[i,j,:] = val_class[points_idx*7+j][subset]
-						input_mask[i,j,:] = True
-					else:
-						input_mask[i,j,:] = False
+				subset = numpy.random.choice(val_neighbor_count[points_idx], NUM_NEIGHBOR_POINT, replace=val_neighbor_count[points_idx]<NUM_NEIGHBOR_POINT)
+				neighbor_points[i,:,:] = val_neighbor_points[points_idx][subset, :]
+				input_classes[i,:] = val_class[points_idx][subset]
 			input_complete = val_complete[start_idx:end_idx]
 			ls, cls, cmpl = sess.run([net.loss, net.class_acc, net.completeness_acc],
-				{net.input_pl:input_points, net.context_pl:context_points, net.mask_pl:input_mask, net.completeness_pl:input_complete, net.class_pl:input_classes})
+				{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
 			loss_arr.append(ls)
 			cls_arr.append(cls)
 			cmp_arr.append(cmpl)

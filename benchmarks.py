@@ -65,6 +65,8 @@ NUM_POINT = 1024
 mode = 'normal'
 if mode=='normal':
 	threshold = 0.99
+elif mode == 'curvature':
+	threshold = 0.99
 elif mode=='color':
 	threshold = 0.005
 elif mode=='embedding':
@@ -138,7 +140,7 @@ for AREA in TEST_AREAS:
 		cls_id = cls_id[equalized_idx]
 
 		#compute normals
-		if mode=='normal':
+		if mode=='normal' or mode=='curvature':
 			normals = []
 			curvatures = []
 			for i in range(len(points)):
@@ -156,6 +158,7 @@ for AREA in TEST_AREAS:
 					accB += p
 				cov = accA / len(neighbors) - numpy.outer(accB, accB) / len(neighbors)**2
 				U,S,V = numpy.linalg.svd(cov)
+				# eigenvalues s2<s1<s0
 				curvature = S[2] / (S[0] + S[1] + S[2])
 				normals.append(numpy.fabs(V[2]))
 				curvatures.append(curvature)
@@ -176,6 +179,14 @@ for AREA in TEST_AREAS:
 					if offset!=(0,0,0):
 						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
 						if kk in voxel_map and normals[voxel_map[kk]].dot(normals[i]) > threshold:
+							edges.append([i, voxel_map[kk]])
+		elif mode=='curvature':
+			for i in range(len(point_voxels)):
+				k = tuple(point_voxels[i])
+				for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+					if offset!=(0,0,0):
+						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+						if kk in voxel_map and (curvatures[voxel_map[kk]] - curvatures[i]) < threshold:
 							edges.append([i, voxel_map[kk]])
 		elif mode=='color':
 			for i in range(len(point_voxels)):
@@ -268,8 +279,17 @@ for AREA in TEST_AREAS:
 		#save point cloud results to file
 		if save_results:
 			if mode=='normal':
+				print('points shape: ', points.shape)
+				print('normals shape: ', normals.shape)
 				points[:,3:6] = normals*255
 				savePLY('data/normal/%d.ply'%save_id, points)
+			elif mode == 'curvature':
+				print("shape, ", points.shape)
+				print("shape_curvature: ", curvatures.shape)
+				points[:,3] = curvatures*255
+				points[:,4] = (1-curvatures)*255
+				points[:,5] = (curvatures**0.9)*255
+				savePLY('data/curvature/%d.ply'%save_id, points)
 			elif mode=='pointnet':
 				points[:,3:6] = [class_to_color_rgb[c] for c in class_labels]
 				savePLY('data/class/%d.ply'%save_id, points)

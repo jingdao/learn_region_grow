@@ -279,13 +279,9 @@ for AREA in TEST_AREAS:
 		#save point cloud results to file
 		if save_results:
 			if mode=='normal':
-				print('points shape: ', points.shape)
-				print('normals shape: ', normals.shape)
 				points[:,3:6] = normals*255
 				savePLY('data/normal/%d.ply'%save_id, points)
 			elif mode == 'curvature':
-				print("shape, ", points.shape)
-				print("shape_curvature: ", curvatures.shape)
 				points[:,3] = curvatures*255
 				points[:,4] = (1-curvatures)*255
 				points[:,5] = (curvatures**0.9)*255

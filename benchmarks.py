@@ -135,7 +135,7 @@ for AREA in TEST_AREAS:
 			if not k in normal_grid:
 				normal_grid[k] = []
 			normal_grid[k].append(i)
-		points = unequalized_points[equalized_idx]
+		points = unequalized_points[equalized_idx] #(N,6)
 		obj_id = obj_id[equalized_idx]
 		cls_id = cls_id[equalized_idx]
 
@@ -161,10 +161,13 @@ for AREA in TEST_AREAS:
 				# eigenvalues s2<s1<s0
 				curvature = S[2] / (S[0] + S[1] + S[2])
 				normals.append(numpy.fabs(V[2]))
-				curvatures.append(curvature)
-			normals = numpy.array(normals)
-			curvatures = numpy.array(curvatures)
-			points = numpy.hstack((points, normals)).astype(numpy.float32)
+				curvatures.append(numpy.fabs(curvature)) # change to absolute values?
+			normals = numpy.array(normals) #(N,3)
+			curvatures = numpy.array(curvatures) #(N,)
+			if mode == 'normal':
+				points = numpy.hstack((points, normals)).astype(numpy.float32) #(N, 9)
+			if (mode == 'curvature'):
+				points = numpy.hstack((points,numpy.reshape(curvatures,(curvatures.shape[0],1)))).astype(numpy.float32) #(N, 7)
 
 		#find connected edges on a voxel grid
 		voxel_map = {}

@@ -66,7 +66,7 @@ mode = 'normal'
 if mode=='normal':
 	threshold = 0.99
 elif mode == 'curvature':
-	threshold = 0.99
+	threshold = 0.001
 elif mode=='color':
 	threshold = 0.005
 elif mode=='embedding':
@@ -189,7 +189,7 @@ for AREA in TEST_AREAS:
 				for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
 					if offset!=(0,0,0):
 						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
-						if kk in voxel_map and (curvatures[voxel_map[kk]] - curvatures[i]) < threshold:
+						if kk in voxel_map and abs(curvatures[voxel_map[kk]] - curvatures[i]) < threshold:
 							edges.append([i, voxel_map[kk]])
 		elif mode=='color':
 			for i in range(len(point_voxels)):
@@ -285,9 +285,14 @@ for AREA in TEST_AREAS:
 				points[:,3:6] = normals*255
 				savePLY('data/normal/%d.ply'%save_id, points)
 			elif mode == 'curvature':
-				points[:,3] = curvatures*255
-				points[:,4] = (1-curvatures)*255
-				points[:,5] = (curvatures**0.9)*255
+#				print('curvatures',curvatures.min(), curvatures.mean(), curvatures.max())
+				curvatures = curvatures / curvatures.max()
+#				points[:,3] = curvatures*255
+#				points[:,4] = (1-curvatures)*255
+#				points[:,5] = (curvatures**0.9)*255
+				jet = plt.get_cmap('jet')
+				color_map = jet(curvatures)[:,:3] * 255
+				points[:,3:6] = color_map
 				savePLY('data/curvature/%d.ply'%save_id, points)
 			elif mode=='pointnet':
 				points[:,3:6] = [class_to_color_rgb[c] for c in class_labels]

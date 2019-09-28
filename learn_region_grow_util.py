@@ -83,10 +83,15 @@ def normalize(stacked_points, stacked_neighbor_points):
 	for i in range(len(stacked_points)):
 		center = numpy.mean(stacked_points[i][:,:2], axis=0)
 		stacked_points[i][:,:2] -= center
+#		scale = numpy.max(numpy.abs(stacked_points[i][:,:3]))
+#		stacked_points[i][:,:3] /= scale
 		rgb_center = numpy.mean(stacked_points[i][:,3:6], axis=0)
 		normal_center = numpy.mean(stacked_points[i][:,6:9], axis=0)
 		if len(stacked_neighbor_points[i]) > 0:
 			stacked_neighbor_points[i][:,:2] -= center
+#			scale = numpy.max(numpy.abs(stacked_neighbor_points[i][:,:3]))
+#			stacked_neighbor_points[i][:,:3] /= scale
+#			stacked_points[i][:,:3] /= scale
 			stacked_neighbor_points[i][:,3:6] -= rgb_center
 			stacked_neighbor_points[i][:,6:9] -= normal_center
 

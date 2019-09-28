@@ -57,8 +57,8 @@ for AREA in TEST_AREAS:
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 
-#	for room_id in range(len(all_points)):
-	for room_id in [0]:
+	for room_id in range(len(all_points)):
+#	for room_id in [0]:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
@@ -145,9 +145,19 @@ for AREA in TEST_AREAS:
 						else:
 							newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
 						mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
+					mask = numpy.logical_and(mask, numpy.logical_not(visited))
 					expandPoints.extend(points[mask,:].copy())
 					#determine which neighboring points should be added
 					expandClass.extend(obj_id[mask] == target_id)
+
+				if len(expandPoints)==0: #no neighbors (early termination)
+					visited[currentMask] = True
+					if numpy.sum(currentMask) > 10:
+						cluster_label[currentMask] = cluster_id
+						cluster_id += 1
+					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
+					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noneighbor'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+					break 
 
 				subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
 				input_points[0,:,:] = currentPoints[subset, :]
@@ -161,6 +171,9 @@ for AREA in TEST_AREAS:
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 				input_points[0,:,:2] -= center
 				neighbor_points[0,:,:2] -= center
+#				scale = numpy.max(numpy.abs(neighbor_points[0,:,:2]))
+#				neighbor_points[0,:,:3] /= scale
+#				input_points[0,:,:3] /= scale
 				neighbor_points[0,:,3:6] -= rgb_center
 				neighbor_points[0,:,6:9] -= normal_center
 				input_classes[0,:] = numpy.array(expandClass)[subset]
@@ -173,13 +186,14 @@ for AREA in TEST_AREAS:
 #				cls_mask = input_classes[0].astype(bool)
 				cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
 				validPoints = neighbor_points[0,:,:][cls_mask]
+#				validPoints[:,:3] *= scale
 				validPoints[:,:2] += center
 				validVoxels = numpy.round(validPoints[:,:3]/resolution).astype(int)
 				expandSet = set([tuple(p) for p in validVoxels])
 				for i in range(len(point_voxels)):
 					if tuple(point_voxels[i]) in expandSet:
 						currentMask[i] = True
-				print(numpy.sum(currentMask), numpy.sum(gt_mask), len(expandPoints), numpy.sum(expandClass), numpy.sum(input_classes),len(expandSet), cls_acc, cmpl_conf)
+#				print(numpy.sum(currentMask), numpy.sum(gt_mask), len(expandPoints), numpy.sum(expandClass), numpy.sum(input_classes),len(expandSet), cls_acc, cmpl_conf)
 
 #				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
 				if cmpl_conf > 0.5:
@@ -199,7 +213,7 @@ for AREA in TEST_AREAS:
 							cluster_label[currentMask] = cluster_id
 							cluster_id += 1
 						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-						print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+						print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noexpand'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
 						break 
 				steps += 1
 

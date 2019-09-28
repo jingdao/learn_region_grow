@@ -65,13 +65,15 @@ for AREA in TEST_AREAS:
 
 		#equalize resolution
 		equalized_idx = []
-		equalized_set = set()
+		unequalized_idx = []
+		equalized_map = {}
 		normal_grid = {}
 		for i in range(len(unequalized_points)):
 			k = tuple(numpy.round(unequalized_points[i,:3]/resolution).astype(int))
-			if not k in equalized_set:
-				equalized_set.add(k)
+			if not k in equalized_map:
+				equalized_map[k] = len(equalized_idx)
 				equalized_idx.append(i)
+			unequalized_idx.append(equalized_map[k])
 			if not k in normal_grid:
 				normal_grid[k] = []
 			normal_grid[k].append(i)
@@ -257,8 +259,8 @@ for AREA in TEST_AREAS:
 		if save_results:
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
-			points[:,3:6] = obj_color[cluster_label2,:]
-			savePLY('data/results/%d.ply'%save_id, points)
+			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
+			savePLY('data/results/%d.ply'%save_id, unequalized_points)
 			save_id += 1
 
 print('NMI: %.2f+-%.2f AMI: %.2f+-%.2f ARS: %.2f+-%.2f PRC %.2f+-%.2f RCL %.2f+-%.2f IOU %.2f+-%.2f'%

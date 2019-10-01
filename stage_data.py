@@ -107,8 +107,12 @@ for AREA in range(1,7):
 							mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
 						expandPoints.extend(points[mask,:].copy())
 						#determine which neighboring points should be added
-						expandClass.extend(obj_id[mask] == target_id)
-						currentMask = numpy.logical_or(currentMask, numpy.logical_and(mask, obj_id==target_id))
+						criteria = obj_id[mask] == target_id
+#						avg_normal = currentPoints[:,6:9].mean(axis=0)
+#						criteria = normals[mask].dot(avg_normal) > 0.99
+						expandID = numpy.nonzero(mask)[0][criteria]
+						expandClass.extend(criteria)
+						currentMask[expandID] = True
 
 					stacked_points.append(currentPoints)
 					stacked_count.append(len(currentPoints))

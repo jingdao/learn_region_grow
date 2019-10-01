@@ -94,6 +94,7 @@ def normalize(stacked_points, stacked_neighbor_points):
 #			stacked_points[i][:,:3] /= scale
 			stacked_neighbor_points[i][:,3:6] -= rgb_center
 			stacked_neighbor_points[i][:,6:9] -= normal_center
+			stacked_neighbor_points[i][:,3:9] = numpy.abs(stacked_neighbor_points[i][:,3:9])
 
 class LrgNet:
 	def __init__(self,batch_size, num_points, num_neighbor_points, feature_size):

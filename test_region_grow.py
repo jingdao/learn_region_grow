@@ -41,7 +41,7 @@ for i in range(len(sys.argv)):
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
-	MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
+	MODEL_PATH = 'models/lrgnet_model%s.ckpt'%sys.argv[1]
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
@@ -158,7 +158,7 @@ for AREA in TEST_AREAS:
 						cluster_label[currentMask] = cluster_id
 						cluster_id += 1
 					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noneighbor'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+#					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noneighbor'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
 					break 
 
 				subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
@@ -178,6 +178,7 @@ for AREA in TEST_AREAS:
 #				input_points[0,:,:3] /= scale
 				neighbor_points[0,:,3:6] -= rgb_center
 				neighbor_points[0,:,6:9] -= normal_center
+				neighbor_points[0,:,3:9] = numpy.abs(neighbor_points[0,:,3:9])
 				input_classes[0,:] = numpy.array(expandClass)[subset]
 				input_complete = numpy.zeros(1,dtype=numpy.int32)
 				ls, cls, cls_acc, cmpl, cmpl_acc = sess.run([net.loss, net.class_output, net.class_acc, net.completeness_output, net.completeness_acc],
@@ -192,9 +193,11 @@ for AREA in TEST_AREAS:
 				validPoints[:,:2] += center
 				validVoxels = numpy.round(validPoints[:,:3]/resolution).astype(int)
 				expandSet = set([tuple(p) for p in validVoxels])
+				updated = False
 				for i in range(len(point_voxels)):
-					if tuple(point_voxels[i]) in expandSet:
+					if tuple(point_voxels[i]) in expandSet and not currentMask[i]:
 						currentMask[i] = True
+						updated = True
 #				print(numpy.sum(currentMask), numpy.sum(gt_mask), len(expandPoints), numpy.sum(expandClass), numpy.sum(input_classes),len(expandSet), cls_acc, cmpl_conf)
 
 #				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
@@ -203,10 +206,10 @@ for AREA in TEST_AREAS:
 					cluster_label[currentMask] = cluster_id
 					cluster_id += 1
 					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+#					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
 					break 
 				else:
-					if len(expandSet) > 0: #continue growing
+					if updated: #continue growing
 						minDims = point_voxels[currentMask, :].min(axis=0)
 						maxDims = point_voxels[currentMask, :].max(axis=0)
 					else: #no matching neighbors (early termination)
@@ -215,7 +218,7 @@ for AREA in TEST_AREAS:
 							cluster_label[currentMask] = cluster_id
 							cluster_id += 1
 						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-						print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noexpand'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+#						print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noexpand'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
 						break 
 				steps += 1
 

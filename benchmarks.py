@@ -125,13 +125,15 @@ for AREA in TEST_AREAS:
 
 		#equalize resolution
 		equalized_idx = []
-		equalized_set = set()
+		unequalized_idx = []
+		equalized_map = {}
 		normal_grid = {}
 		for i in range(len(unequalized_points)):
 			k = tuple(numpy.round(unequalized_points[i,:3]/resolution).astype(int))
-			if not k in equalized_set:
-				equalized_set.add(k)
+			if not k in equalized_map:
+				equalized_map[k] = len(equalized_idx)
 				equalized_idx.append(i)
+			unequalized_idx.append(equalized_map[k])
 			if not k in normal_grid:
 				normal_grid[k] = []
 			normal_grid[k].append(i)
@@ -282,25 +284,21 @@ for AREA in TEST_AREAS:
 		#save point cloud results to file
 		if save_results:
 			if mode=='normal':
-				points[:,3:6] = normals*255
-				savePLY('data/normal/%d.ply'%save_id, points)
+				unequalized_points[:,3:6] = normals[unequalized_idx]*255
+				savePLY('data/normal/%d.ply'%save_id, unequalized_points)
 			elif mode == 'curvature':
-#				print('curvatures',curvatures.min(), curvatures.mean(), curvatures.max())
 				curvatures = curvatures / curvatures.max()
-#				points[:,3] = curvatures*255
-#				points[:,4] = (1-curvatures)*255
-#				points[:,5] = (curvatures**0.9)*255
 				jet = plt.get_cmap('jet')
 				color_map = jet(curvatures)[:,:3] * 255
-				points[:,3:6] = color_map
-				savePLY('data/curvature/%d.ply'%save_id, points)
+				unequalized_points[:,3:6] = color_map[unequalized_idx]
+				savePLY('data/curvature/%d.ply'%save_id, unequalized_points)
 			elif mode=='pointnet':
-				points[:,3:6] = [class_to_color_rgb[c] for c in class_labels]
-				savePLY('data/class/%d.ply'%save_id, points)
+				unequalized_points[:,3:6] = [class_to_color_rgb[c] for c in class_labels[unequalized_idx]]
+				savePLY('data/class/%d.ply'%save_id, unequalized_points)
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
-			points[:,3:6] = obj_color[cluster_label2,:]
-			savePLY('data/results/%d.ply'%save_id, points)
+			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
+			savePLY('data/results/%d.ply'%save_id, unequalized_points)
 			save_id += 1
 
 print('NMI: %.2f+-%.2f AMI: %.2f+-%.2f ARS: %.2f+-%.2f PRC %.2f+-%.2f RCL %.2f+-%.2f IOU %.2f+-%.2f'%

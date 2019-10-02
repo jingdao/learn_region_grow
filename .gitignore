@@ -4,3 +4,9 @@ data/results/*.ply
 data/normal/*.ply
 **/.*.swp
 *.pyc
+models/
+data/viz_*
+data/class/*
+data/curvature/*
+data/s3dis_normal
+

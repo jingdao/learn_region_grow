@@ -3,7 +3,17 @@ import numpy
 import tensorflow as tf
 import time
 import sys
+import os
 from class_util import classes
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(ROOT_DIR, 'tf_ops/sampling'))
+sys.path.append(os.path.join(ROOT_DIR, 'tf_ops/grouping'))
+sys.path.append(os.path.join(ROOT_DIR, 'tf_ops/3d_interpolation'))
+from tf_sampling import farthest_point_sample, gather_point
+from tf_grouping import query_ball_point, group_point, knn_point
+from tf_interpolate import three_nn, three_interpolate
+
 
 BASE_LEARNING_RATE = 2e-4
 NUM_FEATURE_CHANNELS = [64,64,128,512]
@@ -100,9 +110,103 @@ class PointNet():
 		self.optimizer = tf.train.AdamOptimizer(self.learning_rate)
 		self.train_op = self.optimizer.minimize(self.loss, global_step=self.batch)
 
+def sample_and_group(npoint, radius, nsample, xyz, points):
+	new_xyz = gather_point(xyz, farthest_point_sample(npoint, xyz)) # (batch_size, npoint, 3)
+	idx, pts_cnt = query_ball_point(radius, nsample, xyz, new_xyz)
+	grouped_xyz = group_point(xyz, idx) # (batch_size, npoint, nsample, 3)
+	grouped_xyz -= tf.tile(tf.expand_dims(new_xyz, 2), [1,1,nsample,1]) # translation normalization
+	if points is not None:
+		grouped_points = group_point(points, idx) # (batch_size, npoint, nsample, channel)
+		new_points = tf.concat([grouped_xyz, grouped_points], axis=-1) # (batch_size, npoint, nample, 3+channel)
+	else:
+		new_points = grouped_xyz
+	return new_xyz, new_points, idx, grouped_xyz
+
+#PointNet Set Abstraction (SA) Module
+def pointnet_sa_module(xyz, points, npoint, radius, nsample, mlp, mlp2, group_all, is_training, bn_decay, scope):
+	data_format = 'NHWC'
+	with tf.variable_scope(scope) as sc:
+		new_xyz, new_points, idx, grouped_xyz = sample_and_group(npoint, radius, nsample, xyz, points)
+		kernel = [None]*len(mlp)
+		bias = [None]*len(mlp)
+		for i, num_out_channel in enumerate(mlp):
+			kernel[i] = tf.get_variable('kernel'+str(i), [1,1,new_points.get_shape()[-1].value, num_out_channel], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+			bias[i] = tf.get_variable('bias'+str(i), [num_out_channel], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+			new_points = tf.nn.conv2d(new_points, kernel[i], [1, 1, 1, 1], padding='VALID')
+			new_points = tf.nn.bias_add(new_points, bias[i])
+			new_points = tf.nn.relu(new_points)
+		new_points = tf.reduce_max(new_points, axis=[2], keep_dims=True, name='maxpool')
+		new_points = tf.squeeze(new_points, [2]) # (batch_size, npoints, mlp2[-1])
+		return new_xyz, new_points, idx
+
+#PointNet Feature Propogation (FP) Module
+def pointnet_fp_module(xyz1, xyz2, points1, points2, mlp, is_training, bn_decay, scope):
+	with tf.variable_scope(scope) as sc:
+		dist, idx = three_nn(xyz1, xyz2)
+		dist = tf.maximum(dist, 1e-10)
+		norm = tf.reduce_sum((1.0/dist),axis=2,keep_dims=True)
+		norm = tf.tile(norm,[1,1,3])
+		weight = (1.0/dist) / norm
+		interpolated_points = three_interpolate(points2, idx, weight)
+
+		if points1 is not None:
+			new_points1 = tf.concat(axis=2, values=[interpolated_points, points1]) # B,ndataset1,nchannel1+nchannel2
+		else:
+			new_points1 = interpolated_points
+		new_points1 = tf.expand_dims(new_points1, 2)
+
+		kernel = [None]*len(mlp)
+		bias = [None]*len(mlp)
+		for i, num_out_channel in enumerate(mlp):
+			kernel[i] = tf.get_variable('kernel'+str(i), [1,1,new_points1.get_shape()[-1].value, num_out_channel], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+			bias[i] = tf.get_variable('bias'+str(i), [num_out_channel], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+			new_points1 = tf.nn.conv2d(new_points1, kernel[i], [1, 1, 1, 1], padding='VALID')
+			new_points1 = tf.nn.bias_add(new_points1, bias[i])
+			new_points1 = tf.nn.relu(new_points1)
+		new_points1 = tf.squeeze(new_points1, [2]) # B,ndataset1,mlp[-1]s
+	return new_points1
+
+
 class PointNet2():
-	def __init__(self,batch_size,num_point,num_class):
-		pass
+	def __init__(self,batch_size, feature_size, num_class):
+		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size))
+		self.input_pl = tf.placeholder(tf.float32, shape=(batch_size, feature_size))
+		self.is_training_pl = tf.placeholder(tf.bool, shape=())
+		l0_xyz = tf.reshape(self.input_pl[:,:3], [1,batch_size,3])
+		l0_points = None
+
+		# Layer 1
+		l1_xyz, l1_points, l1_indices = pointnet_sa_module(l0_xyz, l0_points, npoint=1024, radius=0.1, nsample=32, mlp=[32,32,64], mlp2=None, group_all=False, is_training=self.is_training_pl, bn_decay=0, scope='layer1')
+		l2_xyz, l2_points, l2_indices = pointnet_sa_module(l1_xyz, l1_points, npoint=256, radius=0.2, nsample=32, mlp=[64,64,128], mlp2=None, group_all=False, is_training=self.is_training_pl, bn_decay=0, scope='layer2')
+		l3_xyz, l3_points, l3_indices = pointnet_sa_module(l2_xyz, l2_points, npoint=64, radius=0.4, nsample=32, mlp=[128,128,256], mlp2=None, group_all=False, is_training=self.is_training_pl, bn_decay=0, scope='layer3')
+		l4_xyz, l4_points, l4_indices = pointnet_sa_module(l3_xyz, l3_points, npoint=16, radius=0.8, nsample=32, mlp=[256,256,512], mlp2=None, group_all=False, is_training=self.is_training_pl, bn_decay=0, scope='layer4')
+
+		# Feature Propagation layers
+		l3_points = pointnet_fp_module(l3_xyz, l4_xyz, l3_points, l4_points, [256,256], self.is_training_pl, 0, scope='fa_layer1')
+		l2_points = pointnet_fp_module(l2_xyz, l3_xyz, l2_points, l3_points, [256,256], self.is_training_pl, 0, scope='fa_layer2')
+		l1_points = pointnet_fp_module(l1_xyz, l2_xyz, l1_points, l2_points, [256,128], self.is_training_pl, 0, scope='fa_layer3')
+		l0_points = pointnet_fp_module(l0_xyz, l1_xyz, l0_points, l1_points, [128,128,128], self.is_training_pl, 0, scope='fa_layer4')
+
+		# FC layers
+		l0_points = tf.reshape(l0_points, [batch_size, 128])
+		kernel1 = tf.get_variable('kernel1', [128, 128], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		bias1 = tf.get_variable('bias1', [128], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		fc1 = tf.matmul(l0_points, kernel1)
+		fc1 = tf.nn.bias_add(fc1, bias1)
+		fc1 = tf.nn.relu(fc1)
+		kernel2 = tf.get_variable('kernel2', [128, num_class], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		bias2 = tf.get_variable('bias2', [num_class], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		fc2 = tf.matmul(fc1, kernel2)
+		self.class_output = tf.nn.bias_add(fc2, bias2)
+
+		#LOSS FUNCTIONS
+		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.class_output, labels=self.labels_pl))
+		correct = tf.equal(tf.argmax(self.class_output, -1), tf.to_int64(self.labels_pl))
+		self.class_acc = tf.reduce_mean(tf.cast(correct, tf.float32)) 
+		self.loss = self.class_loss
+		batch = tf.Variable(0)
+		optimizer = tf.train.AdamOptimizer(0.001)
+		self.train_op = optimizer.minimize(self.loss, global_step=batch)
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -142,7 +246,10 @@ def jitter_data(points, labels):
 if __name__=='__main__':
 
 	VAL_AREA = 1
+	mode = 'pointnet'
 	for i in range(len(sys.argv)):
+		if sys.argv[i] == '--mode':
+			mode = sys.argv[i+1]
 		if sys.argv[i]=='--area':
 			VAL_AREA = int(sys.argv[i+1])
 	MODEL_PATH = 'models/pointnet_model'+str(VAL_AREA)+'.ckpt'
@@ -189,7 +296,10 @@ if __name__=='__main__':
 
 	with tf.Graph().as_default():
 		with tf.device('/gpu:'+str(GPU_INDEX)):
-			net = PointNet(BATCH_SIZE,NUM_POINT,NUM_CLASSES) 
+			if mode == 'pointnet2':
+				net = Pointnet2(BATCH_SIZE,NUM_POINT,NUM_CLASSES)
+			else:
+				net = PointNet(BATCH_SIZE,NUM_POINT,NUM_CLASSES) 
 			saver = tf.train.Saver()
 
 			config = tf.ConfigProto()

@@ -47,11 +47,11 @@ Saved to data/viz/23.ply: (20749 points)
 
 ## Benchmarks
 
-Train benchmark networks such as PointNet.
+Train benchmark networks such as PointNet and PointNet++ (pointnet2).
 ```bash
 for i in 1 2 3 4 5 6
 do
-	python -u train_pointnet.py --area $i >> models/log_pointnet_model$i.txt
+	python -u train_pointnet.py --mode pointnet --area $i >> models/log_pointnet_model$i.txt
 done
 ```
 

@@ -7,8 +7,8 @@ resolution = 0.1
 numpy.random.seed(0)
 repeats_per_room = 1
 
-for AREA in range(1,7):
-#for AREA in [3]:
+#for AREA in range(1,7):
+for AREA in [3]:
 	all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
 	stacked_points = []
 	stacked_neighbor_points = []
@@ -42,6 +42,7 @@ for AREA in range(1,7):
 
 		#compute normals
 		normals = []
+		curvatures = []
 		for i in range(len(points)):
 			k = tuple(numpy.round(points[i,:3]/resolution).astype(int))
 			neighbors = []
@@ -58,14 +59,19 @@ for AREA in range(1,7):
 			cov = accA / len(neighbors) - numpy.outer(accB, accB) / len(neighbors)**2
 			U,S,V = numpy.linalg.svd(cov)
 			normals.append(numpy.fabs(V[2]))
+			curvature = S[2] / (S[0] + S[1] + S[2])
+			curvatures.append(numpy.fabs(curvature)) # change to absolute values?
 		normals = numpy.array(normals)
+		curvatures = numpy.array(curvatures)
 		points = numpy.hstack((points, normals)).astype(numpy.float32)
 
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 		for i in range(repeats_per_room):
 			visited = numpy.zeros(len(point_voxels), dtype=bool)
 			#iterate over each voxel in the room
-			for seed_id in numpy.random.choice(range(len(points)), len(points), replace=False):
+#			for seed_id in numpy.random.choice(range(len(points)), len(points), replace=False):
+			for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
+				print(curvatures[seed_id])
 				if visited[seed_id]:
 					continue
 				target_id = obj_id[seed_id]

@@ -41,7 +41,10 @@ for i in range(len(sys.argv)):
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
-	MODEL_PATH = 'models/lrgnet_model%s.ckpt'%sys.argv[1]
+	if AREA=='scannet':
+		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%'5'
+	else:
+		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
@@ -83,6 +86,7 @@ for AREA in TEST_AREAS:
 
 		#compute normals
 		normals = []
+		curvatures = []
 		for i in range(len(points)):
 			k = tuple(numpy.round(points[i,:3]/resolution).astype(int))
 			neighbors = []
@@ -99,6 +103,9 @@ for AREA in TEST_AREAS:
 			cov = accA / len(neighbors) - numpy.outer(accB, accB) / len(neighbors)**2
 			U,S,V = numpy.linalg.svd(cov)
 			normals.append(numpy.fabs(V[2]))
+			curvature = S[2] / (S[0] + S[1] + S[2])
+			curvatures.append(numpy.fabs(curvature)) # change to absolute values?
+		curvatures = numpy.array(curvatures)
 		normals = numpy.array(normals)
 		points = numpy.hstack((points, normals)).astype(numpy.float32)
 
@@ -110,7 +117,8 @@ for AREA in TEST_AREAS:
 		neighbor_points = numpy.zeros((1, NUM_NEIGHBOR_POINT, FEATURE_SIZE), dtype=numpy.float32)
 		input_classes = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 		#iterate over each object in the room
-		for seed_id in range(len(point_voxels)):
+#		for seed_id in range(len(point_voxels)):
+		for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 			if visited[seed_id]:
 				continue
 			seed_voxel = point_voxels[seed_id]
@@ -173,12 +181,8 @@ for AREA in TEST_AREAS:
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 				input_points[0,:,:2] -= center
 				neighbor_points[0,:,:2] -= center
-#				scale = numpy.max(numpy.abs(neighbor_points[0,:,:2]))
-#				neighbor_points[0,:,:3] /= scale
-#				input_points[0,:,:3] /= scale
 				neighbor_points[0,:,3:6] -= rgb_center
 				neighbor_points[0,:,6:9] -= normal_center
-				neighbor_points[0,:,3:9] = numpy.abs(neighbor_points[0,:,3:9])
 				input_classes[0,:] = numpy.array(expandClass)[subset]
 				input_complete = numpy.zeros(1,dtype=numpy.int32)
 				ls, cls, cls_acc, cmpl, cmpl_acc = sess.run([net.loss, net.class_output, net.class_acc, net.completeness_output, net.completeness_acc],
@@ -189,7 +193,6 @@ for AREA in TEST_AREAS:
 #				cls_mask = input_classes[0].astype(bool)
 				cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
 				validPoints = neighbor_points[0,:,:][cls_mask]
-#				validPoints[:,:3] *= scale
 				validPoints[:,:2] += center
 				validVoxels = numpy.round(validPoints[:,:3]/resolution).astype(int)
 				expandSet = set([tuple(p) for p in validVoxels])

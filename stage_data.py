@@ -7,8 +7,8 @@ resolution = 0.1
 numpy.random.seed(0)
 repeats_per_room = 1
 
-#for AREA in range(1,7):
-for AREA in [3]:
+for AREA in range(1,7):
+#for AREA in [3]:
 	all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
 	stacked_points = []
 	stacked_neighbor_points = []
@@ -71,7 +71,6 @@ for AREA in [3]:
 			#iterate over each voxel in the room
 #			for seed_id in numpy.random.choice(range(len(points)), len(points), replace=False):
 			for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
-				print(curvatures[seed_id])
 				if visited[seed_id]:
 					continue
 				target_id = obj_id[seed_id]

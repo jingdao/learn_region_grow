@@ -60,3 +60,26 @@ Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *poi
 ```bash
 python benchmarks.py --mode normal --area 1,2,3,4,5,6,scannet --threshold 0.99 --save
 ```
+
+## Learn Region Grow
+
+Run region growing simulations to stage ground truth data for LrgNet.
+
+```bash
+python stage_data.py
+```
+
+Train LrgNet for each area of the S3DIS dataset.
+
+```bash
+for i in 1 2 3 4 5 6
+do
+	python train_region_grow.py --area $i
+done
+
+Test LrgNet and measure the accuracy metrics.
+
+```bash
+python test_region_grow.py --area 1,2,3,4,5,6 --save
+```
+

@@ -17,9 +17,9 @@ config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-net = LrgNet(BATCH_SIZE, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
-saver = tf.train.Saver()
-MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
+# net = LrgNet(BATCH_SIZE, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+# saver = tf.train.Saver()
+# MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 
 train_points, train_count, train_neighbor_points, train_neighbor_count, train_class, train_complete = [], [], [], [], [], []
 val_points, val_count, val_neighbor_points, val_neighbor_count, val_class, val_complete = [], [], [], [], [], []
@@ -46,7 +46,6 @@ for AREA in range(1,7):
 			val_class.append(neighbor_class[idp:idp+neighbor_count[i]])
 			idp += neighbor_count[i]
 	else:
-#	if AREA == VAL_AREA:
 		train_complete.extend(f['complete'][:])
 		count = f['count'][:]
 		train_count.extend(count)
@@ -64,7 +63,13 @@ for AREA in range(1,7):
 			train_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
 			train_class.append(neighbor_class[idp:idp+neighbor_count[i]])
 			idp += neighbor_count[i]
+	if AREA == 1: 
+		FEATURE_SIZE = points.shape[1]
 	f.close()
+
+net = LrgNet(BATCH_SIZE, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+saver = tf.train.Saver()
+MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 
 #filter out instances where the neighbor array is empty
 train_points = [train_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]

@@ -110,6 +110,7 @@ class LrgNet:
 		self.class_pl = tf.placeholder(tf.int32, shape=(batch_size, num_neighbor_points))
 		self.completeness_pl = tf.placeholder(tf.int32, shape=(batch_size))
 
+
 		#CONVOLUTION LAYERS
 		for i in range(len(CONV_CHANNELS)):
 			self.kernel[i] = tf.get_variable('kernel'+str(i), [1, feature_size if i==0 else CONV_CHANNELS[i-1], CONV_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)

@@ -114,7 +114,7 @@ for epoch in range(MAX_EPOCH):
 			input_classes[i,:] = train_class[points_idx][subset]
 		input_complete = train_complete[idx[start_idx:end_idx]]
 		_, ls, cls, cmpl = sess.run([net.train_op, net.loss, net.class_acc, net.completeness_acc],
-			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
+			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: True})
 		loss_arr.append(ls)
 		cls_arr.append(cls)
 		cmp_arr.append(cmpl)
@@ -137,7 +137,7 @@ for epoch in range(MAX_EPOCH):
 				input_classes[i,:] = val_class[points_idx][subset]
 			input_complete = val_complete[start_idx:end_idx]
 			ls, cls, cmpl = sess.run([net.loss, net.class_acc, net.completeness_acc],
-				{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
+				{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: False})
 			loss_arr.append(ls)
 			cls_arr.append(cls)
 			cmp_arr.append(cmpl)

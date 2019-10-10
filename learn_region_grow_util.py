@@ -3,6 +3,7 @@ import h5py
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
+from metric_loss_ops import triplet_semihard_loss
 
 action_map = numpy.array([
 	[0,0,0,0,0,0],
@@ -185,3 +186,43 @@ class LrgNet:
 		optimizer = tf.train.AdamOptimizer(1e-4)
 		self.train_op = optimizer.minimize(self.loss, global_step=batch)
 
+class MCPNet:
+	def __init__(self,batch_size, neighbor_size, feature_size, hidden_size, embedding_size):
+		self.input_pl = tf.placeholder(tf.float32, shape=(batch_size, feature_size-2))
+		self.label_pl = tf.placeholder(tf.int32, shape=(batch_size))
+		self.neighbor_pl = tf.placeholder(tf.float32, shape=(batch_size, neighbor_size, feature_size))
+
+		#NETWORK_WEIGHTS
+		kernel1 = tf.get_variable('kernel1', [1,feature_size,hidden_size], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		bias1 = tf.get_variable('bias1', [hidden_size], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		kernel2 = tf.get_variable('kernel2', [1,hidden_size,hidden_size], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		bias2 = tf.get_variable('bias2', [hidden_size], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		kernel3 = tf.get_variable('kernel3', [feature_size-2+hidden_size, hidden_size], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		bias3 = tf.get_variable('bias3', [hidden_size], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		kernel4 = tf.get_variable('kernel4', [hidden_size, embedding_size], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		bias4 = tf.get_variable('bias4', [embedding_size], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+
+		#MULTI-VIEW CONTEXT POOLING
+		neighbor_fc = tf.nn.conv1d(self.neighbor_pl, kernel1, 1, padding='VALID')
+		neighbor_fc = tf.nn.bias_add(neighbor_fc, bias1)
+		neighbor_fc = tf.nn.relu(neighbor_fc)
+		neighbor_fc = tf.nn.conv1d(neighbor_fc, kernel2, 1, padding='VALID')
+		neighbor_fc = tf.nn.bias_add(neighbor_fc, bias2)
+		neighbor_fc = tf.nn.relu(neighbor_fc)
+		neighbor_fc = tf.reduce_max(neighbor_fc, axis=1)
+		concat = tf.concat(axis=1, values=[self.input_pl, neighbor_fc])
+
+		#FEATURE EMBEDDING BRANCH (for instance label prediction)
+		fc3 = tf.matmul(concat, kernel3)
+		fc3 = tf.nn.bias_add(fc3, bias3)
+		fc3 = tf.nn.relu(fc3)
+		self.fc4 = tf.matmul(fc3, kernel4)
+		self.fc4 = tf.nn.bias_add(self.fc4, bias4)
+		self.embeddings = tf.nn.l2_normalize(self.fc4, dim=1)
+		self.triplet_loss = triplet_semihard_loss(self.label_pl, self.embeddings)
+
+		#LOSS FUNCTIONS
+		self.loss = self.triplet_loss
+		batch = tf.Variable(0)
+		optimizer = tf.train.AdamOptimizer(0.001)
+		self.train_op = optimizer.minimize(self.loss, global_step=batch)

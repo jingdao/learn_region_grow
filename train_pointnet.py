@@ -169,7 +169,10 @@ def pointnet_fp_module(xyz1, xyz2, points1, points2, mlp, is_training, bn_decay,
 
 class PointNet2():
 	def __init__(self,batch_size, feature_size, num_class):
+		#input_channels = 6
+		#self.pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, feature_size, input_channels))
 		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size))
+		#self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size, feature_size))
 		self.input_pl = tf.placeholder(tf.float32, shape=(batch_size, feature_size))
 		self.is_training_pl = tf.placeholder(tf.bool, shape=())
 		l0_xyz = tf.reshape(self.input_pl[:,:3], [1,batch_size,3])
@@ -243,6 +246,51 @@ def jitter_data(points, labels):
 		output_points[i,:,:3] = output_points[i,:,:3] * C + T
 	return output_points, output_labels
 
+def get_acc(emb,lb):
+	correct = 0
+	for i in range(len(lb)):
+		dist = numpy.sum((emb[i] - emb)**2, axis=1)
+		order = numpy.argsort(dist)
+		correct += lb[i] == lb[order[1]]
+	return 1.0 * correct / len(lb)
+
+def get_anova(emb, lb):
+	lid = list(set(lb))
+	nf = emb.shape[1]
+	class_mean = numpy.zeros((len(lid), nf))
+	for i in range(len(lid)):
+		class_mean[i] = emb[lb==lid[i]].mean(axis=0)
+	overall_mean = emb.mean(axis=0)
+	between_group = 0
+	for i in range(len(lid)):
+		num_in_group = numpy.sum(lb==lid[i])
+		between_group += numpy.sum((class_mean[i] - overall_mean)**2) * num_in_group
+	between_group /= (len(lid) - 1)
+	within_group = 0
+	for i in range(len(lid)):
+		within_group += numpy.sum((emb[lb==lid[i]] - class_mean[i])**2)
+	within_group /= (len(lb) - len(lid))
+	F = 0 if within_group==0 else between_group / within_group
+	return between_group, within_group, F
+
+def get_even_sampling(labels, batch_size, samples_per_instance):
+	pool = {}
+	for i in set(labels):
+		pool[i] = set(numpy.nonzero(labels==i)[0])
+	idx = []
+	while len(pool) > 0 and len(idx) < batch_size:
+		k = pool.keys()
+		c = k[numpy.random.randint(len(k))]	
+		if len(pool[c]) > samples_per_instance:
+			inliers = set(numpy.random.choice(list(pool[c]), samples_per_instance, replace=False))
+			idx.extend(inliers)
+			pool[c] -= inliers
+		else:
+			idx.extend(pool[c])
+			del pool[c]
+	return idx[:batch_size]
+
+
 if __name__=='__main__':
 
 	VAL_AREA = 1
@@ -252,7 +300,10 @@ if __name__=='__main__':
 			mode = sys.argv[i+1]
 		if sys.argv[i]=='--area':
 			VAL_AREA = int(sys.argv[i+1])
-	MODEL_PATH = 'models/pointnet_model'+str(VAL_AREA)+'.ckpt'
+	if mode == 'pointnet2':
+		MODEL_PATH = 'models/pointnet2_model'+str(VAL_AREA)+'.ckpt'
+	else:
+		MODEL_PATH = 'models/pointnet_model'+str(VAL_AREA)+'.ckpt'
 
 	#arrange points into batches of 2048x6
 	train_points = []
@@ -297,7 +348,7 @@ if __name__=='__main__':
 	with tf.Graph().as_default():
 		with tf.device('/gpu:'+str(GPU_INDEX)):
 			if mode == 'pointnet2':
-				net = Pointnet2(BATCH_SIZE,NUM_POINT,NUM_CLASSES)
+				net = PointNet2(BATCH_SIZE,NUM_POINT,NUM_CLASSES)
 			else:
 				net = PointNet(BATCH_SIZE,NUM_POINT,NUM_CLASSES) 
 			saver = tf.train.Saver()
@@ -309,6 +360,7 @@ if __name__=='__main__':
 			sess = tf.Session(config=config)
 			init = tf.global_variables_initializer()
 			sess.run(init, {net.is_training_pl: True})
+
 
 			for epoch in range(MAX_EPOCH):
 				#shuffle data
@@ -339,6 +391,7 @@ if __name__=='__main__':
 					feed_dict = {net.pointclouds_pl: input_points,
 						net.labels_pl: input_labels,
 						net.is_training_pl: True}
+					
 					a1,l1,_ = sess.run([net.class_acc,net.class_loss,net.train_op], feed_dict=feed_dict)
 					class_acc.append(a1)
 					class_loss.append(l1)
@@ -368,6 +421,6 @@ if __name__=='__main__':
 						class_acc.append(a1)
 						class_loss.append(l1)
 					print('Validation: %d Loss: %.3f (cls %.3f)'%(epoch,numpy.mean(class_loss), numpy.mean(class_acc)))
-
 			#save trained model
 			saver.save(sess, MODEL_PATH)
+	

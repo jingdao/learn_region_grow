@@ -17,9 +17,9 @@ neighbor_radii = 0.3
 batch_size = 256
 hidden_size = 200
 embedding_size = 10
-dp_threshold = 0.9
-feature_size = 6
-max_epoch = 100
+#feature_size = 6
+feature_size = 3
+max_epoch = 50
 samples_per_instance = 16
 stage_data = False
 
@@ -162,24 +162,21 @@ net = MCPNet(batch_size, num_neighbors, feature_size, hidden_size, embedding_siz
 saver = tf.train.Saver()
 MODEL_PATH = 'models/mcpnet_model%d.ckpt'%(VAL_AREA)
 
-train_points, train_neighbor_points, train_obj_id = None,None,None
-val_points, val_neighbor_points, val_obj_id = None,None,None
+train_points, train_obj_id = None,None
+val_points, val_obj_id = None,None
 
 for AREA in range(1,7):
 	f = h5py.File('data/mcp_area%d.h5'%AREA,'r')
 	print('Loading %s ...'%f.filename)
 	if AREA == VAL_AREA:
-		val_points = f['points'][:]
-		val_neighbor_points = f['neighbor_points'][:]
+		val_points = f['neighbor_points'][:,:,:,:feature_size]
 		val_obj_id = f['labels'][:]
 	else:
 		if train_points is None:
-			train_points = f['points'][:]
-			train_neighbor_points = f['neighbor_points'][:]
+			train_points = f['neighbor_points'][:,:,:,:feature_size]
 			train_obj_id = f['labels'][:]
 		else:
-			train_points = numpy.vstack((train_points, f['points'][:]))
-			train_neighbor_points = numpy.vstack((train_neighbor_points, f['neighbor_points'][:]))
+			train_points = numpy.vstack((train_points, f['neighbor_points'][:,:,:,:feature_size]))
 			train_obj_id = numpy.vstack((train_obj_id, f['labels'][:]))
 	f.close()
 
@@ -195,10 +192,9 @@ for epoch in range(max_epoch):
 	f_arr = []
 	for i in random.sample(xrange(len(train_points)), len(train_points)):
 		idx = get_even_sampling(train_obj_id[i], batch_size,samples_per_instance)
-		input_points = train_points[i][idx, :]
-		input_neighbors = train_neighbor_points[i][idx,:,:]
+		input_points = train_points[i][idx, :, :]
 		input_labels = train_obj_id[i][idx]
-		_, loss_val, emb_val = sess.run([net.train_op, net.loss, net.embeddings], {net.input_pl:input_points, net.neighbor_pl:input_neighbors, net.label_pl:input_labels})
+		_, loss_val, emb_val = sess.run([net.train_op, net.loss, net.embeddings], {net.input_pl:input_points, net.label_pl:input_labels})
 		acc = get_acc(emb_val, input_labels)
 		bg,wg,f = get_anova(emb_val, input_labels)
 		loss_arr.append(loss_val)
@@ -216,10 +212,9 @@ for epoch in range(max_epoch):
 		f_arr = []
 		for i in random.sample(xrange(len(val_points)), len(val_points)):
 			idx = get_even_sampling(val_obj_id[i], batch_size,samples_per_instance)
-			input_points = val_points[i][idx, :]
-			input_neighbors = val_neighbor_points[i][idx,:,:]
+			input_points = val_points[i][idx, :, :]
 			input_labels = val_obj_id[i][idx]
-			loss_val, emb_val = sess.run([net.loss, net.embeddings], {net.input_pl:input_points, net.neighbor_pl:input_neighbors, net.label_pl:input_labels})
+			loss_val, emb_val = sess.run([net.loss, net.embeddings], {net.input_pl:input_points, net.label_pl:input_labels})
 			acc = get_acc(emb_val, input_labels)
 			bg,wg,f = get_anova(emb_val, input_labels)
 			loss_arr.append(loss_val)

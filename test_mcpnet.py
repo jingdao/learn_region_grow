@@ -15,13 +15,14 @@ from learn_region_grow_util import *
 numpy.random.seed(0)
 local_range = 2
 resolution = 0.1
-batch_size = 256
+batch_size = 1
 num_neighbors = 50
 neighbor_radii = 0.3
 hidden_size = 200
 embedding_size = 10
 dp_threshold = float(sys.argv[1])
-feature_size = 6
+#feature_size = 6
+feature_size = 3
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 save_results = False
 save_id = 0
@@ -48,7 +49,7 @@ for AREA in TEST_AREAS:
 	net = MCPNet(batch_size, num_neighbors, feature_size, hidden_size, embedding_size)
 	saver = tf.train.Saver()
 	if AREA=='scannet':
-		MODEL_PATH = 'models/mcpnet_model3.ckpt'
+		MODEL_PATH = 'models/mcpnet_model1.ckpt'
 	else:
 		MODEL_PATH = 'models/mcpnet_model%s.ckpt'%AREA
 	saver = tf.train.Saver()
@@ -107,31 +108,13 @@ for AREA in TEST_AREAS:
 			neighbor_array[i,:,:] = neighbors
 
 		#compute embedding for each point
-		available = numpy.ones(len(points), dtype=bool)
 		embeddings = numpy.zeros((len(points), embedding_size), dtype=float)
-		input_points = numpy.zeros((batch_size, feature_size-4), dtype=float)
-		input_neighbors = numpy.zeros((batch_size, num_neighbors, feature_size), dtype=float)
+		input_points = numpy.zeros((batch_size, num_neighbors, feature_size), dtype=float)
 		num_batches = 0
 		for i in range(len(points)):
-			if not available[i]:
-				continue
-			center_position = points[i,:2]
-			tmp_range = local_range
-			local_mask = []
-			while True:
-				local_mask = numpy.sum((points[:,:2]-center_position)**2, axis=1) < tmp_range * tmp_range
-				local_mask = numpy.logical_and(local_mask, available)
-				local_mask = numpy.nonzero(local_mask)[0]
-				if len(local_mask) >= batch_size or len(local_mask)==numpy.sum(available):
-					break
-				else:
-					tmp_range *= 1.5
-			local_mask = numpy.random.choice(local_mask, batch_size, replace=len(local_mask)<batch_size)
-			input_points = points[local_mask, 2:6]
-			input_neighbors = neighbor_array[local_mask, :, :]
-			emb_val = sess.run(net.embeddings, {net.input_pl:input_points, net.neighbor_pl:input_neighbors})
-			embeddings[local_mask] = emb_val
-			available[local_mask] = False
+			input_points[0,:,:] = neighbor_array[i, :, :feature_size]
+			emb_val = sess.run(net.embeddings, {net.input_pl:input_points})
+			embeddings[i] = emb_val
 			num_batches += 1
 
 		#find connected edges on a voxel grid

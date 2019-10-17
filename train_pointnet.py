@@ -1,9 +1,10 @@
 import h5py 
 import numpy
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import time
 import sys
-import os
 from class_util import classes
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -168,14 +169,12 @@ def pointnet_fp_module(xyz1, xyz2, points1, points2, mlp, is_training, bn_decay,
 
 
 class PointNet2():
-	def __init__(self,batch_size, feature_size, num_class):
-		#input_channels = 6
-		#self.pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, feature_size, input_channels))
-		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size))
-		#self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size, feature_size))
-		self.input_pl = tf.placeholder(tf.float32, shape=(batch_size, feature_size))
+	def __init__(self,batch_size, num_point, num_class):
+		input_channels = 6
+		self.pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, input_channels))
+		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size, num_point))
 		self.is_training_pl = tf.placeholder(tf.bool, shape=())
-		l0_xyz = tf.reshape(self.input_pl[:,:3], [1,batch_size,3])
+		l0_xyz = self.pointclouds_pl[:,:,:3]
 		l0_points = None
 
 		# Layer 1
@@ -191,20 +190,20 @@ class PointNet2():
 		l0_points = pointnet_fp_module(l0_xyz, l1_xyz, l0_points, l1_points, [128,128,128], self.is_training_pl, 0, scope='fa_layer4')
 
 		# FC layers
-		l0_points = tf.reshape(l0_points, [batch_size, 128])
-		kernel1 = tf.get_variable('kernel1', [128, 128], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		l0_points = tf.reshape(l0_points, [batch_size, num_point, 128])
+		kernel1 = tf.get_variable('kernel1', [1, 128, 128], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
 		bias1 = tf.get_variable('bias1', [128], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-		fc1 = tf.matmul(l0_points, kernel1)
+		fc1 = tf.nn.conv1d(l0_points, kernel1, 1, padding='VALID')	
 		fc1 = tf.nn.bias_add(fc1, bias1)
 		fc1 = tf.nn.relu(fc1)
-		kernel2 = tf.get_variable('kernel2', [128, num_class], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		kernel2 = tf.get_variable('kernel2', [1, 128, num_class], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
 		bias2 = tf.get_variable('bias2', [num_class], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-		fc2 = tf.matmul(fc1, kernel2)
-		self.class_output = tf.nn.bias_add(fc2, bias2)
+		fc2 = tf.nn.conv1d(fc1, kernel2, 1, padding='VALID')	
+		self.output = tf.nn.bias_add(fc2, bias2)
 
 		#LOSS FUNCTIONS
-		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.class_output, labels=self.labels_pl))
-		correct = tf.equal(tf.argmax(self.class_output, -1), tf.to_int64(self.labels_pl))
+		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.output, labels=self.labels_pl))
+		correct = tf.equal(tf.argmax(self.output, -1), tf.to_int64(self.labels_pl))
 		self.class_acc = tf.reduce_mean(tf.cast(correct, tf.float32)) 
 		self.loss = self.class_loss
 		batch = tf.Variable(0)

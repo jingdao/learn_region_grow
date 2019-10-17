@@ -15,7 +15,7 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
-from train_pointnet import PointNet
+from train_pointnet import PointNet, PointNet2
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -105,6 +105,20 @@ for AREA in TEST_AREAS:
 		config.log_device_placement = False
 		sess = tf.Session(config=config)
 		net = PointNet(1,NUM_POINT,len(classes)) 
+		saver = tf.train.Saver()
+		saver.restore(sess, MODEL_PATH)
+		print('Restored from %s'%MODEL_PATH)
+	elif mode=='pointnet2':
+		if AREA == 'scannet':
+			MODEL_PATH = 'models/pointnet2_model3.ckpt'
+		else:
+			MODEL_PATH = 'models/pointnet2_model'+str(AREA)+'.ckpt'
+		config = tf.ConfigProto()
+		config.gpu_options.allow_growth = True
+		config.allow_soft_placement = True
+		config.log_device_placement = False
+		sess = tf.Session(config=config)
+		net = PointNet2(1,NUM_POINT,len(classes)) 
 		saver = tf.train.Saver()
 		saver.restore(sess, MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
@@ -201,7 +215,7 @@ for AREA in TEST_AREAS:
 						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
 						if kk in voxel_map and numpy.sum((points[voxel_map[kk],3:6] - points[i,3:6])**2) < threshold:
 							edges.append([i, voxel_map[kk]])
-		elif mode=='pointnet':
+		elif mode=='pointnet' or mode=='pointnet2':
 			class_labels = numpy.zeros(len(points))
 			grid_resolution = 1.0
 			grid = numpy.round(points[:,:2]/grid_resolution).astype(int)
@@ -292,7 +306,7 @@ for AREA in TEST_AREAS:
 				color_map = jet(curvatures)[:,:3] * 255
 				unequalized_points[:,3:6] = color_map[unequalized_idx]
 				savePLY('data/curvature/%d.ply'%save_id, unequalized_points)
-			elif mode=='pointnet':
+			elif mode=='pointnet' or mode=='pointnet2':
 				unequalized_points[:,3:6] = [class_to_color_rgb[c] for c in class_labels[unequalized_idx]]
 				savePLY('data/class/%d.ply'%save_id, unequalized_points)
 			color_sample_state = numpy.random.RandomState(0)

@@ -7,3 +7,4 @@ wget -O data/s3dis_area4.h5 https://www.dropbox.com/s/tylxmgk4ekssrcm/s3dis_area
 wget -O data/s3dis_area5.h5 https://www.dropbox.com/s/4edppetkoartq1z/s3dis_area5.h5?dl=1
 wget -O data/s3dis_area6.h5 https://www.dropbox.com/s/a9ncpcilxb9jfiu/s3dis_area6.h5?dl=1
 wget -O data/scannet.h5 https://www.dropbox.com/s/fuvj7b9dj1vjyhc/scannet.h5?dl=1
+wget -O data/bim.h5 https://www.dropbox.com/s/34mrpjkc90h84au/bim.h5?dl=1

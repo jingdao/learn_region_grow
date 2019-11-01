@@ -69,10 +69,10 @@ for AREA in range(1,7):
 		# points = points[:,0:3]
 
 		## XYZ + RGB + normal(x,y,z)
-		points = np.hstack((points, normals)).astype(np.float32)
+#		points = np.hstack((points, normals)).astype(np.float32)
 		
 		## XYZ + RGB + normal(x,y,z) + curvature
-		# points = np.hstack((points, normals, curvatures)).astype(np.float32)
+		points = np.hstack((points, normals, curvatures.reshape(-1,1))).astype(np.float32)
 
 		point_voxels = np.round(points[:,:3]/resolution).astype(int)
 		for i in range(repeats_per_room):

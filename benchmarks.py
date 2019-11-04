@@ -9,6 +9,7 @@ import itertools
 import random
 from sklearn.decomposition import PCA
 from sklearn.metrics import normalized_mutual_info_score, adjusted_rand_score, adjusted_mutual_info_score
+from sklearn.externals import joblib
 import math
 import networkx as nx
 from scipy.cluster.vq import vq, kmeans
@@ -126,6 +127,13 @@ for AREA in TEST_AREAS:
 		pass
 	elif mode=='mcpnet':
 		pass
+	elif mode=='edge':
+		if AREA == 'scannet':
+			MODEL_PATH = 'models/edge3.pkl'
+		else:
+			MODEL_PATH = 'models/edge%s.pkl' % AREA
+		svc = joblib.load(MODEL_PATH)
+		print('Restored from %s'%MODEL_PATH)
 
 	if AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
@@ -246,6 +254,52 @@ for AREA in TEST_AREAS:
 			pass
 		elif mode=='mcpnet':
 			pass
+		elif mode=='edge':
+			def get_features(E, p1, p2, neighbor_min, neighbor_max, neighbor_mean):
+				F = numpy.hstack((
+					0.5 * (p1[:,2:] + p2[:,2:]),
+					numpy.minimum(p1[:,2:], p2[:,2:]),
+					numpy.maximum(p1[:,2:], p2[:,2:]),
+					numpy.abs(p1 - p2),
+					numpy.maximum(
+						numpy.abs(p1 - neighbor_min[E[:,1]]),
+						numpy.abs(p2 - neighbor_min[E[:,0]]),
+					),
+					numpy.maximum(
+						numpy.abs(p1 - neighbor_max[E[:,1]]),
+						numpy.abs(p2 - neighbor_max[E[:,0]]),
+					),
+				))
+				return F
+			for i in range(len(point_voxels)):
+				k = tuple(point_voxels[i])
+				for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+					if offset!=(0,0,0):
+						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+						if kk in voxel_map:
+							edges.append([i, voxel_map[kk]])
+			E = numpy.array(edges)
+			neighbor_array = [[i] for i in range(len(points))]
+			for e in E:
+				neighbor_array[int(e[0])].append(int(e[1]))
+				neighbor_array[int(e[1])].append(int(e[0]))
+			neighbor_points = [points[e,:6] for e in neighbor_array]
+			neighbor_min = numpy.array([n.min(axis=0) for n in neighbor_points])
+			neighbor_max = numpy.array([n.max(axis=0) for n in neighbor_points])
+			neighbor_mean = numpy.array([n.mean(axis=0) for n in neighbor_points])
+			p1 = points[E[:,0],:6]
+			p2 = points[E[:,1],:6]
+			F = get_features(E, p1, p2, neighbor_min, neighbor_max, neighbor_mean)
+
+			test_probs = svc.predict_proba(F)[:,1]
+			neighbors = [[0] for i in range(len(points))]
+			for i in range(len(E)):
+				neighbors[int(E[i,0])].append(test_probs[i])
+				neighbors[int(E[i,1])].append(test_probs[i])
+			neighbor_max = numpy.array([numpy.max(n) for n in neighbors])
+			criteria = numpy.logical_and(test_probs > 0.99 * neighbor_max[E[:,0]], test_probs > 0.99 * neighbor_max[E[:,1]])
+			criteria = numpy.logical_and(criteria, test_probs > 0.9)
+			edges = E[criteria].tolist()
 
 		#calculate connected components from edges
 		G = nx.Graph(edges)
@@ -258,6 +312,26 @@ for AREA in TEST_AREAS:
 			if len(clusters[i]) > min_cluster_size:
 				cluster_label[clusters[i]] = cluster_id
 				cluster_id += 1
+
+		if mode=='edge':
+			best_neighbor = [[] for i in range(len(points))]
+			for i in range(len(E)):
+				best_neighbor[E[i,0]].append([E[i,1], test_probs[i]])
+				best_neighbor[E[i,1]].append([E[i,0], test_probs[i]])
+			best_neighbor = [sorted(b,key=lambda x:x[1]) for b in best_neighbor]
+			for i in numpy.nonzero(cluster_label==0)[0]:
+				visited = set()
+				Q = [[i,1]]
+				while len(Q) > 0:
+					q = Q[-1][0]
+					del Q[-1]
+					if q in visited:
+						continue
+					if cluster_label[q] > 0:
+						cluster_label[i] = cluster_label[q]
+						break
+					visited.add(q)
+					Q.extend(best_neighbor[q])
 	
 		#calculate statistics 
 		gt_match = 0

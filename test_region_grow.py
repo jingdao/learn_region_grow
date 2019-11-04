@@ -23,7 +23,9 @@ NUM_NEIGHBOR_POINT = 512
 FEATURE_SIZE = 10
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
-threshold = 0.5
+completion_threshold = 0.5
+classification_threshold = 0.5
+cluster_threshold = 10
 save_results = False
 save_id = 0
 agg_nmi = []
@@ -108,7 +110,7 @@ for AREA in TEST_AREAS:
 		curvatures = numpy.array(curvatures)
 		curvatures = curvatures/curvatures.max()
 		normals = numpy.array(normals)
-		points = numpy.hstack((points, normals)).astype(numpy.float32)
+		points = numpy.hstack((points, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
 
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 		cluster_label = numpy.zeros(len(points), dtype=int)
@@ -139,6 +141,15 @@ for AREA in TEST_AREAS:
 			#perform region growing
 			while True:
 
+				def stop_growing(reason):
+					global cluster_id
+					visited[currentMask] = True
+					if numpy.sum(currentMask) > cluster_threshold:
+						cluster_label[currentMask] = cluster_id
+						cluster_id += 1
+					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
+#					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f %s'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf, reason))
+
 				#determine the current points and the neighboring points
 				currentPoints = points[currentMask, :].copy()
 				expandPoints = []
@@ -162,39 +173,32 @@ for AREA in TEST_AREAS:
 					expandClass.extend(obj_id[mask] == target_id)
 
 				if len(expandPoints)==0: #no neighbors (early termination)
-					visited[currentMask] = True
-					if numpy.sum(currentMask) > 10:
-						cluster_label[currentMask] = cluster_id
-						cluster_id += 1
-					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-#					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noneighbor'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+					stop_growing('noneighbor')
 					break 
 
 				subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
+				center = numpy.mean(currentPoints, axis=0)
+				expandPoints = numpy.array(expandPoints)
+				expandPoints[:,:2] -= center[:2]
+				expandPoints[:,3:] -= center[3:]
 				input_points[0,:,:] = currentPoints[subset, :]
-				center = numpy.mean(input_points[0,:,:2], axis=0)
-				rgb_center = numpy.mean(input_points[0,:,3:6], axis=0)
-				normal_center = numpy.mean(input_points[0,:,6:9], axis=0)
+				input_points[0,:,:2] -= center[:2]
 				if len(expandPoints) >= NUM_NEIGHBOR_POINT:
 					subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
 				else:
 					subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
-				input_points[0,:,:2] -= center
-				neighbor_points[0,:,:2] -= center
-				neighbor_points[0,:,3:6] -= rgb_center
-				neighbor_points[0,:,6:9] -= normal_center
 				input_classes[0,:] = numpy.array(expandClass)[subset]
 				input_complete = numpy.zeros(1,dtype=numpy.int32)
 				ls, cls, cls_acc, cmpl, cmpl_acc = sess.run([net.loss, net.class_output, net.class_acc, net.completeness_output, net.completeness_acc],
-					{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
+					{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: False})
 
 				cls_conf = scipy.special.softmax(cls[0], axis=-1)[:,1]
-				cls_mask = cls_conf > threshold
+				cls_mask = cls_conf > classification_threshold
 #				cls_mask = input_classes[0].astype(bool)
 				cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
 				validPoints = neighbor_points[0,:,:][cls_mask]
-				validPoints[:,:2] += center
+				validPoints[:,:2] += center[:2]
 				validVoxels = numpy.round(validPoints[:,:3]/resolution).astype(int)
 				expandSet = set([tuple(p) for p in validVoxels])
 				updated = False
@@ -205,26 +209,33 @@ for AREA in TEST_AREAS:
 #				print(numpy.sum(currentMask), numpy.sum(gt_mask), len(expandPoints), numpy.sum(expandClass), numpy.sum(input_classes),len(expandSet), cls_acc, cmpl_conf)
 
 #				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
-				if cmpl_conf > 0.5:
-					visited[currentMask] = True
-					cluster_label[currentMask] = cluster_id
-					cluster_id += 1
-					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-#					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+				if cmpl_conf > completion_threshold:
+					stop_growing('')
 					break 
 				else:
 					if updated: #continue growing
 						minDims = point_voxels[currentMask, :].min(axis=0)
 						maxDims = point_voxels[currentMask, :].max(axis=0)
 					else: #no matching neighbors (early termination)
-						visited[currentMask] = True
-						if numpy.sum(currentMask) > 10:
-							cluster_label[currentMask] = cluster_id
-							cluster_id += 1
-						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-#						print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f noexpand'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf))
+						stop_growing('noexpand')
 						break 
 				steps += 1
+
+		#fill in points with no labels
+		for i in numpy.nonzero(cluster_label==0)[0]:
+			k = tuple(numpy.round(points[i,:3]/resolution).astype(int))
+			d = 1
+			while cluster_label[i]==0:
+				neighbors = []
+				for offset in itertools.product(range(-d,d+1),range(-d,d+1),range(-d,d+1)):
+					kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+					if kk in equalized_map:
+						neighbors.append(equalized_map[kk])
+				for n in neighbors:
+					if cluster_label[n] > 0:
+						cluster_label[i] = cluster_label[n]
+						break
+				d += 1
 
 		#calculate statistics 
 		gt_match = 0
@@ -266,6 +277,7 @@ for AREA in TEST_AREAS:
 		if save_results:
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
+			obj_color[0] = [100,100,100]
 			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
 			savePLY('data/results/%d.ply'%save_id, unequalized_points)
 			save_id += 1

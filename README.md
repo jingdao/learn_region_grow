@@ -76,6 +76,7 @@ for i in 1 2 3 4 5 6
 do
 	python train_region_grow.py --area $i >> models/log_lrgnet_model$i.txt
 done
+```
 
 Test LrgNet and measure the accuracy metrics.
 

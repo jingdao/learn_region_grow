@@ -20,7 +20,7 @@ from learn_region_grow_util import *
 numpy.random.seed(0)
 NUM_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-FEATURE_SIZE = 9
+FEATURE_SIZE = 10
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
 threshold = 0.5
@@ -104,8 +104,9 @@ for AREA in TEST_AREAS:
 			U,S,V = numpy.linalg.svd(cov)
 			normals.append(numpy.fabs(V[2]))
 			curvature = S[2] / (S[0] + S[1] + S[2])
-			curvatures.append(numpy.fabs(curvature)) # change to absolute values?
+			curvatures.append(numpy.fabs(curvature))
 		curvatures = numpy.array(curvatures)
+		curvatures = curvatures/curvatures.max()
 		normals = numpy.array(normals)
 		points = numpy.hstack((points, normals)).astype(numpy.float32)
 

@@ -65,14 +65,18 @@ for AREA in range(1,7):
 			curvatures.append(np.fabs(curvature)) 
 		normals = np.array(normals)
 		curvatures = np.array(curvatures)
+		curvatures = curvatures/curvatures.max()
 		## XYZ
 		# points = points[:,0:3]
 
+		## XYZ + normal
+		# points = np.hstack((points[:,0:3], normals)).astype(np.float32)
+
 		## XYZ + RGB + normal(x,y,z)
-		points = np.hstack((points, normals)).astype(np.float32)
+		# points = np.hstack((points, normals)).astype(np.float32)
 		
 		## XYZ + RGB + normal(x,y,z) + curvature
-		# points = np.hstack((points, normals, curvatures)).astype(np.float32)
+		points = np.hstack((points, normals, np.reshape(curvatures, (curvatures.shape[0],1)))).astype(np.float32)
 
 		point_voxels = np.round(points[:,:3]/resolution).astype(int)
 		for i in range(repeats_per_room):

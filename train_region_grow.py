@@ -7,7 +7,7 @@ NUM_NEIGHBOR_POINT = 512
 MAX_EPOCH = 50
 VAL_STEP = 10
 VAL_AREA = 1
-FEATURE_SIZE = 9
+FEATURE_SIZE = 10
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
 		VAL_AREA = int(sys.argv[i+1])
@@ -17,9 +17,6 @@ config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-# net = LrgNet(BATCH_SIZE, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
-# saver = tf.train.Saver()
-# MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 
 train_points, train_count, train_neighbor_points, train_neighbor_count, train_class, train_complete = [], [], [], [], [], []
 val_points, val_count, val_neighbor_points, val_neighbor_count, val_class, val_complete = [], [], [], [], [], []
@@ -114,7 +111,8 @@ for epoch in range(MAX_EPOCH):
 			input_classes[i,:] = train_class[points_idx][subset]
 		input_complete = train_complete[idx[start_idx:end_idx]]
 		_, ls, cls, cmpl = sess.run([net.train_op, net.loss, net.class_acc, net.completeness_acc],
-			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: True})
+			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
+			#{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: True})
 		loss_arr.append(ls)
 		cls_arr.append(cls)
 		cmp_arr.append(cmpl)
@@ -137,7 +135,8 @@ for epoch in range(MAX_EPOCH):
 				input_classes[i,:] = val_class[points_idx][subset]
 			input_complete = val_complete[start_idx:end_idx]
 			ls, cls, cmpl = sess.run([net.loss, net.class_acc, net.completeness_acc],
-				{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: False})
+				{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
+				# {net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: False})
 			loss_arr.append(ls)
 			cls_arr.append(cls)
 			cmp_arr.append(cmpl)

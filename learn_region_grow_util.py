@@ -110,7 +110,7 @@ class LrgNet:
 		self.neighbor_pl = tf.placeholder(tf.float32, shape=(batch_size, num_neighbor_points, feature_size))
 		self.class_pl = tf.placeholder(tf.int32, shape=(batch_size, num_neighbor_points))
 		self.completeness_pl = tf.placeholder(tf.int32, shape=(batch_size))
-		self.is_training_pl = tf.placeholder(tf.bool, shape=())
+		# self.is_training_pl = tf.placeholder(tf.bool, shape=())
 
 		def batch_norm_template(inputs, is_training, moments_dims):
 			with tf.variable_scope('bn') as sc:
@@ -141,7 +141,7 @@ class LrgNet:
 			self.bias[i] = tf.get_variable('lrg_bias'+str(i), [CONV_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 			self.conv[i] = tf.nn.conv1d(self.input_pl if i==0 else self.conv[i-1], self.kernel[i], 1, padding='VALID')
 			self.conv[i] = tf.nn.bias_add(self.conv[i], self.bias[i])
-			self.conv[i] = batch_norm_template(self.conv[i], self.is_training_pl, [0,])
+			# self.conv[i] = batch_norm_template(self.conv[i], self.is_training_pl, [0,])
 			self.conv[i] = tf.nn.relu(self.conv[i])
 
 		#CONVOLUTION LAYERS FOR NEIGHBOR INPUT
@@ -150,7 +150,7 @@ class LrgNet:
 			self.neighbor_bias[i] = tf.get_variable('lrg_neighbor_bias'+str(i), [CONV_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 			self.neighbor_conv[i] = tf.nn.conv1d(self.neighbor_pl if i==0 else self.neighbor_conv[i-1], self.neighbor_kernel[i], 1, padding='VALID')
 			self.neighbor_conv[i] = tf.nn.bias_add(self.neighbor_conv[i], self.neighbor_bias[i])
-			self.neighbor_conv[i] = batch_norm_template(self.neighbor_conv[i], self.is_training_pl, [0,])
+			# self.neighbor_conv[i] = batch_norm_template(self.neighbor_conv[i], self.is_training_pl, [0,])
 			self.neighbor_conv[i] = tf.nn.relu(self.neighbor_conv[i])
 
 		#MAX POOLING
@@ -164,7 +164,7 @@ class LrgNet:
 			self.fc_bias[i] = tf.get_variable('lrg_fc_bias'+str(i), [FC_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 			self.fc[i] = tf.matmul(self.combined_pool if i==0 else self.fc[i-1], self.fc_kernel[i])
 			self.fc[i] = tf.nn.bias_add(self.fc[i], self.fc_bias[i])
-			self.fc[i] = batch_norm_template(self.fc[i],self.is_training_pl,[0,])
+			# self.fc[i] = batch_norm_template(self.fc[i],self.is_training_pl,[0,])
 			self.fc[i] = tf.nn.relu(self.fc[i])
 		i += 1
 		self.fc_kernel[i] = tf.get_variable('lrg_fc_kernel'+str(i), [FC_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
@@ -188,7 +188,7 @@ class LrgNet:
 			self.neighbor_bias[kernel_id] = tf.get_variable('lrg_neighbor_bias'+str(kernel_id), [CONV2_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 			self.neighbor_conv[kernel_id] = tf.nn.conv1d(self.concat if i==0 else self.neighbor_conv[kernel_id-1], self.neighbor_kernel[kernel_id], 1, padding='VALID')
 			self.neighbor_conv[kernel_id] = tf.nn.bias_add(self.neighbor_conv[kernel_id], self.neighbor_bias[kernel_id])
-			self.neighbor_conv[kernel_id] = batch_norm_template(self.neighbor_conv[kernel_id], self.is_training_pl, [0,])
+			# self.neighbor_conv[kernel_id] = batch_norm_template(self.neighbor_conv[kernel_id], self.is_training_pl, [0,])
 			self.neighbor_conv[kernel_id] = tf.nn.relu(self.neighbor_conv[kernel_id])
 		kernel_id = i + len(CONV_CHANNELS) + 1
 		self.neighbor_kernel[kernel_id] = tf.get_variable('lrg_neighbor_kernel'+str(kernel_id), [1, CONV2_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)

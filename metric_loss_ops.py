@@ -50,11 +50,11 @@ def pairwise_distance(feature, squared=False):
     pairwise_distances: 2-D Tensor of size [number of data, number of data].
   """
   pairwise_distances_squared = math_ops.add(
-      math_ops.reduce_sum(math_ops.square(feature), axis=[1], keep_dims=True),
+      math_ops.reduce_sum(math_ops.square(feature), axis=[1], keepdims=True),
       math_ops.reduce_sum(
           math_ops.square(array_ops.transpose(feature)),
           axis=[0],
-          keep_dims=True)) - 2.0 * math_ops.matmul(feature,
+          keepdims=True)) - 2.0 * math_ops.matmul(feature,
                                                   array_ops.transpose(feature))
 
   # Deal with numerical inaccuracies. Set small negatives to zero.
@@ -128,10 +128,10 @@ def masked_maximum(data, mask, dim=1):
     masked_maximums: N-D `Tensor`.
       The maximized dimension is of size 1 after the operation.
   """
-  axis_minimums = math_ops.reduce_min(data, dim, keep_dims=True)
+  axis_minimums = math_ops.reduce_min(data, dim, keepdims=True)
   masked_maximums = math_ops.reduce_max(
       math_ops.multiply(data - axis_minimums, mask), dim,
-      keep_dims=True) + axis_minimums
+      keepdims=True) + axis_minimums
   return masked_maximums
 
 
@@ -147,10 +147,10 @@ def masked_minimum(data, mask, dim=1):
     masked_minimums: N-D `Tensor`.
       The minimized dimension is of size 1 after the operation.
   """
-  axis_maximums = math_ops.reduce_max(data, dim, keep_dims=True)
+  axis_maximums = math_ops.reduce_max(data, dim, keepdims=True)
   masked_minimums = math_ops.reduce_min(
       math_ops.multiply(data - axis_maximums, mask), dim,
-      keep_dims=True) + axis_maximums
+      keepdims=True) + axis_maximums
   return masked_minimums
 
 
@@ -198,7 +198,7 @@ def triplet_semihard_loss(labels, embeddings, margin=1.0):
   mask_final = array_ops.reshape(
       math_ops.greater(
           math_ops.reduce_sum(
-              math_ops.cast(mask, dtype=dtypes.float32), 1, keep_dims=True),
+              math_ops.cast(mask, dtype=dtypes.float32), 1, keepdims=True),
           0.0), [batch_size, batch_size])
   mask_final = array_ops.transpose(mask_final)
 

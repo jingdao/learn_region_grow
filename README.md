@@ -67,6 +67,11 @@ Run region growing simulations to stage ground truth data for LrgNet.
 
 ```bash
 python stage_data.py
+#To apply data augmentation, run stage_data with different random seeds
+for i in 0 1 2 3 4
+do
+	python stage_data.py --seed $i
+done
 ```
 
 Train LrgNet for each area of the S3DIS dataset.

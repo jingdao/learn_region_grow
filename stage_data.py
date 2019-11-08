@@ -5,8 +5,13 @@ import numpy as np
 from class_util import classes
 
 resolution = 0.1
-np.random.seed(0)
 repeats_per_room = 1
+SEED = None
+np.random.seed(0)
+for i in range(len(sys.argv)):
+	if sys.argv[i]=='--seed':
+		SEED = int(sys.argv[i+1])
+		np.random.seed(SEED)
 
 for AREA in range(1,7):
 #for AREA in [3]:
@@ -73,24 +78,17 @@ for AREA in range(1,7):
 		# points = np.hstack((points[:,0:3], normals)).astype(np.float32)
 
 		## XYZ + RGB + normal(x,y,z)
-<<<<<<< HEAD
 		# points = np.hstack((points, normals)).astype(np.float32)
 		
 		## XYZ + RGB + normal(x,y,z) + curvature
-		points = np.hstack((points, normals, np.reshape(curvatures, (curvatures.shape[0],1)))).astype(np.float32)
-=======
-#		points = np.hstack((points, normals)).astype(np.float32)
-		
-		## XYZ + RGB + normal(x,y,z) + curvature
 		points = np.hstack((points, normals, curvatures.reshape(-1,1))).astype(np.float32)
->>>>>>> c785f0b1bd029ffb8ee23eac0619bf215c39253e
 
 		point_voxels = np.round(points[:,:3]/resolution).astype(int)
 		for i in range(repeats_per_room):
 			visited = np.zeros(len(point_voxels), dtype=bool)
 			#iterate over each voxel in the room
-			#for seed_id in np.random.choice(range(len(points)), len(points), replace=False):
-			for seed_id in np.arange(len(points))[np.argsort(curvatures)]:
+			for seed_id in np.random.choice(range(len(points)), len(points), replace=False):
+#			for seed_id in np.arange(len(points))[np.argsort(curvatures)]:
 				if visited[seed_id]:
 					continue
 				target_id = obj_id[seed_id]
@@ -171,7 +169,10 @@ for AREA in range(1,7):
 							break 
 
 	normalize(stacked_points, stacked_neighbor_points)
-	h5_fout = h5py.File('data/staged_area%s.h5'%AREA,'w')
+	if SEED is None:
+		h5_fout = h5py.File('data/staged_area%s.h5'%(AREA),'w')
+	else:
+		h5_fout = h5py.File('data/multiseed/seed%d_area%s.h5'%(SEED,AREA),'w')
 	h5_fout.create_dataset( 'points', data=np.vstack(stacked_points), compression='gzip', compression_opts=4, dtype=np.float32)
 	h5_fout.create_dataset( 'count', data=stacked_count, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'neighbor_points', data=np.vstack(stacked_neighbor_points), compression='gzip', compression_opts=4, dtype=np.float32)

@@ -227,6 +227,8 @@ class MCPNet:
 		bias3 = tf.get_variable('mcp_bias3', [hidden_size], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 		kernel4 = tf.get_variable('mcp_kernel4', [hidden_size, embedding_size], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
 		bias4 = tf.get_variable('mcp_bias4', [embedding_size], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		self.kernels = [kernel1, kernel2, kernel3, kernel4]
+		self.biases = [bias1, bias2, bias3, bias4]
 
 		#MULTI-VIEW CONTEXT POOLING
 		neighbor_fc = tf.nn.conv1d(self.neighbor_pl, kernel1, 1, padding='VALID')

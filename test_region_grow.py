@@ -191,7 +191,7 @@ for AREA in TEST_AREAS:
 				input_classes[0,:] = numpy.array(expandClass)[subset]
 				input_complete = numpy.zeros(1,dtype=numpy.int32)
 				ls, cls, cls_acc, cmpl, cmpl_acc = sess.run([net.loss, net.class_output, net.class_acc, net.completeness_output, net.completeness_acc],
-					{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: False})
+					{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
 
 				cls_conf = scipy.special.softmax(cls[0], axis=-1)[:,1]
 				cls_mask = cls_conf > classification_threshold

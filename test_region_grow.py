@@ -152,26 +152,16 @@ for AREA in TEST_AREAS:
 
 				#determine the current points and the neighboring points
 				currentPoints = points[currentMask, :].copy()
-				expandPoints = []
-				expandClass = []
-				for a in range(len(action_map)):
-					if a==0:
-						mask = numpy.logical_and(numpy.all(point_voxels>=minDims,axis=1), numpy.all(point_voxels<=maxDims, axis=1))
-						mask = numpy.logical_and(mask, numpy.logical_not(currentMask))
-					else:
-						newMinDims = minDims.copy()	
-						newMaxDims = maxDims.copy()	
-						expand_dim = numpy.nonzero(action_map[a])[0][0] % 3
-						if numpy.sum(action_map[a])>0:
-							newMinDims[expand_dim] = newMaxDims[expand_dim] = maxDims[expand_dim]+1
-						else:
-							newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
-						mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
-					mask = numpy.logical_and(mask, numpy.logical_not(visited))
-					expandPoints.extend(points[mask,:].copy())
-					#determine which neighboring points should be added
-					expandClass.extend(obj_id[mask] == target_id)
-
+				newMinDims = minDims.copy()	
+				newMaxDims = maxDims.copy()	
+				newMinDims -= 1
+				newMaxDims += 1
+				mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
+				mask = numpy.logical_and(mask, numpy.logical_not(currentMask))
+				mask = numpy.logical_and(mask, numpy.logical_not(visited))
+				expandPoints = points[mask, :].copy()
+				expandClass = obj_id[mask] == target_id
+				
 				if len(expandPoints)==0: #no neighbors (early termination)
 					stop_growing('noneighbor')
 					break 

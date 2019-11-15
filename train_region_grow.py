@@ -7,7 +7,7 @@ NUM_NEIGHBOR_POINT = 512
 MAX_EPOCH = 100
 VAL_STEP = 7
 VAL_AREA = 1
-FEATURE_SIZE = 19
+FEATURE_SIZE = 10
 MULTISEED = 5
 initialized = False
 for i in range(len(sys.argv)):
@@ -32,11 +32,10 @@ for epoch in range(MAX_EPOCH):
 		train_points, train_count, train_neighbor_points, train_neighbor_count, train_class, train_complete = [], [], [], [], [], []
 		val_points, val_count, val_neighbor_points, val_neighbor_count, val_class, val_complete = [], [], [], [], [], []
 
-		SEED = epoch % MULTISEED
 		for AREA in range(1,7):
 			if MULTISEED > 0:
-#				f = h5py.File('data/multiseed/seed%d_area%d.h5'%(SEED,AREA),'r')
-				f = h5py.File('data/multiseed/embedding_seed%d_area%d.h5'%(SEED,AREA),'r')
+				SEED = epoch % MULTISEED
+				f = h5py.File('data/multiseed/seed%d_area%d.h5'%(SEED,AREA),'r')
 			else:
 				f = h5py.File('data/staged_area%d.h5'%(AREA),'r')
 			print('Loading %s ...'%f.filename)

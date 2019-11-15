@@ -113,29 +113,16 @@ for AREA in range(1,7):
 
 					#determine the current points and the neighboring points
 					currentPoints = points[currentMask, :].copy()
-					expandPoints = []
-					expandClass = []
-					for a in range(len(action_map)):
-						if a==0:
-							mask = np.logical_and(np.all(point_voxels>=minDims,axis=1), np.all(point_voxels<=maxDims, axis=1))
-							mask = np.logical_and(mask, np.logical_not(currentMask))
-						else:
-							newMinDims = minDims.copy()	
-							newMaxDims = maxDims.copy()	
-							expand_dim = np.nonzero(action_map[a])[0][0] % 3
-							if np.sum(action_map[a])>0:
-								newMinDims[expand_dim] = newMaxDims[expand_dim] = maxDims[expand_dim]+1
-							else:
-								newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
-							mask = np.logical_and(np.all(point_voxels>=newMinDims,axis=1), np.all(point_voxels<=newMaxDims, axis=1))
-						expandPoints.extend(points[mask,:].copy())
-						#determine which neighboring points should be added
-						criteria = obj_id[mask] == target_id
-#						avg_normal = currentPoints[:,6:9].mean(axis=0)
-#						criteria = normals[mask].dot(avg_normal) > 0.99
-						expandID = np.nonzero(mask)[0][criteria]
-						expandClass.extend(criteria)
-						currentMask[expandID] = True
+					newMinDims = minDims.copy()	
+					newMaxDims = maxDims.copy()	
+					newMinDims -= 1
+					newMaxDims += 1
+					mask = np.logical_and(np.all(point_voxels>=newMinDims,axis=1), np.all(point_voxels<=newMaxDims, axis=1))
+					mask = np.logical_and(mask, np.logical_not(currentMask))
+					expandPoints = points[mask, :].copy()
+					expandClass = obj_id[mask] == target_id
+					expandID = np.nonzero(mask)[0][expandClass]
+					currentMask[expandID] = True
 
 					stacked_points.append(currentPoints)
 					stacked_count.append(len(currentPoints))

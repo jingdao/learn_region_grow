@@ -93,9 +93,10 @@ def normalize(stacked_points, stacked_neighbor_points):
 
 class LrgNet:
 	def __init__(self,batch_size, num_points, num_neighbor_points, feature_size):
-		CONV_CHANNELS = [64,64,64,128,512]
-		CONV2_CHANNELS = [256, 128]
-		FC_CHANNELS = [256, 128]
+		BASE_LEARNING_RATE = 1e-4
+		CONV_CHANNELS = [64,64,64,128,128,512]
+		CONV2_CHANNELS = [256,128,128]
+		FC_CHANNELS = [256, 128,128]
 		self.kernel = [None]*len(CONV_CHANNELS)
 		self.bias = [None]*len(CONV_CHANNELS)
 		self.conv = [None]*len(CONV_CHANNELS)
@@ -154,8 +155,8 @@ class LrgNet:
 			self.neighbor_conv[i] = tf.nn.relu(self.neighbor_conv[i])
 
 		#MAX POOLING
-		self.pool = tf.reduce_max(self.conv[4], axis=1)
-		self.neighbor_pool = tf.reduce_max(self.neighbor_conv[4], axis=1)
+		self.pool = tf.reduce_max(self.conv[5], axis=1)
+		self.neighbor_pool = tf.reduce_max(self.neighbor_conv[5], axis=1)
 		self.combined_pool = tf.concat(axis=1, values=[self.pool, self.neighbor_pool])
 
 		##COMPLETENESS BRANCH##
@@ -211,6 +212,8 @@ class LrgNet:
 		self.completeness_acc = tf.reduce_mean(tf.cast(correct, tf.float32))
 		self.loss = self.class_loss + self.completeness_loss
 		batch = tf.Variable(0)
+		#learning_rate = tf.train.exponential_decay(BASE_LEARNING_RATE,batch,300,0.7,staircase=True)
+		#optimizer = tf.train.AdamOptimizer(learning_rate)
 		optimizer = tf.train.AdamOptimizer(1e-4)
 		self.train_op = optimizer.minimize(self.loss, global_step=batch)
 

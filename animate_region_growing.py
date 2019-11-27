@@ -40,6 +40,7 @@ for i in range(len(sys.argv)):
 		ROOM = int(sys.argv[i+1])
 
 cameraX = -7.877314620191699
+#cameraX = -2
 cameraY = 7.081133344966971
 cameraZ = 4.281504153975013
 centerX=0
@@ -154,6 +155,7 @@ normals = numpy.array(normals)
 points = numpy.hstack((points, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
 result_points = unequalized_points.copy()
 result_points[:,3:6] = (result_points[:,3:6]+0.5)*255
+viz_points = []
 print('points',points.shape)
 
 def displayFun():
@@ -164,6 +166,9 @@ def displayFun():
 
 	glPointSize(5.0)
 	glBegin(GL_POINTS)
+	for n in range(len(viz_points)):
+		glColor3ub(int(viz_points[n][3]),int(viz_points[n][4]),int(viz_points[n][5]))
+		glVertex3d(viz_points[n][0],viz_points[n][1],viz_points[n][2])
 	for n in range(len(result_points)):
 		glColor3ub(int(result_points[n][3]),int(result_points[n][4]),int(result_points[n][5]))
 		glVertex3d(result_points[n][0],result_points[n][1],result_points[n][2])
@@ -266,6 +271,7 @@ input_points = numpy.zeros((1, NUM_POINT, FEATURE_SIZE), dtype=numpy.float32)
 neighbor_points = numpy.zeros((1, NUM_NEIGHBOR_POINT, FEATURE_SIZE), dtype=numpy.float32)
 input_classes = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 #iterate over each object in the room
+#for seed_id in range(len(point_voxels)):
 for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 	if visited[seed_id]:
 		continue
@@ -347,18 +353,24 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 #		cameraX = rho * numpy.cos(theta)
 #		cameraY = rho * numpy.sin(theta)
 		obj_color = numpy.ones((len(points), 3)) * 100
-		obj_color[currentMask] = [0, 255, 0]
-		obj_color[mask] = [0, 0, 255]
+#		obj_color[currentMask] = [0, 255, 0]
+		obj_color[currentMask] = [150, 150, 150]
+#		obj_color[mask] = [0, 0, 255]
+		jet = plt.get_cmap('jet')
 		result_points[:,3:6] = obj_color[unequalized_idx]
+		viz_points = neighbor_points[0,:,:]
+		viz_points[:,:2] += center[:2]
+		viz_points[:,3:6] = jet(cls_conf)[:,:3] * 255
 		displayFun()
 		data = glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE)
 		image = Image.frombytes("RGBA", (width, height), data)
 		image = ImageOps.flip(image)
 		d = ImageDraw.Draw(image)
 		fnt = ImageFont.truetype('FreeMono.ttf', 40)
-		d.text((10,10), "Inlier Set: %d points"%(numpy.sum(currentMask)), font=fnt, fill=(255,255,255,255))
-		d.text((10,60), "Neighbor Set: %d points"%(numpy.sum(mask)), font=fnt, fill=(255,255,255,255))
-		d.text((10,110), "Completion: %.3f"%cmpl_conf, font=fnt, fill=(255,255,255,255))
+		d.text((10,10), "Step %d"%steps, font=fnt, fill=(255,255,255,255))
+		d.text((10,60), "Inlier Set: %d points"%(numpy.sum(currentMask)), font=fnt, fill=(255,255,255,255))
+		d.text((10,110), "Neighbor Set: %d points"%(numpy.sum(mask)), font=fnt, fill=(255,255,255,255))
+		d.text((10,160), "Completion: %.3f"%cmpl_conf, font=fnt, fill=(255,255,255,255))
 		image.save('tmp/%03d.png' % img_id, 'PNG')
 		print('Saved image %d'%img_id)
 		img_id += 1

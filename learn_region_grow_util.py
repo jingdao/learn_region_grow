@@ -5,17 +5,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 from metric_loss_ops import triplet_semihard_loss
 
-action_map = numpy.array([
-	[0,0,0,0,0,0],
-	[-1,0,0,0,0,0],
-	[0,0,0,1,0,0],
-	[0,-1,0,0,0,0],
-	[0,0,0,0,1,0],
-	[0,0,-1,0,0,0],
-	[0,0,0,0,0,1],
-])
-action_str = ['no-op','-x','+x','-y','+y','-z','+z']
-
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
 	all_points = f['points'][:]

@@ -16,7 +16,7 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
-from train_pointnet import PointNet, PointNet2
+#from train_pointnet import PointNet, PointNet2
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -90,8 +90,11 @@ for i in range(len(sys.argv)):
 		TEST_AREAS = sys.argv[i+1].split(',')
 	elif sys.argv[i]=='--threshold':
 		threshold = float(sys.argv[i+1])
+	elif sys.argv[i]=='--resolution':
+		resolution = float(sys.argv[i+1])
 	elif sys.argv[i]=='--save':
 		save_results = True
+print('Using threshold', threshold, 'resolution',resolution)
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
@@ -137,6 +140,8 @@ for AREA in TEST_AREAS:
 
 	if AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
+	elif AREA=='vkitti':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/vkitti.h5')
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 

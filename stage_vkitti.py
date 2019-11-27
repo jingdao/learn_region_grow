@@ -42,6 +42,25 @@ for AREA in range(1,7):
 				neighbor_map[k] = []
 			neighbor_map[k].append(i)
 
+		remove_set = set()
+		for k in neighbor_map:
+			if len(neighbor_map[k]) < 3:
+				remove_set.add(k)
+		clean_idx = []
+		for i in range(len(pcd)):
+			k = tuple(point_voxels[i])
+			if not k in remove_set:
+				clean_idx.append(i)
+		pcd = pcd[clean_idx, :]
+		class_id = class_id[clean_idx]
+		point_voxels = numpy.round(pcd[:,:3]/cluster_resolution).astype(int)
+		neighbor_map = {}
+		for i in range(len(pcd)):
+			k = tuple(point_voxels[i])
+			if not k in neighbor_map:
+				neighbor_map[k] = []
+			neighbor_map[k].append(i)
+
 		cluster_label = numpy.zeros(len(pcd),dtype=int)
 		cluster_id = 1
 		for i in range(len(pcd)):
@@ -99,7 +118,7 @@ for AREA in range(1,7):
 		points[:,-1] = class_id
 		stacked_points.append(points)
 		stacked_count.append(len(pcd))
-#		break
+		break
 
 output_filename = 'data/vkitti.h5'
 h5_fout = h5py.File(output_filename,'w')

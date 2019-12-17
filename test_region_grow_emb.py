@@ -20,11 +20,14 @@ from learn_region_grow_util import *
 numpy.random.seed(0)
 NUM_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-FEATURE_SIZE = 10
+num_neighbors = 50
+neighbor_radii = 0.3
+embedding_size = 10
+FEATURE_SIZE = 19
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
-completion_threshold = 0.5
 classification_threshold = 0.5
+completion_threshold = 0.5
 cluster_threshold = 10
 save_results = False
 save_id = 0
@@ -44,8 +47,10 @@ for i in range(len(sys.argv)):
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
 	if AREA=='scannet':
-		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%'5'
+		MCP_PATH = 'models/mcpnet_model%s.ckpt'%'6'
+		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%'6'
 	else:
+		MCP_PATH = 'models/mcpnet_model%s.ckpt'%AREA
 		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
@@ -56,6 +61,10 @@ for AREA in TEST_AREAS:
 	saver = tf.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
+	mcpnet = MCPNet(1, 50, 6, 200, 10)
+	saver = tf.train.Saver(mcpnet.kernels + mcpnet.biases)
+	saver.restore(sess, MCP_PATH)
+	print('Restored from %s'%MCP_PATH)
 
 	if AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
@@ -67,21 +76,29 @@ for AREA in TEST_AREAS:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
+		centroid = 0.5 * (unequalized_points[:,:2].min(axis=0) + unequalized_points[:,:2].max(axis=0))
+		unequalized_points[:,:2] -= centroid
+		unequalized_points[:,2] -= unequalized_points[:,2].min()
 
 		#equalize resolution
 		equalized_idx = []
-		unequalized_idx = []
 		equalized_map = {}
+		coarse_map = {}
+		unequalized_idx = []
 		normal_grid = {}
 		for i in range(len(unequalized_points)):
 			k = tuple(numpy.round(unequalized_points[i,:3]/resolution).astype(int))
 			if not k in equalized_map:
 				equalized_map[k] = len(equalized_idx)
 				equalized_idx.append(i)
-			unequalized_idx.append(equalized_map[k])
+				kk = tuple(numpy.round(unequalized_points[i,:3]/neighbor_radii).astype(int))
+				if not kk in coarse_map:
+					coarse_map[kk] = []
+				coarse_map[kk].append(equalized_map[k])
 			if not k in normal_grid:
 				normal_grid[k] = []
 			normal_grid[k].append(i)
+			unequalized_idx.append(equalized_map[k])
 		points = unequalized_points[equalized_idx]
 		obj_id = obj_id[equalized_idx]
 		cls_id = cls_id[equalized_idx]
@@ -106,12 +123,36 @@ for AREA in TEST_AREAS:
 			U,S,V = numpy.linalg.svd(cov)
 			normals.append(numpy.fabs(V[2]))
 			curvature = S[2] / (S[0] + S[1] + S[2])
-			curvatures.append(numpy.fabs(curvature))
+			curvatures.append(numpy.fabs(curvature)) # change to absolute values?
 		curvatures = numpy.array(curvatures)
-		curvatures = curvatures/curvatures.max()
 		normals = numpy.array(normals)
-		points = numpy.hstack((points, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
 
+		#compute neighbors for each point
+		neighbor_array = numpy.zeros((len(points), num_neighbors, 6), dtype=float)
+		for i in range(len(points)):
+			p = points[i,:6]
+			k = tuple(numpy.round(points[i,:3]/neighbor_radii).astype(int))
+			neighbors = []
+			for offset in itertools.product(range(-1,2),range(-1,2),range(-1,2)):
+				kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+				if kk in coarse_map:
+					neighbors.extend(coarse_map[kk])
+			neighbors = numpy.random.choice(neighbors, num_neighbors, replace=len(neighbors)<num_neighbors)
+			neighbors = points[neighbors, :6].copy()
+			neighbors -= p
+			neighbor_array[i,:,:] = neighbors
+
+		#compute embedding for each point
+		embeddings = numpy.zeros((len(points), embedding_size), dtype=float)
+		input_points = numpy.zeros((1, 4), dtype=float)
+		input_neighbors = numpy.zeros((1, num_neighbors, 6), dtype=float)
+		for i in range(len(points)):
+			input_points[0,:] = points[i, 2:6]	
+			input_neighbors[0,:,:] = neighbor_array[i, :, :6]
+			emb_val = sess.run(mcpnet.embeddings, {mcpnet.input_pl:input_points, mcpnet.neighbor_pl:input_neighbors})
+			embeddings[i] = emb_val
+
+		points = numpy.hstack((points, normals, embeddings)).astype(numpy.float32)
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 		cluster_label = numpy.zeros(len(points), dtype=int)
 		cluster_id = 1
@@ -152,16 +193,26 @@ for AREA in TEST_AREAS:
 
 				#determine the current points and the neighboring points
 				currentPoints = points[currentMask, :].copy()
-				newMinDims = minDims.copy()	
-				newMaxDims = maxDims.copy()	
-				newMinDims -= 1
-				newMaxDims += 1
-				mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
-				mask = numpy.logical_and(mask, numpy.logical_not(currentMask))
-				mask = numpy.logical_and(mask, numpy.logical_not(visited))
-				expandPoints = points[mask, :].copy()
-				expandClass = obj_id[mask] == target_id
-				
+				expandPoints = []
+				expandClass = []
+				for a in range(len(action_map)):
+					if a==0:
+						mask = numpy.logical_and(numpy.all(point_voxels>=minDims,axis=1), numpy.all(point_voxels<=maxDims, axis=1))
+						mask = numpy.logical_and(mask, numpy.logical_not(currentMask))
+					else:
+						newMinDims = minDims.copy()	
+						newMaxDims = maxDims.copy()	
+						expand_dim = numpy.nonzero(action_map[a])[0][0] % 3
+						if numpy.sum(action_map[a])>0:
+							newMinDims[expand_dim] = newMaxDims[expand_dim] = maxDims[expand_dim]+1
+						else:
+							newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
+						mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
+					mask = numpy.logical_and(mask, numpy.logical_not(visited))
+					expandPoints.extend(points[mask,:].copy())
+					#determine which neighboring points should be added
+					expandClass.extend(obj_id[mask] == target_id)
+
 				if len(expandPoints)==0: #no neighbors (early termination)
 					stop_growing('noneighbor')
 					break 
@@ -196,9 +247,7 @@ for AREA in TEST_AREAS:
 					if tuple(point_voxels[i]) in expandSet and not currentMask[i]:
 						currentMask[i] = True
 						updated = True
-#				print(numpy.sum(currentMask), numpy.sum(gt_mask), len(expandPoints), numpy.sum(expandClass), numpy.sum(input_classes),len(expandSet), cls_acc, cmpl_conf)
 
-#				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
 				if cmpl_conf > completion_threshold:
 					stop_growing('')
 					break 
@@ -227,6 +276,32 @@ for AREA in TEST_AREAS:
 						break
 				d += 1
 
+#		#find connected edges on a voxel grid
+#		voxel_map = {}
+#		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
+#		for i in range(len(point_voxels)):
+#			voxel_map[tuple(point_voxels[i])] = i
+#		edges = []
+#		for i in range(len(point_voxels)):
+#			k = tuple(point_voxels[i])
+#			for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+#				if offset!=(0,0,0):
+#					kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+#					if kk in voxel_map and embeddings[voxel_map[kk]].dot(embeddings[i]) > 0.9:
+#						edges.append([i, voxel_map[kk]])
+#
+#		#calculate connected components from edges
+#		G = nx.Graph(edges)
+#		clusters = nx.connected_components(G)
+#		clusters = [list(c) for c in clusters]
+#		cluster_label = numpy.zeros(len(point_voxels),dtype=int)
+#		min_cluster_size = 10
+#		cluster_id = 1
+#		for i in range(len(clusters)):
+#			if len(clusters[i]) > min_cluster_size:
+#				cluster_label[clusters[i]] = cluster_id
+#				cluster_id += 1
+	
 		#calculate statistics 
 		gt_match = 0
 		match_id = 0
@@ -267,7 +342,6 @@ for AREA in TEST_AREAS:
 		if save_results:
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
-			obj_color[0] = [100,100,100]
 			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
 			savePLY('data/results/%d.ply'%save_id, unequalized_points)
 			save_id += 1

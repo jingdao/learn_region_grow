@@ -5,8 +5,13 @@ import numpy as np
 from class_util import classes
 
 resolution = 0.1
-np.random.seed(0)
 repeats_per_room = 1
+SEED = None
+np.random.seed(0)
+for i in range(len(sys.argv)):
+	if sys.argv[i]=='--seed':
+		SEED = int(sys.argv[i+1])
+		np.random.seed(SEED)
 
 for AREA in range(1,7):
 #for AREA in [3]:
@@ -73,7 +78,7 @@ for AREA in range(1,7):
 		# points = np.hstack((points[:,0:3], normals)).astype(np.float32)
 
 		## XYZ + RGB + normal(x,y,z)
-#		points = np.hstack((points, normals)).astype(np.float32)
+		# points = np.hstack((points, normals)).astype(np.float32)
 		
 		## XYZ + RGB + normal(x,y,z) + curvature
 		points = np.hstack((points, normals, curvatures.reshape(-1,1))).astype(np.float32)
@@ -82,8 +87,8 @@ for AREA in range(1,7):
 		for i in range(repeats_per_room):
 			visited = np.zeros(len(point_voxels), dtype=bool)
 			#iterate over each voxel in the room
-			#for seed_id in np.random.choice(range(len(points)), len(points), replace=False):
-			for seed_id in np.arange(len(points))[np.argsort(curvatures)]:
+			for seed_id in np.random.choice(range(len(points)), len(points), replace=False):
+#			for seed_id in np.arange(len(points))[np.argsort(curvatures)]:
 				if visited[seed_id]:
 					continue
 				target_id = obj_id[seed_id]
@@ -108,29 +113,16 @@ for AREA in range(1,7):
 
 					#determine the current points and the neighboring points
 					currentPoints = points[currentMask, :].copy()
-					expandPoints = []
-					expandClass = []
-					for a in range(len(action_map)):
-						if a==0:
-							mask = np.logical_and(np.all(point_voxels>=minDims,axis=1), np.all(point_voxels<=maxDims, axis=1))
-							mask = np.logical_and(mask, np.logical_not(currentMask))
-						else:
-							newMinDims = minDims.copy()	
-							newMaxDims = maxDims.copy()	
-							expand_dim = np.nonzero(action_map[a])[0][0] % 3
-							if np.sum(action_map[a])>0:
-								newMinDims[expand_dim] = newMaxDims[expand_dim] = maxDims[expand_dim]+1
-							else:
-								newMinDims[expand_dim] = newMaxDims[expand_dim] = minDims[expand_dim]-1
-							mask = np.logical_and(np.all(point_voxels>=newMinDims,axis=1), np.all(point_voxels<=newMaxDims, axis=1))
-						expandPoints.extend(points[mask,:].copy())
-						#determine which neighboring points should be added
-						criteria = obj_id[mask] == target_id
-#						avg_normal = currentPoints[:,6:9].mean(axis=0)
-#						criteria = normals[mask].dot(avg_normal) > 0.99
-						expandID = np.nonzero(mask)[0][criteria]
-						expandClass.extend(criteria)
-						currentMask[expandID] = True
+					newMinDims = minDims.copy()	
+					newMaxDims = maxDims.copy()	
+					newMinDims -= 1
+					newMaxDims += 1
+					mask = np.logical_and(np.all(point_voxels>=newMinDims,axis=1), np.all(point_voxels<=newMaxDims, axis=1))
+					mask = np.logical_and(mask, np.logical_not(currentMask))
+					expandPoints = points[mask, :].copy()
+					expandClass = obj_id[mask] == target_id
+					expandID = np.nonzero(mask)[0][expandClass]
+					currentMask[expandID] = True
 
 					stacked_points.append(currentPoints)
 					stacked_count.append(len(currentPoints))
@@ -164,7 +156,10 @@ for AREA in range(1,7):
 							break 
 
 	normalize(stacked_points, stacked_neighbor_points)
-	h5_fout = h5py.File('data/staged_area%s.h5'%AREA,'w')
+	if SEED is None:
+		h5_fout = h5py.File('data/staged_area%s.h5'%(AREA),'w')
+	else:
+		h5_fout = h5py.File('data/multiseed/seed%d_area%s.h5'%(SEED,AREA),'w')
 	h5_fout.create_dataset( 'points', data=np.vstack(stacked_points), compression='gzip', compression_opts=4, dtype=np.float32)
 	h5_fout.create_dataset( 'count', data=stacked_count, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'neighbor_points', data=np.vstack(stacked_neighbor_points), compression='gzip', compression_opts=4, dtype=np.float32)

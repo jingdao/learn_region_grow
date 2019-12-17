@@ -21,8 +21,7 @@ neighbor_radii = 0.3
 hidden_size = 200
 embedding_size = 10
 dp_threshold = 0.9
-#feature_size = 6
-feature_size = 3
+feature_size = 6
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 save_results = False
 save_id = 0
@@ -109,11 +108,13 @@ for AREA in TEST_AREAS:
 
 		#compute embedding for each point
 		embeddings = numpy.zeros((len(points), embedding_size), dtype=float)
-		input_points = numpy.zeros((batch_size, num_neighbors, feature_size), dtype=float)
+		input_points = numpy.zeros((batch_size, feature_size-2), dtype=float)
+		input_neighbors = numpy.zeros((batch_size, num_neighbors, feature_size), dtype=float)
 		num_batches = 0
 		for i in range(len(points)):
-			input_points[0,:,:] = neighbor_array[i, :, :feature_size]
-			emb_val = sess.run(net.embeddings, {net.input_pl:input_points})
+			input_points[0,:] = points[i, 2:6]	
+			input_neighbors[0,:,:] = neighbor_array[i, :, :feature_size]
+			emb_val = sess.run(net.embeddings, {net.input_pl:input_points, net.neighbor_pl:input_neighbors})
 			embeddings[i] = emb_val
 			num_batches += 1
 

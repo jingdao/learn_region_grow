@@ -4,10 +4,12 @@ import sys
 BATCH_SIZE = 100
 NUM_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 50
-VAL_STEP = 10
+MAX_EPOCH = 100
+VAL_STEP = 7
 VAL_AREA = 1
 FEATURE_SIZE = 10
+MULTISEED = 5
+initialized = False
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
 		VAL_AREA = int(sys.argv[i+1])
@@ -17,78 +19,84 @@ config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-
-train_points, train_count, train_neighbor_points, train_neighbor_count, train_class, train_complete = [], [], [], [], [], []
-val_points, val_count, val_neighbor_points, val_neighbor_count, val_class, val_complete = [], [], [], [], [], []
-
-for AREA in range(1,7):
-	f = h5py.File('data/staged_area%d.h5'%AREA,'r')
-	print('Loading %s ...'%f.filename)
-	if AREA == VAL_AREA:
-		val_complete.extend(f['complete'][:])
-		count = f['count'][:]
-		val_count.extend(count)
-		points = f['points'][:]
-		idp = 0
-		for i in range(len(count)):
-			val_points.append(points[idp:idp+count[i], :])
-			idp += count[i]
-		neighbor_count = f['neighbor_count'][:]
-		val_neighbor_count.extend(neighbor_count)
-		neighbor_points = f['neighbor_points'][:]
-		neighbor_class = f['class'][:]
-		idp = 0
-		for i in range(len(neighbor_count)):
-			val_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
-			val_class.append(neighbor_class[idp:idp+neighbor_count[i]])
-			idp += neighbor_count[i]
-	else:
-		train_complete.extend(f['complete'][:])
-		count = f['count'][:]
-		train_count.extend(count)
-		points = f['points'][:]
-		idp = 0
-		for i in range(len(count)):
-			train_points.append(points[idp:idp+count[i], :])
-			idp += count[i]
-		neighbor_count = f['neighbor_count'][:]
-		train_neighbor_count.extend(neighbor_count)
-		neighbor_points = f['neighbor_points'][:]
-		neighbor_class = f['class'][:]
-		idp = 0
-		for i in range(len(neighbor_count)):
-			train_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
-			train_class.append(neighbor_class[idp:idp+neighbor_count[i]])
-			idp += neighbor_count[i]
-	if AREA == 1: 
-		FEATURE_SIZE = points.shape[1]
-	f.close()
-
 net = LrgNet(BATCH_SIZE, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
 MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 
-#filter out instances where the neighbor array is empty
-train_points = [train_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
-train_count = [train_count[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
-train_neighbor_points = [train_neighbor_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
-train_complete = [train_complete[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
-train_class = [train_class[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
-train_neighbor_count = [train_neighbor_count[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
-val_points = [val_points[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
-val_count = [val_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
-val_neighbor_points = [val_neighbor_points[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
-val_complete = [val_complete[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
-val_class = [val_class[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
-val_neighbor_count = [val_neighbor_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
-train_complete = numpy.array(train_complete)
-val_complete = numpy.array(val_complete)
-print('train',len(train_points),len(train_neighbor_points), train_complete.shape)
-print('val',len(val_points),len(val_neighbor_points), val_complete.shape)
-
 init = tf.global_variables_initializer()
 sess.run(init, {})
 for epoch in range(MAX_EPOCH):
+
+	if not initialized or MULTISEED > 1:
+		initialized = True
+		train_points, train_count, train_neighbor_points, train_neighbor_count, train_class, train_complete = [], [], [], [], [], []
+		val_points, val_count, val_neighbor_points, val_neighbor_count, val_class, val_complete = [], [], [], [], [], []
+
+		for AREA in range(1,7):
+			if MULTISEED > 0:
+				SEED = epoch % MULTISEED
+				f = h5py.File('data/multiseed/seed%d_area%d.h5'%(SEED,AREA),'r')
+			else:
+				f = h5py.File('data/staged_area%d.h5'%(AREA),'r')
+			print('Loading %s ...'%f.filename)
+			if AREA == VAL_AREA:
+				val_complete.extend(f['complete'][:])
+				count = f['count'][:]
+				val_count.extend(count)
+				points = f['points'][:]
+				idp = 0
+				for i in range(len(count)):
+					val_points.append(points[idp:idp+count[i], :])
+					idp += count[i]
+				neighbor_count = f['neighbor_count'][:]
+				val_neighbor_count.extend(neighbor_count)
+				neighbor_points = f['neighbor_points'][:]
+				neighbor_class = f['class'][:]
+				idp = 0
+				for i in range(len(neighbor_count)):
+					val_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
+					val_class.append(neighbor_class[idp:idp+neighbor_count[i]])
+					idp += neighbor_count[i]
+			else:
+				train_complete.extend(f['complete'][:])
+				count = f['count'][:]
+				train_count.extend(count)
+				points = f['points'][:]
+				idp = 0
+				for i in range(len(count)):
+					train_points.append(points[idp:idp+count[i], :])
+					idp += count[i]
+				neighbor_count = f['neighbor_count'][:]
+				train_neighbor_count.extend(neighbor_count)
+				neighbor_points = f['neighbor_points'][:]
+				neighbor_class = f['class'][:]
+				idp = 0
+				for i in range(len(neighbor_count)):
+					train_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
+					train_class.append(neighbor_class[idp:idp+neighbor_count[i]])
+					idp += neighbor_count[i]
+			if FEATURE_SIZE is None: 
+				FEATURE_SIZE = points.shape[1]
+			f.close()
+
+		#filter out instances where the neighbor array is empty
+		train_points = [train_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+		train_count = [train_count[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+		train_neighbor_points = [train_neighbor_points[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+		train_complete = [train_complete[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+		train_class = [train_class[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+		train_neighbor_count = [train_neighbor_count[i] for i in range(len(train_neighbor_count)) if train_neighbor_count[i]>0]
+		val_points = [val_points[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		val_count = [val_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		val_neighbor_points = [val_neighbor_points[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		val_complete = [val_complete[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		val_class = [val_class[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		val_neighbor_count = [val_neighbor_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		train_complete = numpy.array(train_complete)
+		val_complete = numpy.array(val_complete)
+		print('train',len(train_points),train_points[0].shape, len(train_neighbor_points), train_complete.shape)
+		print('val',len(val_points),train_points[0].shape, len(val_neighbor_points), val_complete.shape)
+
 	idx = numpy.arange(len(train_points))
 	numpy.random.shuffle(idx)
 	input_points = numpy.zeros((BATCH_SIZE, NUM_POINT, FEATURE_SIZE))
@@ -112,7 +120,6 @@ for epoch in range(MAX_EPOCH):
 		input_complete = train_complete[idx[start_idx:end_idx]]
 		_, ls, cls, cmpl = sess.run([net.train_op, net.loss, net.class_acc, net.completeness_acc],
 			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
-			#{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: True})
 		loss_arr.append(ls)
 		cls_arr.append(cls)
 		cmp_arr.append(cmpl)
@@ -136,7 +143,6 @@ for epoch in range(MAX_EPOCH):
 			input_complete = val_complete[start_idx:end_idx]
 			ls, cls, cmpl = sess.run([net.loss, net.class_acc, net.completeness_acc],
 				{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
-				# {net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes, net.is_training_pl: False})
 			loss_arr.append(ls)
 			cls_arr.append(cls)
 			cmp_arr.append(cmpl)

@@ -4,7 +4,6 @@ import sys
 from class_util import classes
 from sklearn.decomposition import PCA
 
-numpy.random.seed(0)
 resolution = 0.1
 repeats_per_room = 1
 local_range = 2
@@ -14,9 +13,15 @@ num_neighbors = 50
 neighbor_radii = 0.3
 hidden_size = 200
 embedding_size = 10
-dp_threshold = 0.95
-feature_size = 3
+feature_size = 6
 save_id = 0
+
+SEED = None
+numpy.random.seed(0)
+for i in range(len(sys.argv)):
+	if sys.argv[i]=='--seed':
+		SEED = int(sys.argv[i+1])
+		numpy.random.seed(SEED)
 
 for AREA in range(1,7):
 #for AREA in [3]:
@@ -48,6 +53,9 @@ for AREA in range(1,7):
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
+		centroid = 0.5 * (unequalized_points[:,:2].min(axis=0) + unequalized_points[:,:2].max(axis=0))
+		unequalized_points[:,:2] -= centroid
+		unequalized_points[:,2] -= unequalized_points[:,2].min()
 
 		#equalize resolution
 		equalized_idx = []
@@ -114,11 +122,13 @@ for AREA in range(1,7):
 
 		#compute embedding for each point
 		embeddings = numpy.zeros((len(points), embedding_size), dtype=float)
-		input_points = numpy.zeros((batch_size, num_neighbors, feature_size), dtype=float)
+		input_points = numpy.zeros((batch_size, feature_size-2), dtype=float)
+		input_neighbors = numpy.zeros((batch_size, num_neighbors, feature_size), dtype=float)
 		num_batches = 0
 		for i in range(len(points)):
-			input_points[0,:,:] = neighbor_array[i, :, :feature_size]
-			emb_val = sess.run(net.embeddings, {net.input_pl:input_points})
+			input_points[0,:] = points[i, 2:6]	
+			input_neighbors[0,:,:] = neighbor_array[i, :, :feature_size]
+			emb_val = sess.run(net.embeddings, {net.input_pl:input_points, net.neighbor_pl:input_neighbors})
 			embeddings[i] = emb_val
 			num_batches += 1
 
@@ -127,7 +137,7 @@ for AREA in range(1,7):
 		for i in range(repeats_per_room):
 			visited = numpy.zeros(len(point_voxels), dtype=bool)
 			#iterate over each voxel in the room
-			for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
+			for seed_id in numpy.random.choice(range(len(points)), len(points), replace=False):
 				if visited[seed_id]:
 					continue
 				target_id = obj_id[seed_id]
@@ -175,18 +185,14 @@ for AREA in range(1,7):
 						currentMask[expandID] = True
 
 					center = numpy.mean(currentPoints[:,:2], axis=0)
-					rgb_center = numpy.mean(currentPoints[:,3:6], axis=0)
-					normal_center = numpy.mean(currentPoints[:,6:9], axis=0)
-					emb_center = numpy.mean(currentPoints[:,9:], axis=0)
+					feature_center = numpy.mean(currentPoints[:,3:], axis=0)
 					currentPoints[:,:2] -= center
 					stacked_points.append(currentPoints)
 					stacked_count.append(len(currentPoints))
 					if len(expandPoints) > 0:
 						expandPoints = numpy.array(expandPoints)
 						expandPoints[:,:2] -= center
-						expandPoints[:,3:6] -= rgb_center
-						expandPoints[:,6:9] -= normal_center
-						expandPoints[:,9:] -= emb_center
+						expandPoints[:,3:] -= feature_center
 						stacked_neighbor_points.append(numpy.array(expandPoints))
 					else:
 						stacked_neighbor_points.append(numpy.zeros((0,currentPoints.shape[-1])))
@@ -215,7 +221,10 @@ for AREA in range(1,7):
 							print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), finalScore, originalScore))
 							break 
 
-	h5_fout = h5py.File('data/embedding_area%s.h5'%AREA,'w')
+	if SEED is None:
+		h5_fout = h5py.File('data/embedding_area%s.h5'%(AREA),'w')
+	else:
+		h5_fout = h5py.File('data/multiseed/embedding_seed%d_area%s.h5'%(SEED,AREA),'w')
 	h5_fout.create_dataset( 'points', data=numpy.vstack(stacked_points), compression='gzip', compression_opts=4, dtype=numpy.float32)
 	h5_fout.create_dataset( 'count', data=stacked_count, compression='gzip', compression_opts=4, dtype=numpy.int32)
 	h5_fout.create_dataset( 'neighbor_points', data=numpy.vstack(stacked_neighbor_points), compression='gzip', compression_opts=4, dtype=numpy.float32)

@@ -1,12 +1,19 @@
-from learn_region_grow_util import *
+from learn_region_grow_util import loadFromH5, savePCD, normalize
+import h5py
 import itertools
 import sys
 import numpy as np
 from class_util import classes
 
 resolution = 0.1
-repeats_per_room = 1
 SEED = None
+add_mistake_prob = 0.03
+remove_mistake_prob = 0.01
+iou_threshold = 0.9
+stop_threshold = 5
+cluster_threshold = 10
+max_points = 1024
+save_id = 0
 np.random.seed(0)
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--seed':
@@ -14,13 +21,14 @@ for i in range(len(sys.argv)):
 		np.random.seed(SEED)
 
 for AREA in range(1,7):
-#for AREA in [3]:
+#for AREA in [1]:
 	all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
 	stacked_points = []
 	stacked_neighbor_points = []
 	stacked_count = []
 	stacked_neighbor_count = []
-	stacked_class = []
+	stacked_remove = []
+	stacked_add = []
 	stacked_steps = []
 	stacked_complete = []
 
@@ -84,76 +92,117 @@ for AREA in range(1,7):
 		points = np.hstack((points, normals, curvatures.reshape(-1,1))).astype(np.float32)
 
 		point_voxels = np.round(points[:,:3]/resolution).astype(int)
-		for i in range(repeats_per_room):
-			visited = np.zeros(len(point_voxels), dtype=bool)
-			#iterate over each voxel in the room
-			for seed_id in np.random.choice(range(len(points)), len(points), replace=False):
-#			for seed_id in np.arange(len(points))[np.argsort(curvatures)]:
-				if visited[seed_id]:
-					continue
-				target_id = obj_id[seed_id]
-				obj_voxels = point_voxels[obj_id==target_id, :]
-				gt_mask = obj_id==target_id
-				original_minDims = obj_voxels.min(axis=0)
-				original_maxDims = obj_voxels.max(axis=0)
-				#print('original',np.sum(gt_mask), original_minDims, original_maxDims)
-				mask = np.logical_and(np.all(point_voxels>=original_minDims,axis=1), np.all(point_voxels<=original_maxDims, axis=1))
-				originalScore = 1.0 * np.sum(np.logical_and(gt_mask,mask)) / np.sum(np.logical_or(gt_mask,mask))
+		visited = np.zeros(len(point_voxels), dtype=bool)
+		#iterate over each voxel in the room
+		for seed_id in np.random.choice(range(len(points)), len(points), replace=False):
+#		for seed_id in np.arange(len(points))[np.argsort(curvatures)]:
+			if visited[seed_id]:
+				continue
+			target_id = obj_id[seed_id]
+			obj_voxels = point_voxels[obj_id==target_id, :]
+			gt_mask = obj_id==target_id
+			original_minDims = obj_voxels.min(axis=0)
+			original_maxDims = obj_voxels.max(axis=0)
+			#print('original',np.sum(gt_mask), original_minDims, original_maxDims)
+			mask = np.logical_and(np.all(point_voxels>=original_minDims,axis=1), np.all(point_voxels<=original_maxDims, axis=1))
+			originalScore = 1.0 * np.sum(np.logical_and(gt_mask,mask)) / np.sum(np.logical_or(gt_mask,mask))
 
-				#initialize the seed voxel
-				seed_voxel = point_voxels[seed_id]
-				currentMask = np.zeros(len(points), dtype=bool)
-				currentMask[seed_id] = True
-				minDims = seed_voxel.copy()
-				maxDims = seed_voxel.copy()
-				steps = 0
+			#initialize the seed voxel
+			seed_voxel = point_voxels[seed_id]
+			currentMask = np.zeros(len(points), dtype=bool)
+			currentMask[seed_id] = True
+			minDims = seed_voxel.copy()
+			maxDims = seed_voxel.copy()
+			steps = 0
+			stop_count = 0
+			max_iou = 0
 
-				#perform region growing
-				while True:
+			#perform region growing
+			while True:
 
-					#determine the current points and the neighboring points
-					currentPoints = points[currentMask, :].copy()
-					newMinDims = minDims.copy()	
-					newMaxDims = maxDims.copy()	
-					newMinDims -= 1
-					newMaxDims += 1
-					mask = np.logical_and(np.all(point_voxels>=newMinDims,axis=1), np.all(point_voxels<=newMaxDims, axis=1))
-					mask = np.logical_and(mask, np.logical_not(currentMask))
-					expandPoints = points[mask, :].copy()
-					expandClass = obj_id[mask] == target_id
-					expandID = np.nonzero(mask)[0][expandClass]
-					currentMask[expandID] = True
+				#determine the current points and the neighboring points
+				currentPoints = points[currentMask, :].copy()
+				newMinDims = minDims.copy()	
+				newMaxDims = maxDims.copy()	
+				newMinDims -= 1
+				newMaxDims += 1
+				mask = np.logical_and(np.all(point_voxels>=newMinDims,axis=1), np.all(point_voxels<=newMaxDims, axis=1))
+				mask = np.logical_and(mask, np.logical_not(currentMask))
+				mask = np.logical_and(mask, np.logical_not(visited))
 
+				#determine which points to accept
+				expandPoints = points[mask, :].copy()
+				expandClass = obj_id[mask] == target_id
+				mask_idx = np.nonzero(mask)[0]
+				mistake_sample = np.random.random(len(mask_idx)) < add_mistake_prob
+				expand_with_mistake = np.logical_xor(expandClass, mistake_sample)
+				expandID = mask_idx[expand_with_mistake]
+
+				#determine which points to reject
+				rejectClass = obj_id[currentMask] != target_id
+				mask_idx = np.nonzero(currentMask)[0]
+				mistake_sample = np.random.random(len(mask_idx)) < remove_mistake_prob
+				reject_with_mistake = np.logical_xor(rejectClass, mistake_sample)
+				rejectID = mask_idx[reject_with_mistake]
+
+				#update current mask
+				currentMask[expandID] = True
+				if len(rejectID) < len(mask_idx):
+					currentMask[rejectID] = False
+				iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
+				iou_round = np.round(iou, decimals=2)
+				if iou_round > max_iou:
+					stop_count = 0
+					max_iou = iou_round
+				else:
+					stop_count += 1
+#				print('mask %d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
+
+				if len(currentPoints) <= max_points:
 					stacked_points.append(currentPoints)
 					stacked_count.append(len(currentPoints))
-					if len(expandPoints) > 0:
-						stacked_neighbor_points.append(np.array(expandPoints))
-					else:
-						stacked_neighbor_points.append(np.zeros((0,currentPoints.shape[-1])))
+					stacked_remove.extend(rejectClass)
+				else:
+					subset = np.random.choice(len(currentPoints), max_points, replace=False)
+					stacked_points.append(currentPoints[subset])
+					stacked_count.append(max_points)
+					stacked_remove.extend(rejectClass[subset])
+				if len(expandPoints) == 0:
+					stacked_neighbor_points.append(np.zeros((0,currentPoints.shape[-1])))
+					stacked_neighbor_count.append(0)
+				elif len(expandPoints) <= max_points:
+					stacked_neighbor_points.append(np.array(expandPoints))
 					stacked_neighbor_count.append(len(expandPoints))
-					stacked_class.extend(expandClass)
-					steps += 1
+					stacked_add.extend(expandClass)
+				else:
+					subset = np.random.choice(len(expandPoints), max_points, replace=False)
+					stacked_neighbor_points.append(expandPoints[subset])
+					stacked_neighbor_count.append(max_points)
+					stacked_add.extend(expandClass[subset])
+				stacked_complete.append(iou > iou_threshold)
+				steps += 1
 
-					if np.sum(currentMask) == np.sum(gt_mask): #completed
-						visited[currentMask] = True
-						stacked_complete.append(1)
-						stacked_steps.append(steps)
-						finalScore = 1.0 * np.sum(np.logical_and(gt_mask,currentMask)) / np.sum(np.logical_or(gt_mask,currentMask))
-						print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), finalScore, originalScore))
-						break 
-					else:
-						if np.any(expandClass): #continue growing
-							stacked_complete.append(0)
-							#has matching neighbors: expand in those directions
-							minDims = point_voxels[currentMask, :].min(axis=0)
-							maxDims = point_voxels[currentMask, :].max(axis=0)
-						else: #no matching neighbors (early termination)
+#				if np.all(currentMask == gt_mask): #completed
+				if stop_count >= stop_threshold:
+					visited[currentMask] = True
+					stacked_steps.append(steps)
+#					savePCD('tmp/%d-cloud.pcd'%save_id, points[currentMask])
+#					save_id += 1
+					print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
+					break 
+				else:
+					if np.any(expandClass) or np.any(rejectClass): #continue growing
+						#has matching neighbors: expand in those directions
+						minDims = point_voxels[currentMask, :].min(axis=0)
+						maxDims = point_voxels[currentMask, :].max(axis=0)
+					else: #no matching neighbors (early termination)
+						if np.sum(currentMask) > cluster_threshold:
 							visited[currentMask] = True
-							stacked_complete.append(0)
 							stacked_steps.append(steps)
-							finalScore = 1.0 * np.sum(np.logical_and(gt_mask,currentMask)) / np.sum(np.logical_or(gt_mask,currentMask))
-							print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), finalScore, originalScore))
-							break 
+#							savePCD('tmp/%d-cloud.pcd'%save_id, points[currentMask])
+#							save_id += 1
+							print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
+						break 
 
 	normalize(stacked_points, stacked_neighbor_points)
 	if SEED is None:
@@ -164,7 +213,8 @@ for AREA in range(1,7):
 	h5_fout.create_dataset( 'count', data=stacked_count, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'neighbor_points', data=np.vstack(stacked_neighbor_points), compression='gzip', compression_opts=4, dtype=np.float32)
 	h5_fout.create_dataset( 'neighbor_count', data=stacked_neighbor_count, compression='gzip', compression_opts=4, dtype=np.int32)
-	h5_fout.create_dataset( 'class', data=stacked_class, compression='gzip', compression_opts=4, dtype=np.int32)
+	h5_fout.create_dataset( 'add', data=stacked_add, compression='gzip', compression_opts=4, dtype=np.int32)
+	h5_fout.create_dataset( 'remove', data=stacked_remove, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'steps', data=stacked_steps, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'complete', data=stacked_complete, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.close()

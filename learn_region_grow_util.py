@@ -5,17 +5,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 from metric_loss_ops import triplet_semihard_loss
 
-action_map = numpy.array([
-	[0,0,0,0,0,0],
-	[-1,0,0,0,0,0],
-	[0,0,0,1,0,0],
-	[0,-1,0,0,0,0],
-	[0,0,0,0,1,0],
-	[0,0,-1,0,0,0],
-	[0,0,0,0,0,1],
-])
-action_str = ['no-op','-x','+x','-y','+y','-z','+z']
-
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
 	all_points = f['points'][:]
@@ -90,7 +79,7 @@ def normalize(stacked_points, stacked_neighbor_points):
 			stacked_neighbor_points[i][:,3:] -= feature_center
 
 class LrgNet:
-	def __init__(self,batch_size, num_points, num_neighbor_points, feature_size):
+	def __init__(self,batch_size, num_inlier_points, num_neighbor_points, feature_size):
 		CONV_CHANNELS = [64,64,64,128,512]
 		CONV2_CHANNELS = [256, 128]
 		FC_CHANNELS = [256, 128]
@@ -100,55 +89,37 @@ class LrgNet:
 		self.fc = [None]*(len(FC_CHANNELS) + 1)
 		self.fc_kernel = [None]*(len(FC_CHANNELS) + 1)
 		self.fc_bias = [None]*(len(FC_CHANNELS) + 1)
-		self.neighbor_kernel = [None]*(len(CONV_CHANNELS) + len(CONV2_CHANNELS) + 1)
-		self.neighbor_bias = [None]*(len(CONV_CHANNELS) + len(CONV2_CHANNELS) + 1)
-		self.neighbor_conv = [None]*(len(CONV_CHANNELS) + len(CONV2_CHANNELS) + 1)
-		self.tile = [None]*2
-		self.input_pl = tf.placeholder(tf.float32, shape=(batch_size, num_points, feature_size))
+		self.neighbor_kernel = [None]*len(CONV_CHANNELS)
+		self.neighbor_bias = [None]*len(CONV_CHANNELS)
+		self.neighbor_conv = [None]*len(CONV_CHANNELS)
+		self.add_kernel = [None]*(len(CONV2_CHANNELS) + 1)
+		self.add_bias = [None]*(len(CONV2_CHANNELS) + 1)
+		self.add_conv = [None]*(len(CONV2_CHANNELS) + 1)
+		self.remove_kernel = [None]*(len(CONV2_CHANNELS) + 1)
+		self.remove_bias = [None]*(len(CONV2_CHANNELS) + 1)
+		self.remove_conv = [None]*(len(CONV2_CHANNELS) + 1)
+		self.inlier_tile = [None]*2
+		self.neighbor_tile = [None]*2
+		self.inlier_pl = tf.placeholder(tf.float32, shape=(batch_size, num_inlier_points, feature_size))
 		self.neighbor_pl = tf.placeholder(tf.float32, shape=(batch_size, num_neighbor_points, feature_size))
-		self.class_pl = tf.placeholder(tf.int32, shape=(batch_size, num_neighbor_points))
+		self.add_mask_pl = tf.placeholder(tf.int32, shape=(batch_size, num_neighbor_points))
+		self.remove_mask_pl = tf.placeholder(tf.int32, shape=(batch_size, num_inlier_points))
 		self.completeness_pl = tf.placeholder(tf.int32, shape=(batch_size))
-		# self.is_training_pl = tf.placeholder(tf.bool, shape=())
 
-		def batch_norm_template(inputs, is_training, moments_dims):
-			with tf.variable_scope('bn') as sc:
-				num_channels = inputs.get_shape()[-1].value
-				beta = tf.Variable(tf.constant(0.0, shape=[num_channels]),
-					name='beta', trainable=True)
-				gamma = tf.Variable(tf.constant(1.0, shape=[num_channels]),
-					name='gamma', trainable=True)
-				batch_mean, batch_var = tf.nn.moments(inputs, moments_dims, name='moments')
-				ema = tf.train.ExponentialMovingAverage(decay=0.9)
-				ema_apply_op = tf.cond(is_training,
-					lambda: ema.apply([batch_mean, batch_var]),
-					lambda: tf.no_op())
-
-				def mean_var_with_update():
-					with tf.control_dependencies([ema_apply_op]):
-						return tf.identity(batch_mean), tf.identity(batch_var)
-
-				mean, var = tf.cond(is_training,
-					mean_var_with_update,
-					lambda: (ema.average(batch_mean), ema.average(batch_var)))
-				normed = tf.nn.batch_normalization(inputs, mean, var, beta, gamma, 1e-3)
-			return normed
-
-		#CONVOLUTION LAYERS
+		#CONVOLUTION LAYERS FOR INLIER SET
 		for i in range(len(CONV_CHANNELS)):
 			self.kernel[i] = tf.get_variable('lrg_kernel'+str(i), [1, feature_size if i==0 else CONV_CHANNELS[i-1], CONV_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
 			self.bias[i] = tf.get_variable('lrg_bias'+str(i), [CONV_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-			self.conv[i] = tf.nn.conv1d(self.input_pl if i==0 else self.conv[i-1], self.kernel[i], 1, padding='VALID')
+			self.conv[i] = tf.nn.conv1d(self.inlier_pl if i==0 else self.conv[i-1], self.kernel[i], 1, padding='VALID')
 			self.conv[i] = tf.nn.bias_add(self.conv[i], self.bias[i])
-			# self.conv[i] = batch_norm_template(self.conv[i], self.is_training_pl, [0,])
 			self.conv[i] = tf.nn.relu(self.conv[i])
 
-		#CONVOLUTION LAYERS FOR NEIGHBOR INPUT
+		#CONVOLUTION LAYERS FOR NEIGHBOR SET
 		for i in range(len(CONV_CHANNELS)):
 			self.neighbor_kernel[i] = tf.get_variable('lrg_neighbor_kernel'+str(i), [1, feature_size if i==0 else CONV_CHANNELS[i-1], CONV_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
 			self.neighbor_bias[i] = tf.get_variable('lrg_neighbor_bias'+str(i), [CONV_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 			self.neighbor_conv[i] = tf.nn.conv1d(self.neighbor_pl if i==0 else self.neighbor_conv[i-1], self.neighbor_kernel[i], 1, padding='VALID')
 			self.neighbor_conv[i] = tf.nn.bias_add(self.neighbor_conv[i], self.neighbor_bias[i])
-			# self.neighbor_conv[i] = batch_norm_template(self.neighbor_conv[i], self.is_training_pl, [0,])
 			self.neighbor_conv[i] = tf.nn.relu(self.neighbor_conv[i])
 
 		#MAX POOLING
@@ -162,7 +133,6 @@ class LrgNet:
 			self.fc_bias[i] = tf.get_variable('lrg_fc_bias'+str(i), [FC_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 			self.fc[i] = tf.matmul(self.combined_pool if i==0 else self.fc[i-1], self.fc_kernel[i])
 			self.fc[i] = tf.nn.bias_add(self.fc[i], self.fc_bias[i])
-			# self.fc[i] = batch_norm_template(self.fc[i],self.is_training_pl,[0,])
 			self.fc[i] = tf.nn.relu(self.fc[i])
 		i += 1
 		self.fc_kernel[i] = tf.get_variable('lrg_fc_kernel'+str(i), [FC_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
@@ -174,42 +144,76 @@ class LrgNet:
 		##CLASSIFICATION BRANCH##
 
 		#CONCAT AFTER POOLING
-		self.tile[0] = tf.tile(tf.reshape(self.combined_pool,[batch_size,-1,CONV_CHANNELS[-1]*2]) , [1,1,num_neighbor_points])
-		self.tile[0] = tf.reshape(self.tile[0],[batch_size,num_neighbor_points,-1])
-		self.tile[1] = self.neighbor_conv[1]
-		self.concat = tf.concat(axis=2, values=self.tile)
+		self.inlier_tile[0] = tf.tile(tf.reshape(self.combined_pool,[batch_size,-1,CONV_CHANNELS[-1]*2]) , [1,1,num_inlier_points])
+		self.inlier_tile[0] = tf.reshape(self.inlier_tile[0],[batch_size,num_inlier_points,-1])
+		self.inlier_tile[1] = self.conv[1]
+		self.inlier_concat = tf.concat(axis=2, values=self.inlier_tile)
+		self.neighbor_tile[0] = tf.tile(tf.reshape(self.combined_pool,[batch_size,-1,CONV_CHANNELS[-1]*2]) , [1,1,num_neighbor_points])
+		self.neighbor_tile[0] = tf.reshape(self.neighbor_tile[0],[batch_size,num_neighbor_points,-1])
+		self.neighbor_tile[1] = self.neighbor_conv[1]
+		self.neighbor_concat = tf.concat(axis=2, values=self.neighbor_tile)
 
 		#CONVOLUTION LAYERS AFTER POOLING
 		for i in range(len(CONV2_CHANNELS)):
-			kernel_id = i + len(CONV_CHANNELS)
-			self.neighbor_kernel[kernel_id] = tf.get_variable('lrg_neighbor_kernel'+str(kernel_id), [1, CONV_CHANNELS[-1]*2 + CONV_CHANNELS[1] if i==0 else CONV2_CHANNELS[i-1], CONV2_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-			self.neighbor_bias[kernel_id] = tf.get_variable('lrg_neighbor_bias'+str(kernel_id), [CONV2_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-			self.neighbor_conv[kernel_id] = tf.nn.conv1d(self.concat if i==0 else self.neighbor_conv[kernel_id-1], self.neighbor_kernel[kernel_id], 1, padding='VALID')
-			self.neighbor_conv[kernel_id] = tf.nn.bias_add(self.neighbor_conv[kernel_id], self.neighbor_bias[kernel_id])
-			# self.neighbor_conv[kernel_id] = batch_norm_template(self.neighbor_conv[kernel_id], self.is_training_pl, [0,])
-			self.neighbor_conv[kernel_id] = tf.nn.relu(self.neighbor_conv[kernel_id])
-		kernel_id = i + len(CONV_CHANNELS) + 1
-		self.neighbor_kernel[kernel_id] = tf.get_variable('lrg_neighbor_kernel'+str(kernel_id), [1, CONV2_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-		self.neighbor_bias[kernel_id] = tf.get_variable('lrg_neighbor_bias'+str(kernel_id), [2], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-		self.neighbor_conv[kernel_id] = tf.nn.conv1d(self.neighbor_conv[kernel_id-1], self.neighbor_kernel[kernel_id], 1, padding='VALID')
-		self.neighbor_conv[kernel_id] = tf.nn.bias_add(self.neighbor_conv[kernel_id], self.neighbor_bias[kernel_id])
-		self.class_output = self.neighbor_conv[kernel_id]
+			self.add_kernel[i] = tf.get_variable('lrg_add_kernel'+str(i), [1, CONV_CHANNELS[-1]*2 + CONV_CHANNELS[1] if i==0 else CONV2_CHANNELS[i-1], CONV2_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+			self.add_bias[i] = tf.get_variable('lrg_add_bias'+str(i), [CONV2_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+			self.add_conv[i] = tf.nn.conv1d(self.neighbor_concat if i==0 else self.add_conv[i-1], self.add_kernel[i], 1, padding='VALID')
+			self.add_conv[i] = tf.nn.bias_add(self.add_conv[i], self.add_bias[i])
+			self.add_conv[i] = tf.nn.relu(self.add_conv[i])
+		i += 1
+		self.add_kernel[i] = tf.get_variable('lrg_add_kernel'+str(i), [1, CONV2_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		self.add_bias[i] = tf.get_variable('lrg_add_bias'+str(i), [2], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		self.add_conv[i] = tf.nn.conv1d(self.add_conv[i-1], self.add_kernel[i], 1, padding='VALID')
+		self.add_conv[i] = tf.nn.bias_add(self.add_conv[i], self.add_bias[i])
+		self.add_output = self.add_conv[i]
+
+		for i in range(len(CONV2_CHANNELS)):
+			self.remove_kernel[i] = tf.get_variable('lrg_remove_kernel'+str(i), [1, CONV_CHANNELS[-1]*2 + CONV_CHANNELS[1] if i==0 else CONV2_CHANNELS[i-1], CONV2_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+			self.remove_bias[i] = tf.get_variable('lrg_remove_bias'+str(i), [CONV2_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+			self.remove_conv[i] = tf.nn.conv1d(self.inlier_concat if i==0 else self.remove_conv[i-1], self.remove_kernel[i], 1, padding='VALID')
+			self.remove_conv[i] = tf.nn.bias_add(self.remove_conv[i], self.remove_bias[i])
+			self.remove_conv[i] = tf.nn.relu(self.remove_conv[i])
+		i += 1
+		self.remove_kernel[i] = tf.get_variable('lrg_remove_kernel'+str(i), [1, CONV2_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		self.remove_bias[i] = tf.get_variable('lrg_remove_bias'+str(i), [2], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		self.remove_conv[i] = tf.nn.conv1d(self.remove_conv[i-1], self.remove_kernel[i], 1, padding='VALID')
+		self.remove_conv[i] = tf.nn.bias_add(self.remove_conv[i], self.remove_bias[i])
+		self.remove_output = self.remove_conv[i]
 
 		#LOSS FUNCTIONS
-		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.class_output, labels=self.class_pl))
-		self.class_acc = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.class_output, -1), tf.to_int64(self.class_pl)), tf.float32))
-		pos_mask = tf.where(tf.cast(self.completeness_pl, tf.bool))
-		neg_mask = tf.where(tf.cast(1 - self.completeness_pl, tf.bool))
-		self.pos_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.gather_nd(self.completeness_output, pos_mask), labels=tf.gather_nd(self.completeness_pl, pos_mask)))
-		self.neg_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.gather_nd(self.completeness_output, neg_mask), labels=tf.gather_nd(self.completeness_pl, neg_mask)))
-		self.pos_loss = tf.cond(tf.is_nan(self.pos_loss), lambda: 0.0, lambda: self.pos_loss)
-		self.neg_loss = tf.cond(tf.is_nan(self.neg_loss), lambda: 0.0, lambda: self.neg_loss)
-		self.completeness_loss = self.pos_loss + self.neg_loss
+		def weighted_cross_entropy(logit, label):
+			pos_mask = tf.where(tf.cast(label, tf.bool))
+			neg_mask = tf.where(tf.cast(1 - label, tf.bool))
+			pos_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.gather_nd(logit, pos_mask), labels=tf.gather_nd(label, pos_mask)))
+			neg_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=tf.gather_nd(logit, neg_mask), labels=tf.gather_nd(label, neg_mask)))
+			pos_loss = tf.cond(tf.is_nan(pos_loss), lambda: 0.0, lambda: pos_loss)
+			neg_loss = tf.cond(tf.is_nan(neg_loss), lambda: 0.0, lambda: neg_loss)
+			return pos_loss + neg_loss
+
+		self.add_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.add_output, labels=self.add_mask_pl))
+#		self.add_loss = weighted_cross_entropy(self.add_output, self.add_mask_pl)
+		self.add_acc = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.add_output, -1), tf.to_int64(self.add_mask_pl)), tf.float32))
+		TP = tf.reduce_sum(tf.cast(tf.logical_and(tf.equal(tf.argmax(self.add_output, -1), 1), tf.equal(self.add_mask_pl, 1)), tf.float32))
+		self.add_prc = TP / (tf.cast(tf.reduce_sum(tf.argmax(self.add_output, -1)), tf.float32) + 1)
+		self.add_rcl = TP / (tf.cast(tf.reduce_sum(self.add_mask_pl), tf.float32) + 1)
+#		self.remove_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.remove_output, labels=self.remove_mask_pl))
+		self.remove_loss = weighted_cross_entropy(self.remove_output, self.remove_mask_pl)
+		self.remove_acc = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.remove_output, -1), tf.to_int64(self.remove_mask_pl)), tf.float32))
+		self.remove_mask = tf.nn.softmax(self.remove_output, axis=-1)[:, :, 1] > 0.9
+		TP = tf.reduce_sum(tf.cast(tf.logical_and(self.remove_mask, tf.equal(self.remove_mask_pl, 1)), tf.float32))
+		self.remove_prc = TP / (tf.reduce_sum(tf.cast(self.remove_mask, tf.float32)) + 1)
+		self.remove_rcl = TP / (tf.cast(tf.reduce_sum(self.remove_mask_pl), tf.float32) + 1)
+
+		self.completeness_loss = weighted_cross_entropy(self.completeness_output, self.completeness_pl)
 		correct = tf.equal(tf.argmax(self.completeness_output, -1), tf.to_int64(self.completeness_pl))
 		self.completeness_acc = tf.reduce_mean(tf.cast(correct, tf.float32))
-		self.loss = self.class_loss + self.completeness_loss
+		TP = tf.reduce_sum(tf.cast(tf.logical_and(tf.equal(tf.argmax(self.completeness_output, -1), 1), tf.equal(self.completeness_pl, 1)), tf.float32))
+		self.completeness_prc = TP / (tf.cast(tf.reduce_sum(tf.argmax(self.completeness_output, -1)), tf.float32) + 1)
+		self.completeness_rcl = TP / (tf.cast(tf.reduce_sum(self.completeness_pl), tf.float32) + 1)
+
+		self.loss = self.add_loss + self.remove_loss + self.completeness_loss
 		batch = tf.Variable(0)
-		optimizer = tf.train.AdamOptimizer(1e-4)
+		optimizer = tf.train.AdamOptimizer(1e-3)
 		self.train_op = optimizer.minimize(self.loss, global_step=batch)
 
 class MCPNet:

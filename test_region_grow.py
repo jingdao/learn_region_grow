@@ -166,7 +166,11 @@ for AREA in TEST_AREAS:
 					stop_growing('noneighbor')
 					break 
 
-				subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
+#				subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
+				if len(currentPoints) >= NUM_POINT:
+					subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=False)
+				else:
+					subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_POINT-len(currentPoints), replace=True))
 				center = numpy.mean(currentPoints, axis=0)
 				expandPoints = numpy.array(expandPoints)
 				expandPoints[:,:2] -= center[:2]
@@ -177,6 +181,7 @@ for AREA in TEST_AREAS:
 					subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
 				else:
 					subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
+#				subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=len(expandPoints)<NUM_NEIGHBOR_POINT)
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 				input_classes[0,:] = numpy.array(expandClass)[subset]
 				input_complete = numpy.zeros(1,dtype=numpy.int32)

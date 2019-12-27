@@ -9,8 +9,8 @@ resolution = 0.1
 SEED = None
 add_mistake_prob = 0.03
 remove_mistake_prob = 0.01
-iou_threshold = 0.9
-stop_threshold = 5
+add_mistake_limit = 30.0
+remove_mistake_limit = 30.0
 cluster_threshold = 10
 max_points = 1024
 save_id = 0
@@ -114,8 +114,7 @@ for AREA in range(1,7):
 			minDims = seed_voxel.copy()
 			maxDims = seed_voxel.copy()
 			steps = 0
-			stop_count = 0
-			max_iou = 0
+			stuck = False
 
 			#perform region growing
 			while True:
@@ -134,28 +133,32 @@ for AREA in range(1,7):
 				expandPoints = points[mask, :].copy()
 				expandClass = obj_id[mask] == target_id
 				mask_idx = np.nonzero(mask)[0]
-				mistake_sample = np.random.random(len(mask_idx)) < add_mistake_prob
-				expand_with_mistake = np.logical_xor(expandClass, mistake_sample)
-				expandID = mask_idx[expand_with_mistake]
+				if stuck:
+					expandID = mask_idx[expandClass]
+				else:
+					mistake_sample = np.random.random(len(mask_idx)) < min(add_mistake_prob, add_mistake_limit/(len(mask_idx)+1))
+					expand_with_mistake = np.logical_xor(expandClass, mistake_sample)
+					expandID = mask_idx[expand_with_mistake]
 
 				#determine which points to reject
 				rejectClass = obj_id[currentMask] != target_id
 				mask_idx = np.nonzero(currentMask)[0]
-				mistake_sample = np.random.random(len(mask_idx)) < remove_mistake_prob
-				reject_with_mistake = np.logical_xor(rejectClass, mistake_sample)
-				rejectID = mask_idx[reject_with_mistake]
+				if stuck:
+					rejectID = mask_idx[rejectClass]
+				else:
+					mistake_sample = np.random.random(len(mask_idx)) < min(remove_mistake_prob, remove_mistake_limit/(len(mask_idx)+1))
+					reject_with_mistake = np.logical_xor(rejectClass, mistake_sample)
+					rejectID = mask_idx[reject_with_mistake]
 
 				#update current mask
 				currentMask[expandID] = True
 				if len(rejectID) < len(mask_idx):
 					currentMask[rejectID] = False
+				nextMinDims = point_voxels[currentMask, :].min(axis=0)
+				nextMaxDims = point_voxels[currentMask, :].max(axis=0)
+				if not np.any(nextMinDims<minDims) and not np.any(nextMaxDims>maxDims):
+					stuck = True
 				iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
-				iou_round = np.round(iou, decimals=2)
-				if iou_round > max_iou:
-					stop_count = 0
-					max_iou = iou_round
-				else:
-					stop_count += 1
 #				print('mask %d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
 
 				if len(currentPoints) <= max_points:
@@ -179,11 +182,10 @@ for AREA in range(1,7):
 					stacked_neighbor_points.append(expandPoints[subset])
 					stacked_neighbor_count.append(max_points)
 					stacked_add.extend(expandClass[subset])
-				stacked_complete.append(iou > iou_threshold)
+				stacked_complete.append(stuck and iou>0.5 or iou>0.9)
 				steps += 1
 
-#				if np.all(currentMask == gt_mask): #completed
-				if stop_count >= stop_threshold:
+				if np.all(currentMask == gt_mask): #completed
 					visited[currentMask] = True
 					stacked_steps.append(steps)
 #					savePCD('tmp/%d-cloud.pcd'%save_id, points[currentMask])
@@ -193,8 +195,8 @@ for AREA in range(1,7):
 				else:
 					if np.any(expandClass) or np.any(rejectClass): #continue growing
 						#has matching neighbors: expand in those directions
-						minDims = point_voxels[currentMask, :].min(axis=0)
-						maxDims = point_voxels[currentMask, :].max(axis=0)
+						minDims = nextMinDims
+						maxDims = nextMaxDims
 					else: #no matching neighbors (early termination)
 						if np.sum(currentMask) > cluster_threshold:
 							visited[currentMask] = True

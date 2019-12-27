@@ -4,7 +4,7 @@ import sys
 BATCH_SIZE = 100
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 100
+MAX_EPOCH = 50
 VAL_STEP = 7
 VAL_AREA = 1
 FEATURE_SIZE = 10
@@ -117,20 +117,29 @@ for epoch in range(MAX_EPOCH):
 	rmv_rcl_arr = []
 	cmp_prc_arr = []
 	cmp_rcl_arr = []
+	cmp_acc_arr = []
 	num_batches = int(len(train_inlier_points) / BATCH_SIZE)
 	for batch_id in range(num_batches):
 		start_idx = batch_id * BATCH_SIZE
 		end_idx = (batch_id + 1) * BATCH_SIZE
 		for i in range(BATCH_SIZE):
 			points_idx = idx[start_idx+i]
-			subset = numpy.random.choice(train_inlier_count[points_idx], NUM_INLIER_POINT, replace=train_inlier_count[points_idx]<NUM_INLIER_POINT)
+			N = train_inlier_count[points_idx]
+			if N >= NUM_INLIER_POINT:
+				subset = numpy.random.choice(N, NUM_INLIER_POINT, replace=False)
+			else:
+				subset = range(N) + list(numpy.random.choice(N, NUM_INLIER_POINT-N, replace=True))
 			inlier_points[i,:,:] = train_inlier_points[points_idx][subset, :]
 			input_remove[i,:] = train_remove[points_idx][subset]
-			subset = numpy.random.choice(train_neighbor_count[points_idx], NUM_NEIGHBOR_POINT, replace=train_neighbor_count[points_idx]<NUM_NEIGHBOR_POINT)
+			N = train_neighbor_count[points_idx]
+			if N >= NUM_NEIGHBOR_POINT:
+				subset = numpy.random.choice(N, NUM_NEIGHBOR_POINT, replace=False)
+			else:
+				subset = range(N) + list(numpy.random.choice(N, NUM_NEIGHBOR_POINT-N, replace=True))
 			neighbor_points[i,:,:] = train_neighbor_points[points_idx][subset, :]
 			input_add[i,:] = train_add[points_idx][subset]
 		input_complete = train_complete[idx[start_idx:end_idx]]
-		_, ls, ap, ar, rp, rr, cp, cr = sess.run([net.train_op, net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl, net.completeness_prc, net.completeness_rcl],
+		_, ls, ap, ar, rp, rr, cp, cr, ca = sess.run([net.train_op, net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl, net.completeness_prc, net.completeness_rcl, net.completeness_acc],
 			{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
 		loss_arr.append(ls)
 		add_prc_arr.append(ap)
@@ -139,7 +148,8 @@ for epoch in range(MAX_EPOCH):
 		rmv_rcl_arr.append(rr)
 		cmp_prc_arr.append(cp)
 		cmp_rcl_arr.append(cr)
-	print("Epoch %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f cmpl %.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr), numpy.mean(cmp_prc_arr), numpy.mean(cmp_rcl_arr)))
+		cmp_acc_arr.append(ca)
+	print("Epoch %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f cmpl %.2f/%.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr), numpy.mean(cmp_prc_arr), numpy.mean(cmp_rcl_arr), numpy.mean(cmp_acc_arr)))
 
 	if epoch % VAL_STEP == VAL_STEP - 1:
 		loss_arr = []
@@ -149,20 +159,29 @@ for epoch in range(MAX_EPOCH):
 		rmv_rcl_arr = []
 		cmp_prc_arr = []
 		cmp_rcl_arr = []
+		cmp_acc_arr = []
 		num_batches = int(len(val_inlier_points) / BATCH_SIZE)
 		for batch_id in range(num_batches):
 			start_idx = batch_id * BATCH_SIZE
 			end_idx = (batch_id + 1) * BATCH_SIZE
 			for i in range(BATCH_SIZE):
 				points_idx = start_idx+i
-				subset = numpy.random.choice(val_inlier_count[points_idx], NUM_INLIER_POINT, replace=val_inlier_count[points_idx]<NUM_INLIER_POINT)
+				N = val_inlier_count[points_idx]
+				if N >= NUM_INLIER_POINT:
+					subset = numpy.random.choice(N, NUM_INLIER_POINT, replace=False)
+				else:
+					subset = range(N) + list(numpy.random.choice(N, NUM_INLIER_POINT-N, replace=True))
 				inlier_points[i,:,:] = val_inlier_points[points_idx][subset, :]
 				input_remove[i,:] = val_remove[points_idx][subset]
-				subset = numpy.random.choice(val_neighbor_count[points_idx], NUM_NEIGHBOR_POINT, replace=val_neighbor_count[points_idx]<NUM_NEIGHBOR_POINT)
+				N = val_neighbor_count[points_idx]
+				if N >= NUM_INLIER_POINT:
+					subset = numpy.random.choice(N, NUM_NEIGHBOR_POINT, replace=False)
+				else:
+					subset = range(N) + list(numpy.random.choice(N, NUM_NEIGHBOR_POINT-N, replace=True))
 				neighbor_points[i,:,:] = val_neighbor_points[points_idx][subset, :]
 				input_add[i,:] = val_add[points_idx][subset]
 			input_complete = val_complete[start_idx:end_idx]
-			ls, ap, ar, rp, rr, cp, cr = sess.run([net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl, net.completeness_prc, net.completeness_rcl],
+			ls, ap, ar, rp, rr, cp, cr, ca = sess.run([net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl, net.completeness_prc, net.completeness_rcl, net.completeness_acc],
 				{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
 			loss_arr.append(ls)
 			add_prc_arr.append(ap)
@@ -171,6 +190,7 @@ for epoch in range(MAX_EPOCH):
 			rmv_rcl_arr.append(rr)
 			cmp_prc_arr.append(cp)
 			cmp_rcl_arr.append(cr)
-		print("Validation %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f cmpl %.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr), numpy.mean(cmp_prc_arr), numpy.mean(cmp_rcl_arr)))
+			cmp_acc_arr.append(ca)
+		print("Validation %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f cmpl %.2f/%.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr), numpy.mean(cmp_prc_arr), numpy.mean(cmp_rcl_arr), numpy.mean(cmp_acc_arr)))
 
 saver.save(sess, MODEL_PATH)

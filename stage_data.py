@@ -161,29 +161,27 @@ for AREA in range(1,7):
 				iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
 #				print('mask %d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
 
-				if len(currentPoints) <= max_points:
-					stacked_points.append(currentPoints)
-					stacked_count.append(len(currentPoints))
-					stacked_remove.extend(rejectClass)
-				else:
-					subset = np.random.choice(len(currentPoints), max_points, replace=False)
-					stacked_points.append(currentPoints[subset])
-					stacked_count.append(max_points)
-					stacked_remove.extend(rejectClass[subset])
-				if len(expandPoints) == 0:
-					stacked_neighbor_points.append(np.zeros((0,currentPoints.shape[-1])))
-					stacked_neighbor_count.append(0)
-				elif len(expandPoints) <= max_points:
-					stacked_neighbor_points.append(np.array(expandPoints))
-					stacked_neighbor_count.append(len(expandPoints))
-					stacked_add.extend(expandClass)
-				else:
-					subset = np.random.choice(len(expandPoints), max_points, replace=False)
-					stacked_neighbor_points.append(expandPoints[subset])
-					stacked_neighbor_count.append(max_points)
-					stacked_add.extend(expandClass[subset])
-				stacked_complete.append(stuck and iou>0.5 or iou>0.9)
-				steps += 1
+				if len(expandPoints) > 0:
+					if len(currentPoints) <= max_points:
+						stacked_points.append(currentPoints)
+						stacked_count.append(len(currentPoints))
+						stacked_remove.extend(rejectClass)
+					else:
+						subset = np.random.choice(len(currentPoints), max_points, replace=False)
+						stacked_points.append(currentPoints[subset])
+						stacked_count.append(max_points)
+						stacked_remove.extend(rejectClass[subset])
+					if len(expandPoints) <= max_points:
+						stacked_neighbor_points.append(np.array(expandPoints))
+						stacked_neighbor_count.append(len(expandPoints))
+						stacked_add.extend(expandClass)
+					else:
+						subset = np.random.choice(len(expandPoints), max_points, replace=False)
+						stacked_neighbor_points.append(expandPoints[subset])
+						stacked_neighbor_count.append(max_points)
+						stacked_add.extend(expandClass[subset])
+					stacked_complete.append(stuck and iou>0.5 or iou>0.9)
+					steps += 1
 
 				if np.all(currentMask == gt_mask): #completed
 					visited[currentMask] = True

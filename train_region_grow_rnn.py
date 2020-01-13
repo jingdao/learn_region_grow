@@ -22,7 +22,7 @@ config.log_device_placement = False
 sess = tf.Session(config=config)
 net = LrgNet(BATCH_SIZE, SEQ_LEN, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
-MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
+MODEL_PATH = 'models/lrgnet_rnn_model%d.ckpt'%VAL_AREA
 
 init = tf.global_variables_initializer()
 sess.run(init, {})

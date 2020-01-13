@@ -2,9 +2,9 @@ from learn_region_grow_util import *
 import sys
 
 BATCH_SIZE = 100
-NUM_INLIER_POINT = 512
-NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 50
+NUM_INLIER_POINT = 256
+NUM_NEIGHBOR_POINT = 256
+MAX_EPOCH = 100
 VAL_STEP = 7
 VAL_AREA = 1
 FEATURE_SIZE = 10
@@ -19,7 +19,7 @@ config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-net = LrgNet(BATCH_SIZE, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+net = LrgNet(BATCH_SIZE, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
 MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
 

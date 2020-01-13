@@ -16,6 +16,7 @@ import time
 import matplotlib.pyplot as plt
 import scipy.special
 from learn_region_grow_util import *
+import glob
 
 numpy.random.seed(0)
 NUM_INLIER_POINT = 512
@@ -53,10 +54,12 @@ for AREA in TEST_AREAS:
 	config.allow_soft_placement = True
 	config.log_device_placement = False
 	sess = tf.Session(config=config)
-	net = LrgNet(1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+	net = LrgNet(1, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 	saver = tf.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
+	room_name=[s.split('/')[-1] for s in glob.glob('/home/jd/Documents/GROMI_Deep_Learning/data/Stanford3dDataset_v1.2/Area_%s/*' % AREA)]
+	room_name=[s for s in room_name if '.' not in s]
 
 	if AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
@@ -194,10 +197,10 @@ for AREA in TEST_AREAS:
 
 				add_conf = scipy.special.softmax(add[0], axis=-1)[:,1]
 				rmv_conf = scipy.special.softmax(rmv[0], axis=-1)[:,1]
-				add_mask = add_conf > add_threshold
-				rmv_mask = rmv_conf > rmv_threshold
-#				add_mask = numpy.random.random(len(add_conf)) < add_conf
-#				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf - 0.2
+#				add_mask = add_conf > add_threshold
+#				rmv_mask = rmv_conf > rmv_threshold
+				add_mask = numpy.random.random(len(add_conf)) < add_conf
+				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf - 0.2
 #				add_mask = input_add[0].astype(bool)
 #				rmv_mask = input_remove[0].astype(bool)
 				cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
@@ -220,7 +223,8 @@ for AREA in TEST_AREAS:
 						currentMask[i] = False
 
 #				if numpy.sum(currentMask) == numpy.sum(gt_mask): #completed
-				if cmpl_conf > completion_threshold:
+#				if cmpl_conf > completion_threshold:
+				if False:
 					stop_growing('')
 					break 
 				else:
@@ -292,6 +296,7 @@ for AREA in TEST_AREAS:
 		agg_prc.append(prc)
 		agg_rcl.append(rcl)
 		agg_iou.append(room_iou)
+		print(room_name[room_id])
 		print("Area %s room %d NMI: %.2f AMI: %.2f ARS: %.2f PRC: %.2f RCL: %.2f IOU: %.2f"%(str(AREA), room_id, nmi,ami,ars, prc, rcl, room_iou))
 
 		#save point cloud results to file

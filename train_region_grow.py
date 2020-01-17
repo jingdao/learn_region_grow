@@ -2,12 +2,12 @@ from learn_region_grow_util import *
 import sys
 
 BATCH_SIZE = 100
-NUM_INLIER_POINT = 256
-NUM_NEIGHBOR_POINT = 256
+NUM_INLIER_POINT = 512
+NUM_NEIGHBOR_POINT = 512
 MAX_EPOCH = 100
 VAL_STEP = 7
 VAL_AREA = 1
-FEATURE_SIZE = 10
+FEATURE_SIZE = 13
 MULTISEED = 0
 initialized = False
 for i in range(len(sys.argv)):

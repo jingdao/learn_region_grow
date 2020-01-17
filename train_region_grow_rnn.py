@@ -8,7 +8,7 @@ SEQ_LEN = 100
 MAX_EPOCH = 100
 VAL_STEP = 7
 VAL_AREA = 1
-FEATURE_SIZE = 10
+FEATURE_SIZE = 13
 MULTISEED = 0
 initialized = False
 for i in range(len(sys.argv)):
@@ -38,7 +38,8 @@ for epoch in range(MAX_EPOCH):
 				SEED = epoch % MULTISEED
 				f = h5py.File('data/multiseed/seed%d_area%d.h5'%(SEED,AREA),'r')
 			else:
-				f = h5py.File('data/staged_area%d.h5'%(AREA),'r')
+#				f = h5py.File('data/staged_area%d.h5'%(AREA),'r')
+				f = h5py.File('data/small_area%d.h5'%(AREA),'r')
 			print('Loading %s ...'%f.filename)
 			if AREA == VAL_AREA:
 				val_complete.extend(f['complete'][:])
@@ -101,7 +102,7 @@ for epoch in range(MAX_EPOCH):
 	neighbor_points = numpy.zeros((BATCH_SIZE*SEQ_LEN, NUM_NEIGHBOR_POINT, FEATURE_SIZE))
 	input_add = numpy.zeros((BATCH_SIZE*SEQ_LEN, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 	input_remove = numpy.zeros((BATCH_SIZE*SEQ_LEN, NUM_INLIER_POINT), dtype=numpy.int32)
-	input_complete = numpy.zeros(BATCH_SIZE*SEQ_LEN, dtype=numpy.int32)
+	input_complete = numpy.zeros(BATCH_SIZE*SEQ_LEN, dtype=numpy.float32)
 	input_seq = numpy.zeros(BATCH_SIZE, dtype=numpy.int32)
 	input_seq_mask = numpy.zeros(BATCH_SIZE*SEQ_LEN, dtype=numpy.bool)
 
@@ -139,8 +140,7 @@ for epoch in range(MAX_EPOCH):
 			input_seq[B] = current_step
 			input_seq_mask[B*SEQ_LEN:(B+1)*SEQ_LEN] = False
 			input_seq_mask[B*SEQ_LEN:B*SEQ_LEN+current_step] = True
-		_, ls, ap, ar, rp, rr, cp, cr, ca, a1,a2,a3,a4= sess.run([net.train_op, net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl, net.completeness_prc, net.completeness_rcl, net.completeness_acc,
-				net.add_output, net.add_output_seq, net.add_mask_pl, net.add_pl_seq],
+		_, ls, ap, ar, rp, rr, cp, cr, ca= sess.run([net.train_op, net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl, net.completeness_prc, net.completeness_rcl, net.completeness_acc],
 			{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove, net.seq_pl:input_seq, net.seq_mask_pl:input_seq_mask})
 		loss_arr.append(ls)
 		add_prc_arr.append(ap)

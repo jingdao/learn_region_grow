@@ -69,15 +69,6 @@ end_header
 	f.close()
 	print('Saved to %s: (%d points)'%(filename, len(points)))
 
-def normalize(stacked_points, stacked_neighbor_points):
-	for i in range(len(stacked_points)):
-		center = numpy.mean(stacked_points[i][:,:2], axis=0)
-		stacked_points[i][:,:2] -= center
-		feature_center = numpy.mean(stacked_points[i][:,3:], axis=0)
-		if len(stacked_neighbor_points[i]) > 0:
-			stacked_neighbor_points[i][:,:2] -= center
-			stacked_neighbor_points[i][:,3:] -= feature_center
-
 class LrgNet:
 	def __init__(self,batch_size, seq_len, num_inlier_points, num_neighbor_points, feature_size):
 		CONV_CHANNELS = [64,64,64,128,256]
@@ -104,7 +95,7 @@ class LrgNet:
 		self.neighbor_pl = tf.placeholder(tf.float32, shape=(batch_size*seq_len, num_neighbor_points, feature_size))
 		self.add_mask_pl = tf.placeholder(tf.int32, shape=(batch_size*seq_len, num_neighbor_points))
 		self.remove_mask_pl = tf.placeholder(tf.int32, shape=(batch_size*seq_len, num_inlier_points))
-		self.completeness_pl = tf.placeholder(tf.int32, shape=(batch_size*seq_len))
+		self.completeness_pl = tf.placeholder(tf.float32, shape=(batch_size*seq_len))
 		self.seq_pl = tf.placeholder(tf.int32, shape=(batch_size))
 		self.seq_mask_pl = tf.placeholder(tf.bool, shape=(batch_size*seq_len))
 
@@ -131,9 +122,15 @@ class LrgNet:
 
 		#RECURRENT LAYERS (disabled if seq_len==1)
 		if seq_len > 1:
-			self.combined_pool = tf.reshape(self.combined_pool, [batch_size, seq_len, -1])
-			self.rnn, _ = tf.nn.dynamic_rnn(tf.contrib.rnn.LSTMCell(CONV_CHANNELS[-1]*2), self.combined_pool, dtype=tf.float32, sequence_length = self.seq_pl)
-			print('rnn', self.rnn)
+			rnn_cell = tf.contrib.rnn.GRUCell(CONV_CHANNELS[-1]*2)
+#			initial_state = rnn_cell.zero_state(batch_size, dtype=tf.float32)
+#			initial_state = tf.Variable(rnn_cell.zero_state(batch_size, dtype=tf.float32), trainable=False)
+			self.rnn_init = tf.get_variable('rnn_init', [CONV_CHANNELS[-1]*2], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+			initial_state = tf.tile(tf.reshape(self.rnn_init,[1,CONV_CHANNELS[-1]*2]) , [batch_size, 1])
+			self.rnn, self.final_state = tf.nn.dynamic_rnn(rnn_cell, tf.reshape(self.combined_pool, [batch_size, seq_len, -1]), initial_state=initial_state, dtype=tf.float32, sequence_length = self.seq_pl)
+			print('rnn', self.rnn, initial_state, self.final_state)
+#			with tf.control_dependencies([initial_state.assign(self.final_state)]):
+#				self.rnn = tf.identity(self.rnn)
 			self.pooled_feature = tf.reshape(self.rnn, [batch_size*seq_len, -1])
 		else:
 			self.pooled_feature = self.combined_pool
@@ -146,8 +143,8 @@ class LrgNet:
 			self.fc[i] = tf.nn.bias_add(self.fc[i], self.fc_bias[i])
 			self.fc[i] = tf.nn.relu(self.fc[i])
 		i += 1
-		self.fc_kernel[i] = tf.get_variable('lrg_fc_kernel'+str(i), [FC_CHANNELS[-1], 2], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-		self.fc_bias[i] = tf.get_variable('lrg_fc_bias'+str(i), [2], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
+		self.fc_kernel[i] = tf.get_variable('lrg_fc_kernel'+str(i), [FC_CHANNELS[-1], 1], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
+		self.fc_bias[i] = tf.get_variable('lrg_fc_bias'+str(i), [1], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
 		self.fc[i] = tf.matmul(self.fc[i-1], self.fc_kernel[i])
 		self.fc[i] = tf.nn.bias_add(self.fc[i], self.fc_bias[i])
 		self.completeness_output = self.fc[i]
@@ -198,14 +195,14 @@ class LrgNet:
 			self.add_pl_seq = tf.gather_nd(self.add_mask_pl, M)
 			self.remove_output_seq = tf.gather_nd(self.remove_output, M)
 			self.remove_pl_seq = tf.gather_nd(self.remove_mask_pl, M)
-			self.completeness_output_seq = tf.gather_nd(self.completeness_output, M)
+			self.completeness_output_seq = tf.reshape(tf.gather_nd(self.completeness_output, M), [-1])
 			self.completeness_pl_seq = tf.gather_nd(self.completeness_pl, M)
 		else:
 			self.add_output_seq = self.add_output
 			self.add_pl_seq = self.add_mask_pl
 			self.remove_output_seq = self.remove_output
 			self.remove_pl_seq = self.remove_mask_pl
-			self.completeness_output_seq = self.completeness_output
+			self.completeness_output_seq = tf.reshape(self.completeness_output, [-1])
 			self.completeness_pl_seq = self.completeness_pl
 
 		#LOSS FUNCTIONS
@@ -232,12 +229,10 @@ class LrgNet:
 		self.remove_prc = TP / (tf.reduce_sum(tf.cast(self.remove_mask, tf.float32)) + 1)
 		self.remove_rcl = TP / (tf.cast(tf.reduce_sum(self.remove_pl_seq), tf.float32) + 1)
 
-		self.completeness_loss = weighted_cross_entropy(self.completeness_output_seq, self.completeness_pl_seq)
-		correct = tf.equal(tf.argmax(self.completeness_output_seq, -1), tf.to_int64(self.completeness_pl_seq))
-		self.completeness_acc = tf.reduce_mean(tf.cast(correct, tf.float32))
-		TP = tf.reduce_sum(tf.cast(tf.logical_and(tf.equal(tf.argmax(self.completeness_output_seq, -1), 1), tf.equal(self.completeness_pl_seq, 1)), tf.float32))
-		self.completeness_prc = TP / (tf.cast(tf.reduce_sum(tf.argmax(self.completeness_output_seq, -1)), tf.float32) + 1)
-		self.completeness_rcl = TP / (tf.cast(tf.reduce_sum(self.completeness_pl_seq), tf.float32) + 1)
+		self.completeness_loss = tf.losses.mean_squared_error(self.completeness_output_seq, self.completeness_pl_seq)
+		self.completeness_acc = tf.reduce_mean(tf.cast(tf.math.less(tf.abs(self.completeness_output_seq - self.completeness_pl_seq), 0.1), tf.float32))
+		self.completeness_prc = tf.constant(0)
+		self.completeness_rcl = tf.constant(0)
 
 		self.loss = self.add_loss + self.remove_loss + self.completeness_loss
 		batch = tf.Variable(0)

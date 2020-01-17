@@ -1,4 +1,4 @@
-from learn_region_grow_util import loadFromH5, savePCD, normalize
+from learn_region_grow_util import loadFromH5, savePCD
 import h5py
 import itertools
 import sys
@@ -54,6 +54,9 @@ for AREA in range(1,7):
 		points = unequalized_points[equalized_idx]
 		obj_id = obj_id[equalized_idx]
 		cls_id = cls_id[equalized_idx]
+		xyz = points[:,:3]
+		rgb = points[:,3:6]
+		room_coordinates = (xyz - xyz.min(axis=0)) / (xyz.max(axis=0) - xyz.min(axis=0))
 
 		#compute normals and curvatures
 		normals = []
@@ -79,17 +82,7 @@ for AREA in range(1,7):
 		normals = np.array(normals)
 		curvatures = np.array(curvatures)
 		curvatures = curvatures/curvatures.max()
-		## XYZ
-		# points = points[:,0:3]
-
-		## XYZ + normal
-		# points = np.hstack((points[:,0:3], normals)).astype(np.float32)
-
-		## XYZ + RGB + normal(x,y,z)
-		# points = np.hstack((points, normals)).astype(np.float32)
-		
-		## XYZ + RGB + normal(x,y,z) + curvature
-		points = np.hstack((points, normals, curvatures.reshape(-1,1))).astype(np.float32)
+		points = np.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-1,1))).astype(np.float32)
 
 		point_voxels = np.round(points[:,:3]/resolution).astype(int)
 		visited = np.zeros(len(point_voxels), dtype=bool)
@@ -159,7 +152,8 @@ for AREA in range(1,7):
 				if not np.any(nextMinDims<minDims) and not np.any(nextMaxDims>maxDims):
 					stuck = True
 				iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
-#				print('mask %d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
+#				print('mask %d/%d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(np.logical_and(currentMask, gt_mask)),
+#					np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
 
 				if len(expandPoints) > 0:
 					if len(currentPoints) <= max_points:
@@ -180,7 +174,7 @@ for AREA in range(1,7):
 						stacked_neighbor_points.append(expandPoints[subset])
 						stacked_neighbor_count.append(max_points)
 						stacked_add.extend(expandClass[subset])
-					stacked_complete.append(stuck and iou>0.5 or iou>0.9)
+					stacked_complete.append(iou)
 					steps += 1
 
 				if np.all(currentMask == gt_mask): #completed
@@ -204,9 +198,17 @@ for AREA in range(1,7):
 							print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
 						break 
 
-	normalize(stacked_points, stacked_neighbor_points)
+	for i in range(len(stacked_points)):
+		center = np.mean(stacked_points[i][:,:2], axis=0)
+		stacked_points[i][:,:2] -= center
+		feature_center = np.mean(stacked_points[i][:,6:], axis=0)
+		if len(stacked_neighbor_points[i]) > 0:
+			stacked_neighbor_points[i][:,:2] -= center
+			stacked_neighbor_points[i][:,6:] -= feature_center
+
 	if SEED is None:
 		h5_fout = h5py.File('data/staged_area%s.h5'%(AREA),'w')
+#		h5_fout = h5py.File('data/small_area%s.h5'%(AREA),'w')
 	else:
 		h5_fout = h5py.File('data/multiseed/seed%d_area%s.h5'%(SEED,AREA),'w')
 	h5_fout.create_dataset( 'points', data=np.vstack(stacked_points), compression='gzip', compression_opts=4, dtype=np.float32)
@@ -216,6 +218,6 @@ for AREA in range(1,7):
 	h5_fout.create_dataset( 'add', data=stacked_add, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'remove', data=stacked_remove, compression='gzip', compression_opts=4, dtype=np.int32)
 	h5_fout.create_dataset( 'steps', data=stacked_steps, compression='gzip', compression_opts=4, dtype=np.int32)
-	h5_fout.create_dataset( 'complete', data=stacked_complete, compression='gzip', compression_opts=4, dtype=np.int32)
+	h5_fout.create_dataset( 'complete', data=stacked_complete, compression='gzip', compression_opts=4, dtype=np.float32)
 	h5_fout.close()
 

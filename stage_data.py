@@ -7,10 +7,6 @@ from class_util import classes
 
 resolution = 0.1
 SEED = None
-add_mistake_prob = 0.03
-remove_mistake_prob = 0.01
-add_mistake_limit = 30.0
-remove_mistake_limit = 30.0
 cluster_threshold = 10
 max_points = 1024
 save_id = 0
@@ -108,6 +104,8 @@ for AREA in range(1,7):
 			maxDims = seed_voxel.copy()
 			steps = 0
 			stuck = False
+			add_mistake_prob = np.random.randint(2,5)*0.1
+			remove_mistake_prob = np.random.randint(2,5)*0.1
 
 			#perform region growing
 			while True:
@@ -129,7 +127,7 @@ for AREA in range(1,7):
 				if stuck:
 					expandID = mask_idx[expandClass]
 				else:
-					mistake_sample = np.random.random(len(mask_idx)) < min(add_mistake_prob, add_mistake_limit/(len(mask_idx)+1))
+					mistake_sample = np.random.random(len(mask_idx)) < add_mistake_prob
 					expand_with_mistake = np.logical_xor(expandClass, mistake_sample)
 					expandID = mask_idx[expand_with_mistake]
 
@@ -139,7 +137,7 @@ for AREA in range(1,7):
 				if stuck:
 					rejectID = mask_idx[rejectClass]
 				else:
-					mistake_sample = np.random.random(len(mask_idx)) < min(remove_mistake_prob, remove_mistake_limit/(len(mask_idx)+1))
+					mistake_sample = np.random.random(len(mask_idx)) < remove_mistake_prob
 					reject_with_mistake = np.logical_xor(rejectClass, mistake_sample)
 					rejectID = mask_idx[reject_with_mistake]
 
@@ -152,8 +150,8 @@ for AREA in range(1,7):
 				if not np.any(nextMinDims<minDims) and not np.any(nextMaxDims>maxDims):
 					stuck = True
 				iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
-#				print('mask %d/%d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(np.logical_and(currentMask, gt_mask)),
-#					np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
+				print('mask %d/%d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(np.logical_and(currentMask, gt_mask)),
+					np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
 
 				if len(expandPoints) > 0:
 					if len(currentPoints) <= max_points:
@@ -176,6 +174,8 @@ for AREA in range(1,7):
 						stacked_add.extend(expandClass[subset])
 					stacked_complete.append(iou)
 					steps += 1
+					add_mistake_prob = max(add_mistake_prob-0.01, 0.00)
+					remove_mistake_prob = max(remove_mistake_prob-0.01, 0.00)
 
 				if np.all(currentMask == gt_mask): #completed
 					visited[currentMask] = True

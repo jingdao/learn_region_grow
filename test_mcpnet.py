@@ -48,7 +48,7 @@ for AREA in TEST_AREAS:
 	net = MCPNet(batch_size, num_neighbors, feature_size, hidden_size, embedding_size)
 	saver = tf.train.Saver()
 	if AREA=='scannet':
-		MODEL_PATH = 'models/mcpnet_model1.ckpt'
+		MODEL_PATH = 'models/mcpnet_model5.ckpt'
 	else:
 		MODEL_PATH = 'models/mcpnet_model%s.ckpt'%AREA
 	saver = tf.train.Saver()

@@ -8,7 +8,7 @@ MAX_EPOCH = 100
 VAL_STEP = 7
 VAL_AREA = 1
 FEATURE_SIZE = 13
-MULTISEED = 0
+MULTISEED = 5
 initialized = False
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':

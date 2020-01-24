@@ -203,7 +203,7 @@ for AREA in TEST_AREAS:
 #				add_mask = add_conf > add_threshold
 #				rmv_mask = rmv_conf > rmv_threshold
 				add_mask = numpy.random.random(len(add_conf)) < add_conf
-				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf - 0.2
+				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf - 0.0
 #				add_mask = input_add[0].astype(bool)
 #				rmv_mask = input_remove[0].astype(bool)
 				cmpl_conf = cmpl[0]

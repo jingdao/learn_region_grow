@@ -64,16 +64,6 @@ resolution = 0.1
 feature_size = 9
 NUM_POINT = 1024
 mode = 'normal'
-if mode=='normal':
-	threshold = 0.99
-elif mode == 'curvature':
-	threshold = 0.001
-elif mode=='color':
-	threshold = 0.005
-elif mode=='embedding':
-	threshold = 0.9
-else:
-	threshold = 0.98
 save_results = False
 save_id = 0
 agg_nmi = []
@@ -86,6 +76,14 @@ agg_iou = []
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--mode':
 		mode = sys.argv[i+1]
+		if mode=='normal':
+			threshold = 0.99
+		elif mode == 'curvature':
+			threshold = 0.01
+		elif mode=='color':
+			threshold = 0.005
+		else:
+			threshold = 0.99
 	elif sys.argv[i]=='--area':
 		TEST_AREAS = sys.argv[i+1].split(',')
 	elif sys.argv[i]=='--threshold':
@@ -97,7 +95,7 @@ for AREA in TEST_AREAS:
 	tf.reset_default_graph()
 	if mode=='pointnet':
 		if AREA == 'scannet':
-			MODEL_PATH = 'models/pointnet_model3.ckpt'
+			MODEL_PATH = 'models/pointnet_model5.ckpt'
 		else:
 			MODEL_PATH = 'models/pointnet_model'+str(AREA)+'.ckpt'
 		config = tf.ConfigProto()
@@ -111,7 +109,7 @@ for AREA in TEST_AREAS:
 		print('Restored from %s'%MODEL_PATH)
 	elif mode=='pointnet2':
 		if AREA == 'scannet':
-			MODEL_PATH = 'models/pointnet2_model3.ckpt'
+			MODEL_PATH = 'models/pointnet2_model5.ckpt'
 		else:
 			MODEL_PATH = 'models/pointnet2_model'+str(AREA)+'.ckpt'
 		config = tf.ConfigProto()
@@ -129,7 +127,7 @@ for AREA in TEST_AREAS:
 		pass
 	elif mode=='edge':
 		if AREA == 'scannet':
-			MODEL_PATH = 'models/edge3.pkl'
+			MODEL_PATH = 'models/edge5.pkl'
 		else:
 			MODEL_PATH = 'models/edge%s.pkl' % AREA
 		svc = joblib.load(MODEL_PATH)

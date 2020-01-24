@@ -71,7 +71,7 @@ end_header
 
 class LrgNet:
 	def __init__(self,batch_size, seq_len, num_inlier_points, num_neighbor_points, feature_size):
-		CONV_CHANNELS = [64,64,64,128,256]
+		CONV_CHANNELS = [64,64,64,128,512]
 		CONV2_CHANNELS = [256, 128]
 		FC_CHANNELS = [256, 128]
 		self.kernel = [None]*len(CONV_CHANNELS)

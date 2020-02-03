@@ -64,6 +64,7 @@ resolution = 0.1
 feature_size = 9
 NUM_POINT = 1024
 mode = 'normal'
+threshold = 0.99
 save_results = False
 save_id = 0
 agg_nmi = []
@@ -133,7 +134,9 @@ for AREA in TEST_AREAS:
 		svc = joblib.load(MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
 
-	if AREA=='scannet':
+	if AREA=='synthetic':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
+	elif AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)

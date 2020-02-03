@@ -18,7 +18,11 @@ for i in range(len(sys.argv)):
 
 for AREA in range(1,7):
 #for AREA in [1]:
-	all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
+#for AREA in ['synthetic_train','synthetic_test']:
+	if isinstance(AREA, str) and AREA.startswith('synthetic'):
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
+	else:
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
 	stacked_points = []
 	stacked_neighbor_points = []
 	stacked_count = []
@@ -33,6 +37,14 @@ for AREA in range(1,7):
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
+
+		if SEED is not None:
+			if SEED%2==1: #exchange x and y coordinates
+				unequalized_points[:,0], unequalized_points[:,1] = unequalized_points[:,1], unequalized_points[:,0].copy()
+			if SEED/2%2==1: #flip x coordinates
+				unequalized_points[:,0] = -unequalized_points[:,0]
+			if SEED/4==1: #flip y coordinates
+				unequalized_points[:,1] = -unequalized_points[:,1]
 
 		#equalize resolution
 		equalized_idx = []
@@ -106,6 +118,12 @@ for AREA in range(1,7):
 			stuck = False
 			add_mistake_prob = np.random.randint(2,5)*0.1
 			remove_mistake_prob = np.random.randint(2,5)*0.1
+			add_mistake_limit = np.inf
+			remove_mistake_limit = np.inf
+#			add_mistake_prob = 0.03
+#			remove_mistake_prob = 0.01
+#			add_mistake_limit = 30.0
+#			remove_mistake_limit = 30.0
 
 			#perform region growing
 			while True:
@@ -127,7 +145,8 @@ for AREA in range(1,7):
 				if stuck:
 					expandID = mask_idx[expandClass]
 				else:
-					mistake_sample = np.random.random(len(mask_idx)) < add_mistake_prob
+#					mistake_sample = np.random.random(len(mask_idx)) < add_mistake_prob
+					mistake_sample = np.random.random(len(mask_idx)) < min(add_mistake_prob, add_mistake_limit/(len(mask_idx)+1))
 					expand_with_mistake = np.logical_xor(expandClass, mistake_sample)
 					expandID = mask_idx[expand_with_mistake]
 
@@ -137,21 +156,10 @@ for AREA in range(1,7):
 				if stuck:
 					rejectID = mask_idx[rejectClass]
 				else:
-					mistake_sample = np.random.random(len(mask_idx)) < remove_mistake_prob
+#					mistake_sample = np.random.random(len(mask_idx)) < remove_mistake_prob
+					mistake_sample = np.random.random(len(mask_idx)) < min(remove_mistake_prob, remove_mistake_limit/(len(mask_idx)+1))
 					reject_with_mistake = np.logical_xor(rejectClass, mistake_sample)
 					rejectID = mask_idx[reject_with_mistake]
-
-				#update current mask
-				currentMask[expandID] = True
-				if len(rejectID) < len(mask_idx):
-					currentMask[rejectID] = False
-				nextMinDims = point_voxels[currentMask, :].min(axis=0)
-				nextMaxDims = point_voxels[currentMask, :].max(axis=0)
-				if not np.any(nextMinDims<minDims) and not np.any(nextMaxDims>maxDims):
-					stuck = True
-				iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
-				print('mask %d/%d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(np.logical_and(currentMask, gt_mask)),
-					np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
 
 				if len(expandPoints) > 0:
 					if len(currentPoints) <= max_points:
@@ -162,7 +170,8 @@ for AREA in range(1,7):
 						subset = np.random.choice(len(currentPoints), max_points, replace=False)
 						stacked_points.append(currentPoints[subset])
 						stacked_count.append(max_points)
-						stacked_remove.extend(rejectClass[subset])
+						rejectClass = rejectClass[subset]
+						stacked_remove.extend(rejectClass)
 					if len(expandPoints) <= max_points:
 						stacked_neighbor_points.append(np.array(expandPoints))
 						stacked_neighbor_count.append(len(expandPoints))
@@ -171,8 +180,11 @@ for AREA in range(1,7):
 						subset = np.random.choice(len(expandPoints), max_points, replace=False)
 						stacked_neighbor_points.append(expandPoints[subset])
 						stacked_neighbor_count.append(max_points)
-						stacked_add.extend(expandClass[subset])
+						expandClass = expandClass[subset]
+						stacked_add.extend(expandClass)
+					iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
 					stacked_complete.append(iou)
+#					stacked_complete.append(np.logical_not(np.logical_or(np.any(rejectClass), np.any(expandClass))))
 					steps += 1
 					add_mistake_prob = max(add_mistake_prob-0.01, 0.00)
 					remove_mistake_prob = max(remove_mistake_prob-0.01, 0.00)
@@ -182,11 +194,22 @@ for AREA in range(1,7):
 					stacked_steps.append(steps)
 #					savePCD('tmp/%d-cloud.pcd'%save_id, points[currentMask])
 #					save_id += 1
-					print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
+					print('AREA %s room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(str(AREA), room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
 					break 
 				else:
 					if np.any(expandClass) or np.any(rejectClass): #continue growing
 						#has matching neighbors: expand in those directions
+						#update current mask
+						currentMask[expandID] = True
+						if len(rejectID) < len(mask_idx):
+							currentMask[rejectID] = False
+						nextMinDims = point_voxels[currentMask, :].min(axis=0)
+						nextMaxDims = point_voxels[currentMask, :].max(axis=0)
+						if not np.any(nextMinDims<minDims) and not np.any(nextMaxDims>maxDims):
+							stuck = True
+						iou = 1.0 * np.sum(np.logical_and(currentMask, gt_mask)) / np.sum(np.logical_or(currentMask, gt_mask))
+#						print('mask %d/%d/%d expand %d/%d reject %d/%d iou %.2f'%(np.sum(np.logical_and(currentMask, gt_mask)),
+#							np.sum(currentMask), np.sum(gt_mask), len(expandID), np.sum(expandClass), len(rejectID), np.sum(rejectClass), iou))
 						minDims = nextMinDims
 						maxDims = nextMaxDims
 					else: #no matching neighbors (early termination)
@@ -195,18 +218,21 @@ for AREA in range(1,7):
 							stacked_steps.append(steps)
 #							savePCD('tmp/%d-cloud.pcd'%save_id, points[currentMask])
 #							save_id += 1
-							print('AREA %d room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(AREA, room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
+							print('AREA %s room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(str(AREA), room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
 						break 
 
 	for i in range(len(stacked_points)):
-		center = np.mean(stacked_points[i][:,:2], axis=0)
+		center = np.median(stacked_points[i][:,:2], axis=0)
+		feature_center = np.median(stacked_points[i][:,6:], axis=0)
 		stacked_points[i][:,:2] -= center
-		feature_center = np.mean(stacked_points[i][:,6:], axis=0)
+		stacked_points[i][:,6:] -= feature_center
 		if len(stacked_neighbor_points[i]) > 0:
 			stacked_neighbor_points[i][:,:2] -= center
 			stacked_neighbor_points[i][:,6:] -= feature_center
 
-	if SEED is None:
+	if isinstance(AREA,str) and AREA.startswith('synthetic'):
+		h5_fout = h5py.File('data/staged_%s.h5'%AREA,'w')
+	elif SEED is None:
 		h5_fout = h5py.File('data/staged_area%s.h5'%(AREA),'w')
 #		h5_fout = h5py.File('data/small_area%s.h5'%(AREA),'w')
 	else:

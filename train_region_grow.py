@@ -4,15 +4,17 @@ import sys
 BATCH_SIZE = 100
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 100
+MAX_EPOCH = 160
 VAL_STEP = 7
-VAL_AREA = 1
+VAL_AREA = '1'
 FEATURE_SIZE = 13
-MULTISEED = 5
+MULTISEED = 8
 initialized = False
+numpy.random.seed(0)
+numpy.set_printoptions(2,linewidth=100,suppress=True,sign=' ')
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
-		VAL_AREA = int(sys.argv[i+1])
+		VAL_AREA = sys.argv[i+1]
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -21,7 +23,8 @@ config.log_device_placement = False
 sess = tf.Session(config=config)
 net = LrgNet(BATCH_SIZE, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
-MODEL_PATH = 'models/lrgnet_model%d.ckpt'%VAL_AREA
+MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA
+AREA_LIST = ['synthetic_train','synthetic_test'] if VAL_AREA=='synthetic' else range(1,7)
 
 init = tf.global_variables_initializer()
 sess.run(init, {})
@@ -32,14 +35,16 @@ for epoch in range(MAX_EPOCH):
 		train_inlier_points, train_inlier_count, train_neighbor_points, train_neighbor_count, train_add, train_remove, train_complete = [], [], [], [], [], [], []
 		val_inlier_points, val_inlier_count, val_neighbor_points, val_neighbor_count, val_add, val_remove, val_complete = [], [], [], [], [], [], []
 
-		for AREA in range(1,7):
-			if MULTISEED > 0:
+		for AREA in AREA_LIST:
+			if isinstance(AREA, str) and AREA.startswith('synthetic'):
+				f = h5py.File('data/staged_%s.h5' % AREA, 'r')
+			elif MULTISEED > 0:
 				SEED = epoch % MULTISEED
 				f = h5py.File('data/multiseed/seed%d_area%d.h5'%(SEED,AREA),'r')
 			else:
 				f = h5py.File('data/staged_area%d.h5'%(AREA),'r')
 			print('Loading %s ...'%f.filename)
-			if AREA == VAL_AREA:
+			if str(AREA) == VAL_AREA or AREA=='synthetic_test':
 				val_complete.extend(f['complete'][:])
 				count = f['count'][:]
 				val_inlier_count.extend(count)

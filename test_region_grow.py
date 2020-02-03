@@ -22,9 +22,9 @@ numpy.random.seed(0)
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
 FEATURE_SIZE = 13
-TEST_AREAS = [1,2,3,4,5,6,'scannet']
+TEST_AREAS = ['1','2','3','4','5','6','scannet']
 resolution = 0.1
-completion_threshold = 0.5
+completion_threshold = 0.9
 add_threshold = 0.5
 rmv_threshold = 0.5
 cluster_threshold = 10
@@ -61,7 +61,9 @@ for AREA in TEST_AREAS:
 	room_name=[s.split('/')[-1] for s in glob.glob('/home/jd/Documents/GROMI_Deep_Learning/data/Stanford3dDataset_v1.2/Area_%s/*' % AREA)]
 	room_name=[s for s in room_name if '.' not in s]
 
-	if AREA=='scannet':
+	if AREA=='synthetic':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
+	elif AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
@@ -147,6 +149,8 @@ for AREA in TEST_AREAS:
 			seqMaxDims = maxDims
 			steps = 0
 			stuck = False
+			best_mask = None
+			best_conf = 0
 
 			#perform region growing
 			while True:
@@ -157,8 +161,8 @@ for AREA in TEST_AREAS:
 					if numpy.sum(currentMask) > cluster_threshold:
 						cluster_label[currentMask] = cluster_id
 						cluster_id += 1
-					iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-#					print('room %d target %3d: step %3d %4d/%4d points IOU %.2f add %.3f rmv %.3f cmpl %.2f %s'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, cmpl_conf, reason))
+						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
+#						print('room %d target %3d: step %3d %4d/%4d points IOU %.2f add %.3f rmv %.3f cmpl %.2f %s'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, cmpl_conf, reason))
 
 				#determine the current points and the neighboring points
 				currentPoints = points[currentMask, :].copy()
@@ -181,12 +185,13 @@ for AREA in TEST_AREAS:
 					subset = numpy.random.choice(len(currentPoints), NUM_INLIER_POINT, replace=False)
 				else:
 					subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
-				center = numpy.mean(currentPoints, axis=0)
+				center = numpy.median(currentPoints, axis=0)
 				expandPoints = numpy.array(expandPoints)
 				expandPoints[:,:2] -= center[:2]
 				expandPoints[:,6:] -= center[6:]
 				inlier_points[0,:,:] = currentPoints[subset, :]
 				inlier_points[0,:,:2] -= center[:2]
+				inlier_points[0,:,6:] -= center[6:]
 				input_remove[0,:] = numpy.array(rejectClass)[subset]
 				if len(expandPoints) >= NUM_NEIGHBOR_POINT:
 					subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
@@ -203,10 +208,14 @@ for AREA in TEST_AREAS:
 #				add_mask = add_conf > add_threshold
 #				rmv_mask = rmv_conf > rmv_threshold
 				add_mask = numpy.random.random(len(add_conf)) < add_conf
-				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf - 0.0
+				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf
 #				add_mask = input_add[0].astype(bool)
 #				rmv_mask = input_remove[0].astype(bool)
 				cmpl_conf = cmpl[0]
+#				cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
+				if cmpl_conf > best_conf:
+					best_conf = cmpl_conf
+					best_mask = currentMask
 				addPoints = neighbor_points[0,:,:][add_mask]
 				addPoints[:,:2] += center[:2]
 				addVoxels = numpy.round(addPoints[:,:3]/resolution).astype(int)
@@ -251,20 +260,14 @@ for AREA in TEST_AREAS:
 				steps += 1
 
 		#fill in points with no labels
+		nonzero_idx = numpy.nonzero(cluster_label)[0]
+		nonzero_points = points[nonzero_idx, :]
+		filled_cluster_label = cluster_label.copy()
 		for i in numpy.nonzero(cluster_label==0)[0]:
-			k = tuple(numpy.round(points[i,:3]/resolution).astype(int))
-			d = 1
-			while cluster_label[i]==0:
-				neighbors = []
-				for offset in itertools.product(range(-d,d+1),range(-d,d+1),range(-d,d+1)):
-					kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
-					if kk in equalized_map:
-						neighbors.append(equalized_map[kk])
-				for n in neighbors:
-					if cluster_label[n] > 0:
-						cluster_label[i] = cluster_label[n]
-						break
-				d += 1
+			d = numpy.sum((nonzero_points - points[i])**2, axis=1)
+			closest_idx = numpy.argmin(d)
+			filled_cluster_label[i] = cluster_label[nonzero_idx[closest_idx]]
+		cluster_label = filled_cluster_label
 
 		#calculate statistics 
 		gt_match = 0
@@ -300,7 +303,7 @@ for AREA in TEST_AREAS:
 		agg_prc.append(prc)
 		agg_rcl.append(rcl)
 		agg_iou.append(room_iou)
-		if not AREA=='scannet':
+		if AREA.isdigit():
 			print(room_name[room_id])
 		print("Area %s room %d NMI: %.2f AMI: %.2f ARS: %.2f PRC: %.2f RCL: %.2f IOU: %.2f"%(str(AREA), room_id, nmi,ami,ars, prc, rcl, room_iou))
 

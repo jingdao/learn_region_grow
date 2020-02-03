@@ -230,9 +230,9 @@ class LrgNet:
 		self.remove_rcl = TP / (tf.cast(tf.reduce_sum(self.remove_pl_seq), tf.float32) + 1)
 
 		self.completeness_loss = tf.losses.mean_squared_error(self.completeness_output_seq, self.completeness_pl_seq)
-		self.completeness_acc = tf.reduce_mean(tf.cast(tf.math.less(tf.abs(self.completeness_output_seq - self.completeness_pl_seq), 0.1), tf.float32))
-		self.completeness_prc = tf.constant(0)
-		self.completeness_rcl = tf.constant(0)
+		self.completeness_prc = tf.reduce_mean(tf.cast(tf.math.less(tf.abs(self.completeness_output_seq - self.completeness_pl_seq), 0.1), tf.float32))
+		self.completeness_rcl = tf.reduce_mean(tf.cast(tf.math.less(tf.abs(self.completeness_output_seq - self.completeness_pl_seq), 0.2), tf.float32))
+		self.completeness_acc = tf.reduce_mean(tf.cast(tf.math.less(tf.abs(self.completeness_output_seq - self.completeness_pl_seq), 0.3), tf.float32))
 
 		self.loss = self.add_loss + self.remove_loss + self.completeness_loss
 		batch = tf.Variable(0)

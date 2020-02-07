@@ -340,7 +340,9 @@ for AREA in TEST_AREAS:
 		dt_match = numpy.zeros(cluster_label.max(), dtype=bool)
 		cluster_label2 = numpy.zeros(len(cluster_label), dtype=int)
 		room_iou = []
-		for i in set(obj_id):
+		unique_id, count = numpy.unique(obj_id, return_counts=True)
+		for k in range(len(unique_id)):
+			i = unique_id[numpy.argsort(count)][::-1][k]
 			best_iou = 0
 			for j in range(1, cluster_label.max()+1):
 				if not dt_match[j-1]:
@@ -349,7 +351,7 @@ for AREA in TEST_AREAS:
 					if iou > 0.5:
 						dt_match[j-1] = True
 						gt_match += 1
-						cluster_label2[cluster_label==j] = i
+						cluster_label2[cluster_label==j] = k+1
 						break
 			room_iou.append(best_iou)
 		for j in range(1,cluster_label.max()+1):
@@ -387,7 +389,7 @@ for AREA in TEST_AREAS:
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
 			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
-			savePLY('data/results/%d.ply'%save_id, unequalized_points)
+			savePLY('data/results/%s/%d.ply'%(mode,save_id), unequalized_points)
 			save_id += 1
 
 print('NMI: %.2f+-%.2f AMI: %.2f+-%.2f ARS: %.2f+-%.2f PRC %.2f+-%.2f RCL %.2f+-%.2f IOU %.2f+-%.2f'%

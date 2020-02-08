@@ -38,12 +38,15 @@ agg_ars = []
 agg_prc = []
 agg_rcl = []
 agg_iou = []
+scoring = 'np'
 
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
 		TEST_AREAS = sys.argv[i+1].split(',')
 	elif sys.argv[i]=='--save':
 		save_results = True
+	elif sys.argv[i]=='--scoring':
+		scoring = sys.argv[i+1]
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
@@ -70,8 +73,8 @@ for AREA in TEST_AREAS:
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 
-	for room_id in range(len(all_points)):
-#	for room_id in [0]:
+#	for room_id in range(len(all_points)):
+	for room_id in [0]:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
@@ -163,7 +166,7 @@ for AREA in TEST_AREAS:
 				#determine the current points and the neighboring points
 #				print(qid, Q)
 #				print(newQ)
-				print(qid, len(Q), len(newQ))
+#				print(qid, len(Q), len(newQ))
 				currentScore, currentMask = Q[qid]
 				minDims = point_voxels[currentMask, :].min(axis=0)
 				maxDims = point_voxels[currentMask, :].max(axis=0)
@@ -257,12 +260,14 @@ for AREA in TEST_AREAS:
 							if tuple(point_voxels[i]) in rmvSet:
 								newMask[i] = False
 						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,newMask)) / numpy.sum(numpy.logical_or(gt_mask,newMask))
-						print('%d/%d points %d outliers %d add %d rmv %.2f iou'%(numpy.sum(numpy.logical_and(newMask, gt_mask)), numpy.sum(gt_mask),
-							numpy.sum(numpy.logical_and(gt_mask==0, newMask)), len(addSet), len(rmvSet), iou))
+#						print('%d/%d points %d outliers %d add %d rmv %.2f iou'%(numpy.sum(numpy.logical_and(newMask, gt_mask)), numpy.sum(gt_mask),
+#							numpy.sum(numpy.logical_and(gt_mask==0, newMask)), len(addSet), len(rmvSet), iou))
 						steps += 1
 						if updated:
-#							newScore = numpy.sum(newMask)
-							newScore = currentScore + addLogProb + rmvLogProb
+							if scoring=='ml':
+								newScore = currentScore + addLogProb + rmvLogProb
+							elif scoring=='np':
+								newScore = numpy.sum(newMask)
 							newQ.append((newScore, newMask))
 
 				if qid < len(Q) - 1:

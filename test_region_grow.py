@@ -156,26 +156,18 @@ for AREA in TEST_AREAS:
 			seqMaxDims = maxDims
 			steps = 0
 			stuck = 0
-			maskProb = []
-			maskLogProb = []
+			maskLogProb = 0
 
 			#perform region growing
 			while True:
 
 				def stop_growing(reason):
 					global cluster_id, currentMask, minDims, maxDims, seqMinDims, seqMaxDims, steps, stuck, maskProb, maskLogProb, restart_score, restart_mask
-					if restart_scoring=='mmp':
-						restart_score.append(numpy.mean(maskProb) if len(maskProb)>0 else 0)
-					elif restart_scoring=='mp':
-						restart_score.append(maskProb[-1] if len(maskProb)>0 else 0)
-					elif restart_scoring=='mlp':
-						restart_score.append(numpy.mean(maskLogProb) if len(maskProb)>0 else 0)
-					elif restart_scoring=='lp':
-						restart_score.append(maskLogProb[-1] if len(maskProb)>0 else 0)
+					if restart_scoring=='ml':
+						restart_score.append(maskLogProb)
 					elif restart_scoring=='np':
 						restart_score.append(numpy.sum(currentMask))
 					restart_mask.append(currentMask)
-#					print(numpy.mean(maskProb), maskProb[-1], numpy.mean(maskLogProb), maskLogProb[-1])
 					if len(restart_score)==NUM_RESTARTS:
 						bestMask = restart_mask[numpy.argmax(restart_score)]
 						visited[bestMask] = True
@@ -251,33 +243,27 @@ for AREA in TEST_AREAS:
 				addPoints[:,:2] += center[:2]
 				addVoxels = numpy.round(addPoints[:,:3]/resolution).astype(int)
 				addSet = set([tuple(p) for p in addVoxels])
-				addProb, addLogProb = 0,0
+				addLogProb = 0
 				for i in range(len(neighbor_points[0])):
 					neighbor_points[0,i,:2] += center[:2]
 					p = tuple(numpy.round(neighbor_points[0,i,:3]/resolution).astype(int))
 					if p in addSet:
-						addProb += add_conf[i] / NUM_NEIGHBOR_POINT
 						addLogProb += numpy.log(add_conf[i]) / NUM_NEIGHBOR_POINT
 					else:
-						addProb += (1 - add_conf[i]) / NUM_NEIGHBOR_POINT
 						addLogProb += numpy.log((1 - add_conf[i])) / NUM_NEIGHBOR_POINT
 				rmvPoints = inlier_points[0,:,:][rmv_mask]
 				rmvPoints[:,:2] += center[:2]
 				rmvVoxels = numpy.round(rmvPoints[:,:3]/resolution).astype(int)
 				rmvSet = set([tuple(p) for p in rmvVoxels])
-				rmvProb, rmvLogProb = 0,0
+				rmvLogProb = 0
 				for i in range(len(inlier_points[0])):
 					inlier_points[0,i,:2] += center[:2]
 					p = tuple(numpy.round(inlier_points[0,i,:3]/resolution).astype(int))
 					if p in rmvSet:
-						rmvProb += rmv_conf[i] / NUM_NEIGHBOR_POINT
 						rmvLogProb += numpy.log(rmv_conf[i]) / NUM_NEIGHBOR_POINT
 					else:
-						rmvProb += (1 - rmv_conf[i]) / NUM_NEIGHBOR_POINT
 						rmvLogProb += numpy.log((1 - rmv_conf[i])) / NUM_NEIGHBOR_POINT
-#				print(addProb, addLogProb, rmvProb, rmvLogProb)
-				maskProb.append(0.5*addProb + 0.5*rmvProb)
-				maskLogProb.append(0.5*addLogProb + 0.5*rmvLogProb)
+				maskLogProb += addLogProb + rmvLogProb
 				updated = False
 				iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
 #				print('%d/%d points %d outliers %d add %d rmv %.2f iou'%(numpy.sum(numpy.logical_and(currentMask, gt_mask)), numpy.sum(gt_mask),

@@ -22,16 +22,16 @@ from PIL import ImageFont
 from learn_region_grow_util import LrgNet
 
 numpy.random.seed(0)
-NUM_POINT = 512
+NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-FEATURE_SIZE = 10
+FEATURE_SIZE = 13
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
 completion_threshold = 0.5
 classification_threshold = 0.5
 cluster_threshold = 10
-AREA = 1
-ROOM = 0
+AREA = 5
+ROOM = 44
 
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
@@ -39,10 +39,9 @@ for i in range(len(sys.argv)):
 	if sys.argv[i]=='--room':
 		ROOM = int(sys.argv[i+1])
 
-cameraX = -7.877314620191699
-#cameraX = -2
-cameraY = 7.081133344966971
-cameraZ = 4.281504153975013
+cameraX = 9.42495995258856
+cameraY = 9.381724865127635
+cameraZ = 4.651620026309769
 centerX=0
 centerY=0
 centerZ=0
@@ -127,6 +126,9 @@ for i in range(len(unequalized_points)):
 points = unequalized_points[equalized_idx]
 obj_id = obj_id[equalized_idx]
 cls_id = cls_id[equalized_idx]
+xyz = points[:,:3]
+rgb = points[:,3:6]
+room_coordinates = (xyz - xyz.min(axis=0)) / (xyz.max(axis=0) - xyz.min(axis=0))
 
 #compute normals
 normals = []
@@ -152,7 +154,7 @@ for i in range(len(points)):
 curvatures = numpy.array(curvatures)
 curvatures = curvatures/curvatures.max()
 normals = numpy.array(normals)
-points = numpy.hstack((points, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
+points = numpy.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
 result_points = unequalized_points.copy()
 result_points[:,3:6] = (result_points[:,3:6]+0.5)*255
 viz_points = []
@@ -249,14 +251,14 @@ glClearColor(0.0,0.0,0.0,0.0)
 glMatrixMode(GL_PROJECTION)
 glLoadIdentity()
 gluPerspective(fov,600.0/600,1,1000)
-#glutMainLoop()
+glutMainLoop()
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-net = LrgNet(1, NUM_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+net = LrgNet(1, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
 MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 saver.restore(sess, MODEL_PATH)
@@ -267,9 +269,10 @@ point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 cluster_label = numpy.zeros(len(points), dtype=int)
 cluster_id = 1
 visited = numpy.zeros(len(point_voxels), dtype=bool)
-input_points = numpy.zeros((1, NUM_POINT, FEATURE_SIZE), dtype=numpy.float32)
+inlier_points = numpy.zeros((1, NUM_INLIER_POINT, FEATURE_SIZE), dtype=numpy.float32)
 neighbor_points = numpy.zeros((1, NUM_NEIGHBOR_POINT, FEATURE_SIZE), dtype=numpy.float32)
-input_classes = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
+input_add = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
+input_remove = numpy.zeros((1, NUM_INLIER_POINT), dtype=numpy.int32)
 #iterate over each object in the room
 #for seed_id in range(len(point_voxels)):
 for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
@@ -277,6 +280,7 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		continue
 	seed_voxel = point_voxels[seed_id]
 	target_id = obj_id[seed_id]
+	target_class = classes[cls_id[numpy.nonzero(obj_id==target_id)[0][0]]]
 	gt_mask = obj_id==target_id
 	obj_voxels = point_voxels[gt_mask]
 	obj_voxel_set = set([tuple(p) for p in obj_voxels])
@@ -286,7 +290,10 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 	currentMask[seed_id] = True
 	minDims = seed_voxel.copy()
 	maxDims = seed_voxel.copy()
+	seqMinDims = minDims
+	seqMaxDims = maxDims
 	steps = 0
+	stuck = 0
 
 	#perform region growing
 	while True:
@@ -297,8 +304,8 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 			if numpy.sum(currentMask) > cluster_threshold:
 				cluster_label[currentMask] = cluster_id
 				cluster_id += 1
-			iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-			print('room %d target %3d: step %3d %4d/%4d points IOU %.2f cls %.3f cmpl %.2f %s'%(room_id, target_id, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, cls_acc, cmpl_conf, reason))
+				iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
+				print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f %s'%(room_id, target_id, target_class, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, reason))
 
 		#determine the current points and the neighboring points
 		currentPoints = points[currentMask, :].copy()
@@ -311,40 +318,53 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		mask = numpy.logical_and(mask, numpy.logical_not(visited))
 		expandPoints = points[mask, :].copy()
 		expandClass = obj_id[mask] == target_id
+		rejectClass = obj_id[currentMask] != target_id
 		
 		if len(expandPoints)==0: #no neighbors (early termination)
 			stop_growing('noneighbor')
 			break 
 
-		subset = numpy.random.choice(len(currentPoints), NUM_POINT, replace=len(currentPoints)<NUM_POINT)
-		center = numpy.mean(currentPoints, axis=0)
+		if len(currentPoints) >= NUM_INLIER_POINT:
+			subset = numpy.random.choice(len(currentPoints), NUM_INLIER_POINT, replace=False)
+		else:
+			subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
+		center = numpy.median(currentPoints, axis=0)
 		expandPoints = numpy.array(expandPoints)
 		expandPoints[:,:2] -= center[:2]
-		expandPoints[:,3:] -= center[3:]
-		input_points[0,:,:] = currentPoints[subset, :]
-		input_points[0,:,:2] -= center[:2]
+		expandPoints[:,6:] -= center[6:]
+		inlier_points[0,:,:] = currentPoints[subset, :]
+		inlier_points[0,:,:2] -= center[:2]
+		inlier_points[0,:,6:] -= center[6:]
+		input_remove[0,:] = numpy.array(rejectClass)[subset]
 		if len(expandPoints) >= NUM_NEIGHBOR_POINT:
 			subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
 		else:
 			subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
 		neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
-		input_classes[0,:] = numpy.array(expandClass)[subset]
-		input_complete = numpy.zeros(1,dtype=numpy.int32)
-		ls, cls, cls_acc, cmpl, cmpl_acc = sess.run([net.loss, net.class_output, net.class_acc, net.completeness_output, net.completeness_acc],
-			{net.input_pl:input_points, net.neighbor_pl:neighbor_points, net.completeness_pl:input_complete, net.class_pl:input_classes})
+		input_add[0,:] = numpy.array(expandClass)[subset]
+		ls, add,add_acc, rmv,rmv_acc = sess.run([net.loss, net.add_output, net.add_acc, net.remove_output, net.remove_acc],
+			{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
 
-		cls_conf = scipy.special.softmax(cls[0], axis=-1)[:,1]
-		cls_mask = cls_conf > classification_threshold
-		cmpl_conf = scipy.special.softmax(cmpl[0], axis=-1)[1]
-		validPoints = neighbor_points[0,:,:][cls_mask]
-		validPoints[:,:2] += center[:2]
-		validVoxels = numpy.round(validPoints[:,:3]/resolution).astype(int)
-		expandSet = set([tuple(p) for p in validVoxels])
+		add_conf = scipy.special.softmax(add[0], axis=-1)[:,1]
+		rmv_conf = scipy.special.softmax(rmv[0], axis=-1)[:,1]
+		add_mask = numpy.random.random(len(add_conf)) < add_conf
+		rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf
+		addPoints = neighbor_points[0,:,:][add_mask]
+		addPoints[:,:2] += center[:2]
+		addVoxels = numpy.round(addPoints[:,:3]/resolution).astype(int)
+		addSet = set([tuple(p) for p in addVoxels])
+		rmvPoints = inlier_points[0,:,:][rmv_mask]
+		rmvPoints[:,:2] += center[:2]
+		rmvVoxels = numpy.round(rmvPoints[:,:3]/resolution).astype(int)
+		rmvSet = set([tuple(p) for p in rmvVoxels])
 		updated = False
 		for i in range(len(point_voxels)):
-			if tuple(point_voxels[i]) in expandSet and not currentMask[i]:
+			if not currentMask[i] and tuple(point_voxels[i]) in addSet:
 				currentMask[i] = True
 				updated = True
+			if tuple(point_voxels[i]) in rmvSet:
+				currentMask[i] = False
+		steps += 1
 
 		#slightly rotate camera
 #		rho = math.sqrt(cameraX*cameraX+cameraY*cameraY)
@@ -353,14 +373,14 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 #		cameraX = rho * numpy.cos(theta)
 #		cameraY = rho * numpy.sin(theta)
 		obj_color = numpy.ones((len(points), 3)) * 100
-#		obj_color[currentMask] = [0, 255, 0]
-		obj_color[currentMask] = [150, 150, 150]
-#		obj_color[mask] = [0, 0, 255]
+		obj_color[currentMask] = [0, 255, 0]
+#		obj_color[currentMask] = [150, 150, 150]
+		obj_color[mask] = [0, 0, 255]
 		jet = plt.get_cmap('jet')
 		result_points[:,3:6] = obj_color[unequalized_idx]
-		viz_points = neighbor_points[0,:,:]
-		viz_points[:,:2] += center[:2]
-		viz_points[:,3:6] = jet(cls_conf)[:,:3] * 255
+#		viz_points = neighbor_points[0,:,:]
+#		viz_points[:,:2] += center[:2]
+#		viz_points[:,3:6] = jet(cls_conf)[:,:3] * 255
 		displayFun()
 		data = glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE)
 		image = Image.frombytes("RGBA", (width, height), data)
@@ -370,22 +390,28 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		d.text((10,10), "Step %d"%steps, font=fnt, fill=(255,255,255,255))
 		d.text((10,60), "Inlier Set: %d points"%(numpy.sum(currentMask)), font=fnt, fill=(255,255,255,255))
 		d.text((10,110), "Neighbor Set: %d points"%(numpy.sum(mask)), font=fnt, fill=(255,255,255,255))
-		d.text((10,160), "Completion: %.3f"%cmpl_conf, font=fnt, fill=(255,255,255,255))
+		d.text((10,160), "Add: %d points"%len(addSet), font=fnt, fill=(255,255,255,255))
+		d.text((10,210), "Remove: %d points"%len(rmvSet), font=fnt, fill=(255,255,255,255))
 		image.save('tmp/%03d.png' % img_id, 'PNG')
-		print('Saved image %d'%img_id)
+#		print('Saved image %d'%img_id)
 		img_id += 1
 
-		if cmpl_conf > completion_threshold:
-			stop_growing('')
-			break 
-		else:
-			if updated: #continue growing
-				minDims = point_voxels[currentMask, :].min(axis=0)
-				maxDims = point_voxels[currentMask, :].max(axis=0)
-			else: #no matching neighbors (early termination)
-				stop_growing('noexpand')
-				break 
-		steps += 1
+		if updated: #continue growing
+			minDims = point_voxels[currentMask, :].min(axis=0)
+			maxDims = point_voxels[currentMask, :].max(axis=0)
+			if not numpy.any(minDims<seqMinDims) and not numpy.any(maxDims>seqMaxDims):
+				if stuck >= 1:
+					stop_growing('stuck')
+					break
+				else:
+					stuck += 1
+			else:
+				stuck = 0
+			seqMinDims = numpy.minimum(seqMinDims, minDims)
+			seqMaxDims = numpy.maximum(seqMaxDims, maxDims)
+		else: #no matching neighbors (early termination)
+			stop_growing('noexpand')
+			break
 
-	break
+#	break
 

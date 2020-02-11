@@ -32,6 +32,8 @@ classification_threshold = 0.5
 cluster_threshold = 10
 AREA = 5
 ROOM = 44
+color_sample_state = numpy.random.RandomState(0)
+instance_color_id = color_sample_state.randint(0,255,(20,3))
 
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
@@ -158,6 +160,7 @@ points = numpy.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-
 result_points = unequalized_points.copy()
 result_points[:,3:6] = (result_points[:,3:6]+0.5)*255
 viz_points = []
+instance_color = numpy.ones((len(points), 3), dtype=int)*100
 print('points',points.shape)
 
 def displayFun():
@@ -251,7 +254,7 @@ glClearColor(0.0,0.0,0.0,0.0)
 glMatrixMode(GL_PROJECTION)
 glLoadIdentity()
 gluPerspective(fov,600.0/600,1,1000)
-glutMainLoop()
+#glutMainLoop()
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -365,7 +368,7 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 			if tuple(point_voxels[i]) in rmvSet:
 				currentMask[i] = False
 		steps += 1
-
+		
 		#slightly rotate camera
 #		rho = math.sqrt(cameraX*cameraX+cameraY*cameraY)
 #		theta = numpy.arctan2(cameraY, cameraX)
@@ -392,7 +395,14 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		d.text((10,110), "Neighbor Set: %d points"%(numpy.sum(mask)), font=fnt, fill=(255,255,255,255))
 		d.text((10,160), "Add: %d points"%len(addSet), font=fnt, fill=(255,255,255,255))
 		d.text((10,210), "Remove: %d points"%len(rmvSet), font=fnt, fill=(255,255,255,255))
-		image.save('tmp/%03d.png' % img_id, 'PNG')
+		image.save('tmp/step%03d.png' % img_id, 'PNG')
+		instance_color[currentMask] = instance_color_id[cluster_id]
+		result_points[:,3:6] = instance_color[unequalized_idx]
+		displayFun()
+		data = glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE)
+		image = Image.frombytes("RGBA", (width, height), data)
+		image = ImageOps.flip(image)
+		image.save('tmp/seg%03d.png' % img_id, 'PNG')
 #		print('Saved image %d'%img_id)
 		img_id += 1
 

@@ -59,6 +59,8 @@ for room_id in range(len(all_points)):
 		points[:,3:6] = (points[:,3:6]+0.5)*255
 		savePLY('data/rgb/%d.ply'%room_id, points)
 	elif mode=='seg':
+		if numpy.min(obj_id)==0:
+			obj_id += 1
 		color_sample_state = numpy.random.RandomState(0)
 		obj_color = color_sample_state.randint(0,255,(numpy.max(obj_id)+1,3))
 		unique_id, count = numpy.unique(obj_id, return_counts=True)

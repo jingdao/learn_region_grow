@@ -22,8 +22,7 @@ from class_util import classes
 numpy.random.seed(0)
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-BEAM_WIDTH = 3
-SEARCH_WIDTH = 3
+NUM_RESTARTS = 10
 FEATURE_SIZE = 13
 TEST_AREAS = ['1','2','3','4','5','6','scannet']
 resolution = 0.1
@@ -38,7 +37,7 @@ agg_ars = []
 agg_prc = []
 agg_rcl = []
 agg_iou = []
-scoring = 'np'
+restart_scoring = 'np'
 
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
@@ -46,7 +45,7 @@ for i in range(len(sys.argv)):
 	elif sys.argv[i]=='--save':
 		save_results = True
 	elif sys.argv[i]=='--scoring':
-		scoring = sys.argv[i+1]
+		restart_scoring = sys.argv[i+1]
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
@@ -134,7 +133,10 @@ for AREA in TEST_AREAS:
 		neighbor_points = numpy.zeros((1, NUM_NEIGHBOR_POINT, FEATURE_SIZE), dtype=numpy.float32)
 		input_add = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 		input_remove = numpy.zeros((1, NUM_INLIER_POINT), dtype=numpy.int32)
+		restart_score = []
+		restart_mask = []
 		#iterate over each object in the room
+#		for seed_id in range(len(point_voxels)):
 		for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 			if visited[seed_id]:
 				continue
@@ -154,38 +156,43 @@ for AREA in TEST_AREAS:
 			seqMaxDims = maxDims
 			steps = 0
 			stuck = 0
-			bestScore = 0
-			bestMask = currentMask
-			Q = [(0, currentMask)]
-			qid = 0
-			newQ = []
+			maskLogProb = 0
 
 			#perform region growing
-			while len(Q) > 0:
+			while True:
+
+				def stop_growing(reason):
+					global cluster_id, currentMask, minDims, maxDims, seqMinDims, seqMaxDims, steps, stuck, maskProb, maskLogProb, restart_score, restart_mask
+					if restart_scoring=='ml':
+						restart_score.append(maskLogProb)
+					elif restart_scoring=='np':
+						restart_score.append(numpy.sum(currentMask))
+					restart_mask.append(currentMask)
+					if len(restart_score)==NUM_RESTARTS:
+						bestMask = restart_mask[numpy.argmax(restart_score)]
+						visited[bestMask] = True
+						if numpy.sum(bestMask) > cluster_threshold:
+							cluster_label[bestMask] = cluster_id
+							cluster_id += 1
+							iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,bestMask)) / numpy.sum(numpy.logical_or(gt_mask,bestMask))
+							print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f %s'%(room_id, target_id, target_class, steps, numpy.sum(bestMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, reason))
+						restart_score = []
+						restart_mask = []
+						return True
+					else:
+						currentMask = numpy.zeros(len(points), dtype=bool)
+						currentMask[seed_id] = True
+						minDims = seed_voxel.copy()
+						maxDims = seed_voxel.copy()
+						seqMinDims = minDims
+						seqMaxDims = maxDims
+						stuck = 0
+						maskProb = []
+						maskLogProb = []
+						return False
 
 				#determine the current points and the neighboring points
-#				print(qid, Q)
-#				print(newQ)
-#				print(qid, len(Q), len(newQ))
-				currentScore, currentMask = Q[qid]
-				minDims = point_voxels[currentMask, :].min(axis=0)
-				maxDims = point_voxels[currentMask, :].max(axis=0)
-				if qid==0:
-					bestMask = currentMask
-					if not numpy.any(minDims<seqMinDims) and not numpy.any(maxDims>seqMaxDims):
-						if stuck >= 1:
-#							print('stuck')
-							break
-						else:
-							stuck += 1
-					else:
-						stuck = 0
-					seqMinDims = numpy.minimum(seqMinDims, minDims)
-					seqMaxDims = numpy.maximum(seqMaxDims, maxDims)
-#				if currentScore > bestScore:
-#					bestScore = currentScore
-#					bestMask = currentMask
-				currentPoints = points[currentMask, :]
+				currentPoints = points[currentMask, :].copy()
 				newMinDims = minDims.copy()	
 				newMaxDims = maxDims.copy()	
 				newMinDims -= 1
@@ -193,96 +200,102 @@ for AREA in TEST_AREAS:
 				mask = numpy.logical_and(numpy.all(point_voxels>=newMinDims,axis=1), numpy.all(point_voxels<=newMaxDims, axis=1))
 				mask = numpy.logical_and(mask, numpy.logical_not(currentMask))
 				mask = numpy.logical_and(mask, numpy.logical_not(visited))
-				expandPoints = points[mask, :]
+				expandPoints = points[mask, :].copy()
 				expandClass = obj_id[mask] == target_id
 				rejectClass = obj_id[currentMask] != target_id
 				
-				if len(expandPoints) > 0:
-					#randomly generate several search candidates from currentMask
-					for search_id in range(SEARCH_WIDTH):
+				if len(expandPoints)==0: #no neighbors (early termination)
+					if stop_growing('noneighbor'):
+						break
+					else:
+						continue
 
-						if len(currentPoints) >= NUM_INLIER_POINT:
-							subset = numpy.random.choice(len(currentPoints), NUM_INLIER_POINT, replace=False)
-						else:
-							subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
-						center = numpy.median(currentPoints, axis=0)
-						ep = numpy.array(expandPoints)
-						ep[:,:2] -= center[:2]
-						ep[:,6:] -= center[6:]
-						inlier_points[0,:,:] = numpy.array(currentPoints[subset, :])
-						inlier_points[0,:,:2] -= center[:2]
-						inlier_points[0,:,6:] -= center[6:]
-						input_remove[0,:] = numpy.array(rejectClass)[subset]
-						if len(ep) >= NUM_NEIGHBOR_POINT:
-							subset = numpy.random.choice(len(ep), NUM_NEIGHBOR_POINT, replace=False)
-						else:
-							subset = range(len(ep)) + list(numpy.random.choice(len(ep), NUM_NEIGHBOR_POINT-len(ep), replace=True))
-						neighbor_points[0,:,:] = numpy.array(ep)[subset, :]
-						input_add[0,:] = numpy.array(expandClass)[subset]
-						add,add_acc, rmv,rmv_acc = sess.run([net.add_output, net.add_acc, net.remove_output, net.remove_acc],
-							{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
-
-						add_conf = scipy.special.softmax(add[0], axis=-1)[:,1]
-						rmv_conf = scipy.special.softmax(rmv[0], axis=-1)[:,1]
-						add_mask = numpy.random.random(len(add_conf)) < add_conf
-						rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf
-						addPoints = neighbor_points[0,:,:][add_mask]
-						addPoints[:,:2] += center[:2]
-						addVoxels = numpy.round(addPoints[:,:3]/resolution).astype(int)
-						addSet = set([tuple(p) for p in addVoxels])
-						addLogProb = 0
-						for i in range(len(neighbor_points[0])):
-							neighbor_points[0,i,:2] += center[:2]
-							p = tuple(numpy.round(neighbor_points[0,i,:3]/resolution).astype(int))
-							if p in addSet:
-								addLogProb += numpy.log(add_conf[i]) / NUM_NEIGHBOR_POINT
-							else:
-								addLogProb += numpy.log((1 - add_conf[i])) / NUM_NEIGHBOR_POINT
-						rmvPoints = inlier_points[0,:,:][rmv_mask]
-						rmvPoints[:,:2] += center[:2]
-						rmvVoxels = numpy.round(rmvPoints[:,:3]/resolution).astype(int)
-						rmvSet = set([tuple(p) for p in rmvVoxels])
-						rmvLogProb = 0
-						for i in range(len(inlier_points[0])):
-							inlier_points[0,i,:2] += center[:2]
-							p = tuple(numpy.round(inlier_points[0,i,:3]/resolution).astype(int))
-							if p in rmvSet:
-								rmvLogProb += numpy.log(rmv_conf[i]) / NUM_NEIGHBOR_POINT
-							else:
-								rmvLogProb += numpy.log((1 - rmv_conf[i])) / NUM_NEIGHBOR_POINT
-						updated = False
-
-						newMask = currentMask.copy()
-						for i in range(len(point_voxels)):
-							if not newMask[i] and tuple(point_voxels[i]) in addSet:
-								newMask[i] = True
-								updated = True
-							if tuple(point_voxels[i]) in rmvSet:
-								newMask[i] = False
-						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,newMask)) / numpy.sum(numpy.logical_or(gt_mask,newMask))
-#						print('%d/%d points %d outliers %d add %d rmv %.2f iou'%(numpy.sum(numpy.logical_and(newMask, gt_mask)), numpy.sum(gt_mask),
-#							numpy.sum(numpy.logical_and(gt_mask==0, newMask)), len(addSet), len(rmvSet), iou))
-						steps += 1
-						if updated:
-							if scoring=='ml':
-								newScore = currentScore + addLogProb + rmvLogProb
-							elif scoring=='np':
-								newScore = numpy.sum(newMask)
-							newQ.append((newScore, newMask))
-
-				if qid < len(Q) - 1:
-					qid += 1
+				if len(currentPoints) >= NUM_INLIER_POINT:
+					subset = numpy.random.choice(len(currentPoints), NUM_INLIER_POINT, replace=False)
 				else:
-					qid = 0
-					Q = sorted(newQ, key=lambda x:x[0], reverse=True)[:BEAM_WIDTH]
-					newQ = []
+					subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
+				center = numpy.median(currentPoints, axis=0)
+				expandPoints = numpy.array(expandPoints)
+				expandPoints[:,:2] -= center[:2]
+				expandPoints[:,6:] -= center[6:]
+				inlier_points[0,:,:] = currentPoints[subset, :]
+				inlier_points[0,:,:2] -= center[:2]
+				inlier_points[0,:,6:] -= center[6:]
+				input_remove[0,:] = numpy.array(rejectClass)[subset]
+				if len(expandPoints) >= NUM_NEIGHBOR_POINT:
+					subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
+				else:
+					subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
+				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
+				input_add[0,:] = numpy.array(expandClass)[subset]
+				ls, add,add_acc, rmv,rmv_acc = sess.run([net.loss, net.add_output, net.add_acc, net.remove_output, net.remove_acc],
+					{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
 
-			visited[bestMask] = True
-			if numpy.sum(bestMask) > cluster_threshold:
-				cluster_label[bestMask] = cluster_id
-				cluster_id += 1
-				iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,bestMask)) / numpy.sum(numpy.logical_or(gt_mask,bestMask))
-				print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f'%(room_id, target_id, target_class, steps, numpy.sum(bestMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc))
+				add_conf = scipy.special.softmax(add[0], axis=-1)[:,1]
+				rmv_conf = scipy.special.softmax(rmv[0], axis=-1)[:,1]
+#				add_mask = add_conf > add_threshold
+#				rmv_mask = rmv_conf > rmv_threshold
+				add_mask = numpy.random.random(len(add_conf)) < add_conf
+				rmv_mask = numpy.random.random(len(rmv_conf)) < rmv_conf
+#				add_mask = input_add[0].astype(bool)
+#				rmv_mask = input_remove[0].astype(bool)
+				addPoints = neighbor_points[0,:,:][add_mask]
+				addPoints[:,:2] += center[:2]
+				addVoxels = numpy.round(addPoints[:,:3]/resolution).astype(int)
+				addSet = set([tuple(p) for p in addVoxels])
+				addLogProb = 0
+				for i in range(len(neighbor_points[0])):
+					neighbor_points[0,i,:2] += center[:2]
+					p = tuple(numpy.round(neighbor_points[0,i,:3]/resolution).astype(int))
+					if p in addSet:
+						addLogProb += numpy.log(add_conf[i]) / NUM_NEIGHBOR_POINT
+					else:
+						addLogProb += numpy.log((1 - add_conf[i])) / NUM_NEIGHBOR_POINT
+				rmvPoints = inlier_points[0,:,:][rmv_mask]
+				rmvPoints[:,:2] += center[:2]
+				rmvVoxels = numpy.round(rmvPoints[:,:3]/resolution).astype(int)
+				rmvSet = set([tuple(p) for p in rmvVoxels])
+				rmvLogProb = 0
+				for i in range(len(inlier_points[0])):
+					inlier_points[0,i,:2] += center[:2]
+					p = tuple(numpy.round(inlier_points[0,i,:3]/resolution).astype(int))
+					if p in rmvSet:
+						rmvLogProb += numpy.log(rmv_conf[i]) / NUM_NEIGHBOR_POINT
+					else:
+						rmvLogProb += numpy.log((1 - rmv_conf[i])) / NUM_NEIGHBOR_POINT
+				maskLogProb += addLogProb + rmvLogProb
+				updated = False
+				iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
+#				print('%d/%d points %d outliers %d add %d rmv %.2f iou'%(numpy.sum(numpy.logical_and(currentMask, gt_mask)), numpy.sum(gt_mask),
+#					numpy.sum(numpy.logical_and(gt_mask==0, currentMask)), len(addSet), len(rmvSet), iou))
+				for i in range(len(point_voxels)):
+					if not currentMask[i] and tuple(point_voxels[i]) in addSet:
+						currentMask[i] = True
+						updated = True
+					if tuple(point_voxels[i]) in rmvSet:
+						currentMask[i] = False
+				steps += 1
+
+				if updated: #continue growing
+					minDims = point_voxels[currentMask, :].min(axis=0)
+					maxDims = point_voxels[currentMask, :].max(axis=0)
+					if not numpy.any(minDims<seqMinDims) and not numpy.any(maxDims>seqMaxDims):
+						if stuck >= 1:
+							if stop_growing('stuck'):
+								break
+							else:
+								continue
+						else:
+							stuck += 1
+					else:
+						stuck = 0
+					seqMinDims = numpy.minimum(seqMinDims, minDims)
+					seqMaxDims = numpy.maximum(seqMaxDims, maxDims)
+				else: #no matching neighbors (early termination)
+					if stop_growing('noexpand'):
+						break
+					else:
+						continue
 
 		#fill in points with no labels
 		nonzero_idx = numpy.nonzero(cluster_label)[0]
@@ -300,7 +313,9 @@ for AREA in TEST_AREAS:
 		dt_match = numpy.zeros(cluster_label.max(), dtype=bool)
 		cluster_label2 = numpy.zeros(len(cluster_label), dtype=int)
 		room_iou = []
-		for i in set(obj_id):
+		unique_id, count = numpy.unique(obj_id, return_counts=True)
+		for k in range(len(unique_id)):
+			i = unique_id[numpy.argsort(count)][::-1][k]
 			best_iou = 0
 			for j in range(1, cluster_label.max()+1):
 				if not dt_match[j-1]:
@@ -309,7 +324,7 @@ for AREA in TEST_AREAS:
 					if iou > 0.5:
 						dt_match[j-1] = True
 						gt_match += 1
-						cluster_label2[cluster_label==j] = i
+						cluster_label2[cluster_label==j] = k+1
 						break
 			room_iou.append(best_iou)
 		for j in range(1,cluster_label.max()+1):
@@ -338,7 +353,7 @@ for AREA in TEST_AREAS:
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
 			obj_color[0] = [100,100,100]
 			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
-			savePLY('data/results/%d.ply'%save_id, unequalized_points)
+			savePLY('data/results/lrg/%d.ply'%save_id, unequalized_points)
 			save_id += 1
 
 print('NMI: %.2f+-%.2f AMI: %.2f+-%.2f ARS: %.2f+-%.2f PRC %.2f+-%.2f RCL %.2f+-%.2f IOU %.2f+-%.2f'%

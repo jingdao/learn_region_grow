@@ -115,8 +115,8 @@ class LrgNet:
 			self.neighbor_conv[i] = tf.nn.relu(self.neighbor_conv[i])
 
 		#MAX POOLING
-		self.pool = tf.reduce_max(self.conv[5], axis=1)
-		self.neighbor_pool = tf.reduce_max(self.neighbor_conv[5], axis=1)
+		self.pool = tf.reduce_max(self.conv[4], axis=1)
+		self.neighbor_pool = tf.reduce_max(self.neighbor_conv[4], axis=1)
 		self.combined_pool = tf.concat(axis=1, values=[self.pool, self.neighbor_pool])
 
 		#RECURRENT LAYERS (disabled if seq_len==1)

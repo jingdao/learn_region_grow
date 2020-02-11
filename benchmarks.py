@@ -16,7 +16,7 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
-#from train_pointnet import PointNet, PointNet2
+from train_pointnet import PointNet, PointNet2
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -256,10 +256,6 @@ for AREA in TEST_AREAS:
 						if kk in voxel_map and class_labels[voxel_map[kk]]==class_labels[i]:
 							edges.append([i, voxel_map[kk]])
 
-		elif mode=='sgpn':
-			pass
-		elif mode=='mcpnet':
-			pass
 		elif mode=='edge':
 			def get_features(E, p1, p2, neighbor_min, neighbor_max, neighbor_mean):
 				F = numpy.hstack((
@@ -394,7 +390,10 @@ for AREA in TEST_AREAS:
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
 			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
-			savePLY('data/results/%s/%d.ply'%(mode,save_id), unequalized_points)
+			if AREA == 'scannet':
+				savePLY('data/results/%s/scannet%d.ply'%(mode,save_id), unequalized_points)
+			else:
+				savePLY('data/results/%s/%d.ply'%(mode,save_id), unequalized_points)
 			save_id += 1
 
 print('NMI: %.2f+-%.2f AMI: %.2f+-%.2f ARS: %.2f+-%.2f PRC %.2f+-%.2f RCL %.2f+-%.2f IOU %.2f+-%.2f'%

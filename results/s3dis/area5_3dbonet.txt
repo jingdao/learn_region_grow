@@ -1,0 +1,138 @@
+Couldn't import dot_parser, loading of dot files will not be possible.
+('eval scene', 'Area_5_WC_1.h5.mat')
+NMI: 0.87 AMI: 0.84 ARS: 0.90 PRC: 0.36 RCL: 0.43 IOU: 0.49
+('eval scene', 'Area_5_WC_2.h5.mat')
+NMI: 0.80 AMI: 0.79 ARS: 0.79 PRC: 0.22 RCL: 0.36 IOU: 0.46
+('eval scene', 'Area_5_conferenceRoom_1.h5.mat')
+NMI: 0.81 AMI: 0.77 ARS: 0.78 PRC: 0.39 RCL: 0.59 IOU: 0.55
+('eval scene', 'Area_5_conferenceRoom_2.h5.mat')
+NMI: 0.82 AMI: 0.81 ARS: 0.61 PRC: 0.29 RCL: 0.49 IOU: 0.46
+('eval scene', 'Area_5_conferenceRoom_3.h5.mat')
+NMI: 0.84 AMI: 0.83 ARS: 0.88 PRC: 0.26 RCL: 0.37 IOU: 0.46
+('eval scene', 'Area_5_hallway_1.h5.mat')
+NMI: 0.76 AMI: 0.65 ARS: 0.65 PRC: 0.09 RCL: 0.46 IOU: 0.46
+('eval scene', 'Area_5_hallway_10.h5.mat')
+NMI: 0.87 AMI: 0.86 ARS: 0.88 PRC: 0.20 RCL: 0.42 IOU: 0.49
+('eval scene', 'Area_5_hallway_11.h5.mat')
+NMI: 0.88 AMI: 0.84 ARS: 0.87 PRC: 0.25 RCL: 0.50 IOU: 0.67
+('eval scene', 'Area_5_hallway_12.h5.mat')
+NMI: 0.85 AMI: 0.83 ARS: 0.80 PRC: 0.31 RCL: 0.62 IOU: 0.59
+('eval scene', 'Area_5_hallway_13.h5.mat')
+NMI: 0.87 AMI: 0.82 ARS: 0.91 PRC: 0.11 RCL: 0.62 IOU: 0.63
+('eval scene', 'Area_5_hallway_14.h5.mat')
+NMI: 0.86 AMI: 0.82 ARS: 0.82 PRC: 0.41 RCL: 0.41 IOU: 0.46
+('eval scene', 'Area_5_hallway_15.h5.mat')
+NMI: 0.84 AMI: 0.78 ARS: 0.90 PRC: 0.12 RCL: 0.57 IOU: 0.59
+('eval scene', 'Area_5_hallway_2.h5.mat')
+NMI: 0.86 AMI: 0.83 ARS: 0.90 PRC: 0.10 RCL: 0.30 IOU: 0.37
+('eval scene', 'Area_5_hallway_3.h5.mat')
+NMI: 0.92 AMI: 0.91 ARS: 0.95 PRC: 0.35 RCL: 0.67 IOU: 0.60
+('eval scene', 'Area_5_hallway_4.h5.mat')
+NMI: 0.92 AMI: 0.92 ARS: 0.93 PRC: 0.43 RCL: 0.64 IOU: 0.68
+('eval scene', 'Area_5_hallway_5.h5.mat')
+NMI: 0.83 AMI: 0.81 ARS: 0.84 PRC: 0.19 RCL: 0.42 IOU: 0.41
+('eval scene', 'Area_5_hallway_6.h5.mat')
+NMI: 0.79 AMI: 0.70 ARS: 0.82 PRC: 0.19 RCL: 0.10 IOU: 0.17
+('eval scene', 'Area_5_hallway_7.h5.mat')
+NMI: 0.84 AMI: 0.81 ARS: 0.86 PRC: 0.17 RCL: 0.21 IOU: 0.27
+('eval scene', 'Area_5_hallway_8.h5.mat')
+NMI: 0.88 AMI: 0.84 ARS: 0.89 PRC: 0.33 RCL: 0.44 IOU: 0.42
+('eval scene', 'Area_5_hallway_9.h5.mat')
+NMI: 0.85 AMI: 0.83 ARS: 0.89 PRC: 0.30 RCL: 0.53 IOU: 0.52
+('eval scene', 'Area_5_lobby_1.h5.mat')
+NMI: 0.89 AMI: 0.89 ARS: 0.97 PRC: 0.35 RCL: 0.57 IOU: 0.57
+('eval scene', 'Area_5_office_1.h5.mat')
+NMI: 0.79 AMI: 0.77 ARS: 0.74 PRC: 0.23 RCL: 0.38 IOU: 0.40
+('eval scene', 'Area_5_office_10.h5.mat')
+NMI: 0.83 AMI: 0.81 ARS: 0.82 PRC: 0.31 RCL: 0.61 IOU: 0.56
+('eval scene', 'Area_5_office_11.h5.mat')
+NMI: 0.84 AMI: 0.82 ARS: 0.82 PRC: 0.38 RCL: 0.82 IOU: 0.70
+('eval scene', 'Area_5_office_12.h5.mat')
+NMI: 0.79 AMI: 0.78 ARS: 0.76 PRC: 0.25 RCL: 0.36 IOU: 0.43
+('eval scene', 'Area_5_office_13.h5.mat')
+NMI: 0.85 AMI: 0.83 ARS: 0.84 PRC: 0.41 RCL: 0.32 IOU: 0.32
+('eval scene', 'Area_5_office_14.h5.mat')
+NMI: 0.82 AMI: 0.81 ARS: 0.82 PRC: 0.32 RCL: 0.56 IOU: 0.48
+('eval scene', 'Area_5_office_15.h5.mat')
+NMI: 0.85 AMI: 0.83 ARS: 0.88 PRC: 0.26 RCL: 0.47 IOU: 0.51
+('eval scene', 'Area_5_office_16.h5.mat')
+NMI: 0.85 AMI: 0.84 ARS: 0.86 PRC: 0.36 RCL: 0.52 IOU: 0.53
+('eval scene', 'Area_5_office_17.h5.mat')
+NMI: 0.82 AMI: 0.80 ARS: 0.79 PRC: 0.18 RCL: 0.32 IOU: 0.40
+('eval scene', 'Area_5_office_18.h5.mat')
+NMI: 0.88 AMI: 0.86 ARS: 0.90 PRC: 0.36 RCL: 0.45 IOU: 0.56
+('eval scene', 'Area_5_office_19.h5.mat')
+NMI: 0.85 AMI: 0.84 ARS: 0.90 PRC: 0.32 RCL: 0.45 IOU: 0.50
+('eval scene', 'Area_5_office_2.h5.mat')
+NMI: 0.82 AMI: 0.81 ARS: 0.76 PRC: 0.28 RCL: 0.48 IOU: 0.50
+('eval scene', 'Area_5_office_20.h5.mat')
+NMI: 0.81 AMI: 0.80 ARS: 0.81 PRC: 0.24 RCL: 0.38 IOU: 0.47
+('eval scene', 'Area_5_office_21.h5.mat')
+NMI: 0.86 AMI: 0.84 ARS: 0.91 PRC: 0.30 RCL: 0.54 IOU: 0.57
+('eval scene', 'Area_5_office_22.h5.mat')
+NMI: 0.84 AMI: 0.82 ARS: 0.83 PRC: 0.39 RCL: 0.60 IOU: 0.55
+('eval scene', 'Area_5_office_23.h5.mat')
+NMI: 0.83 AMI: 0.82 ARS: 0.82 PRC: 0.38 RCL: 0.61 IOU: 0.52
+('eval scene', 'Area_5_office_24.h5.mat')
+NMI: 0.76 AMI: 0.72 ARS: 0.69 PRC: 0.23 RCL: 0.28 IOU: 0.33
+('eval scene', 'Area_5_office_25.h5.mat')
+NMI: 0.82 AMI: 0.81 ARS: 0.82 PRC: 0.26 RCL: 0.42 IOU: 0.50
+('eval scene', 'Area_5_office_26.h5.mat')
+NMI: 0.79 AMI: 0.79 ARS: 0.73 PRC: 0.22 RCL: 0.42 IOU: 0.47
+('eval scene', 'Area_5_office_27.h5.mat')
+NMI: 0.83 AMI: 0.81 ARS: 0.80 PRC: 0.24 RCL: 0.39 IOU: 0.45
+('eval scene', 'Area_5_office_28.h5.mat')
+NMI: 0.84 AMI: 0.81 ARS: 0.83 PRC: 0.31 RCL: 0.36 IOU: 0.38
+('eval scene', 'Area_5_office_29.h5.mat')
+NMI: 0.80 AMI: 0.77 ARS: 0.82 PRC: 0.18 RCL: 0.28 IOU: 0.34
+('eval scene', 'Area_5_office_3.h5.mat')
+NMI: 0.80 AMI: 0.80 ARS: 0.77 PRC: 0.17 RCL: 0.35 IOU: 0.37
+('eval scene', 'Area_5_office_30.h5.mat')
+NMI: 0.84 AMI: 0.81 ARS: 0.78 PRC: 0.29 RCL: 0.43 IOU: 0.54
+('eval scene', 'Area_5_office_31.h5.mat')
+NMI: 0.81 AMI: 0.79 ARS: 0.78 PRC: 0.20 RCL: 0.39 IOU: 0.42
+('eval scene', 'Area_5_office_32.h5.mat')
+NMI: 0.80 AMI: 0.79 ARS: 0.75 PRC: 0.19 RCL: 0.45 IOU: 0.45
+('eval scene', 'Area_5_office_33.h5.mat')
+NMI: 0.82 AMI: 0.82 ARS: 0.80 PRC: 0.22 RCL: 0.50 IOU: 0.51
+('eval scene', 'Area_5_office_34.h5.mat')
+NMI: 0.77 AMI: 0.74 ARS: 0.69 PRC: 0.16 RCL: 0.37 IOU: 0.43
+('eval scene', 'Area_5_office_35.h5.mat')
+NMI: 0.82 AMI: 0.80 ARS: 0.77 PRC: 0.42 RCL: 0.71 IOU: 0.65
+('eval scene', 'Area_5_office_36.h5.mat')
+NMI: 0.86 AMI: 0.85 ARS: 0.91 PRC: 0.33 RCL: 0.46 IOU: 0.51
+('eval scene', 'Area_5_office_37.h5.mat')
+NMI: 0.77 AMI: 0.75 ARS: 0.64 PRC: 0.09 RCL: 0.16 IOU: 0.31
+('eval scene', 'Area_5_office_38.h5.mat')
+NMI: 0.69 AMI: 0.64 ARS: 0.49 PRC: 0.07 RCL: 0.15 IOU: 0.27
+('eval scene', 'Area_5_office_39.h5.mat')
+NMI: 0.77 AMI: 0.73 ARS: 0.72 PRC: 0.17 RCL: 0.41 IOU: 0.39
+('eval scene', 'Area_5_office_4.h5.mat')
+NMI: 0.81 AMI: 0.79 ARS: 0.75 PRC: 0.30 RCL: 0.65 IOU: 0.53
+('eval scene', 'Area_5_office_40.h5.mat')
+NMI: 0.84 AMI: 0.83 ARS: 0.84 PRC: 0.19 RCL: 0.33 IOU: 0.39
+('eval scene', 'Area_5_office_41.h5.mat')
+NMI: 0.84 AMI: 0.82 ARS: 0.85 PRC: 0.22 RCL: 0.41 IOU: 0.45
+('eval scene', 'Area_5_office_42.h5.mat')
+NMI: 0.79 AMI: 0.78 ARS: 0.71 PRC: 0.31 RCL: 0.47 IOU: 0.46
+('eval scene', 'Area_5_office_5.h5.mat')
+NMI: 0.87 AMI: 0.86 ARS: 0.85 PRC: 0.41 RCL: 0.68 IOU: 0.61
+('eval scene', 'Area_5_office_6.h5.mat')
+NMI: 0.83 AMI: 0.82 ARS: 0.80 PRC: 0.26 RCL: 0.46 IOU: 0.48
+('eval scene', 'Area_5_office_7.h5.mat')
+NMI: 0.81 AMI: 0.80 ARS: 0.81 PRC: 0.30 RCL: 0.41 IOU: 0.36
+('eval scene', 'Area_5_office_8.h5.mat')
+NMI: 0.81 AMI: 0.80 ARS: 0.76 PRC: 0.36 RCL: 0.70 IOU: 0.61
+('eval scene', 'Area_5_office_9.h5.mat')
+NMI: 0.82 AMI: 0.80 ARS: 0.80 PRC: 0.25 RCL: 0.39 IOU: 0.42
+('eval scene', 'Area_5_pantry_1.h5.mat')
+NMI: 0.84 AMI: 0.80 ARS: 0.84 PRC: 0.34 RCL: 0.55 IOU: 0.55
+('eval scene', 'Area_5_storage_1.h5.mat')
+NMI: 0.62 AMI: 0.60 ARS: 0.34 PRC: 0.11 RCL: 0.19 IOU: 0.27
+('eval scene', 'Area_5_storage_2.h5.mat')
+NMI: 0.67 AMI: 0.65 ARS: 0.37 PRC: 0.12 RCL: 0.24 IOU: 0.33
+('eval scene', 'Area_5_storage_3.h5.mat')
+NMI: 0.80 AMI: 0.77 ARS: 0.74 PRC: 0.41 RCL: 0.58 IOU: 0.61
+('eval scene', 'Area_5_storage_4.h5.mat')
+NMI: 0.83 AMI: 0.83 ARS: 0.79 PRC: 0.24 RCL: 0.42 IOU: 0.45
+NMI: 0.82+-0.05 AMI: 0.80+-0.06 ARS: 0.80+-0.11 PRC 0.26+-0.09 RCL 0.45+-0.14 IOU 0.47+-0.11

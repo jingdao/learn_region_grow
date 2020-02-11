@@ -1,5 +1,7 @@
 # Learnable Region Growing for Point Cloud Segmentation
 
+![architecture](figures/architecture.png?raw=true)
+
 ## Prerequisites
 
 1. numpy
@@ -97,4 +99,14 @@ python test_random_restart.py --area 5 --scoring np
 python test_beam_search.py --area 5 --scoring ml
 python test_beam_search.py --area 5 --scoring np
 ```
+
+## Results
+
+Segmentation results on S3DIS dataset
+
+![s3dis-results](figures/s3dis_results.png?raw=true)
+
+Segmentation results on ScanNet dataset
+
+![scannet-results](figures/scannet_results.png?raw=true)
 

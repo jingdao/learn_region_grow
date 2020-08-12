@@ -49,7 +49,7 @@ DATA ascii
 		rgb = (int(p[3]) << 16) | (int(p[4]) << 8) | int(p[5])
 		f.write("%f %f %f %d\n"%(p[0],p[1],p[2],rgb))
 	f.close()
-	print 'Saved %d points to %s' % (l,filename)
+	print('Saved %d points to %s' % (l,filename))
 
 def savePLY(filename, points):
 	f = open(filename,'w')

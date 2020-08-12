@@ -62,8 +62,8 @@ for AREA in TEST_AREAS:
 	saver = tf.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
-	room_name=[s.split('/')[-1] for s in glob.glob('/home/jd/Documents/GROMI_Deep_Learning/data/Stanford3dDataset_v1.2/Area_%s/*' % AREA)]
-	room_name=[s for s in room_name if '.' not in s]
+#	room_name=[s.split('/')[-1] for s in glob.glob('/home/jd/Documents/GROMI_Deep_Learning/data/Stanford3dDataset_v1.2/Area_%s/*' % AREA)]
+#	room_name=[s for s in room_name if '.' not in s]
 
 	if AREA=='synthetic':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
@@ -213,7 +213,7 @@ for AREA in TEST_AREAS:
 				if len(currentPoints) >= NUM_INLIER_POINT:
 					subset = numpy.random.choice(len(currentPoints), NUM_INLIER_POINT, replace=False)
 				else:
-					subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
+					subset = list(range(len(currentPoints))) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
 				center = numpy.median(currentPoints, axis=0)
 				expandPoints = numpy.array(expandPoints)
 				expandPoints[:,:2] -= center[:2]
@@ -225,7 +225,7 @@ for AREA in TEST_AREAS:
 				if len(expandPoints) >= NUM_NEIGHBOR_POINT:
 					subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
 				else:
-					subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
+					subset = list(range(len(expandPoints))) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 				input_add[0,:] = numpy.array(expandClass)[subset]
 				ls, add,add_acc, rmv,rmv_acc = sess.run([net.loss, net.add_output, net.add_acc, net.remove_output, net.remove_acc],
@@ -343,8 +343,8 @@ for AREA in TEST_AREAS:
 		agg_prc.append(prc)
 		agg_rcl.append(rcl)
 		agg_iou.append(room_iou)
-		if AREA.isdigit():
-			print(room_name[room_id])
+#		if AREA.isdigit():
+#			print(room_name[room_id])
 		print("Area %s room %d NMI: %.2f AMI: %.2f ARS: %.2f PRC: %.2f RCL: %.2f IOU: %.2f"%(str(AREA), room_id, nmi,ami,ars, prc, rcl, room_iou))
 
 		#save point cloud results to file

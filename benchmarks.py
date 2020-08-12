@@ -16,7 +16,7 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
-from train_pointnet import PointNet, PointNet2
+#from train_pointnet import PointNet, PointNet2
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')

@@ -84,6 +84,6 @@ if __name__=='__main__':
         print (reduced_sample)
     with tf.Session('') as sess:
         ret=sess.run(reduced_sample)
-    print ret.shape,ret.dtype
+    print (ret.shape,ret.dtype)
     import cPickle as pickle
     pickle.dump(ret,open('1.pkl','wb'),-1)

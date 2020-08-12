@@ -1,8 +1,8 @@
 import numpy
 import h5py
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-import tensorflow as tf
+#import os
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+#import tensorflow as tf
 import sys
 from class_util import classes, class_to_id, class_to_color_rgb
 import itertools
@@ -83,6 +83,8 @@ for i in range(len(sys.argv)):
 			threshold = 0.01
 		elif mode=='color':
 			threshold = 0.005
+		elif mode=='smoothness':
+			threshold = 0.985
 		else:
 			threshold = 0.99
 	elif sys.argv[i]=='--area':
@@ -96,7 +98,7 @@ for i in range(len(sys.argv)):
 print('Using threshold', threshold, 'resolution',resolution)
 
 for AREA in TEST_AREAS:
-	tf.reset_default_graph()
+#	tf.reset_default_graph()
 	if mode=='pointnet':
 		if AREA == 'scannet':
 			MODEL_PATH = 'models/pointnet_model5.ckpt'
@@ -170,7 +172,7 @@ for AREA in TEST_AREAS:
 		cls_id = cls_id[equalized_idx]
 
 		#compute normals
-		if mode=='normal' or mode=='curvature':
+		if mode=='normal' or mode=='curvature' or mode=='smoothness':
 			normals = []
 			curvatures = []
 			for i in range(len(points)):
@@ -303,37 +305,63 @@ for AREA in TEST_AREAS:
 			criteria = numpy.logical_and(criteria, test_probs > 0.9)
 			edges = E[criteria].tolist()
 
-		#calculate connected components from edges
-		G = nx.Graph(edges)
-		clusters = nx.connected_components(G)
-		clusters = [list(c) for c in clusters]
-		cluster_label = numpy.zeros(len(point_voxels),dtype=int)
-		min_cluster_size = 10
-		cluster_id = 1
-		for i in range(len(clusters)):
-			if len(clusters[i]) > min_cluster_size:
-				cluster_label[clusters[i]] = cluster_id
-				cluster_id += 1
-
-		if mode=='edge':
-			best_neighbor = [[] for i in range(len(points))]
-			for i in range(len(E)):
-				best_neighbor[E[i,0]].append([E[i,1], test_probs[i]])
-				best_neighbor[E[i,1]].append([E[i,0], test_probs[i]])
-			best_neighbor = [sorted(b,key=lambda x:x[1]) for b in best_neighbor]
-			for i in numpy.nonzero(cluster_label==0)[0]:
-				visited = set()
-				Q = [[i,1]]
+		if mode=='smoothness':
+			#use smoothness constraint for region growing (Rabbani et al.)
+			cluster_label = numpy.zeros(len(point_voxels), dtype=int)
+			visited = numpy.zeros(len(point_voxels), dtype=bool)
+			cluster_id = 1
+			min_cluster_size = 10
+			for seed_id in numpy.arange(len(point_voxels))[numpy.argsort(curvatures)]:
+				if visited[seed_id]:
+					continue
+				Q = [seed_id]
+				C = []
 				while len(Q) > 0:
-					q = Q[-1][0]
+					i = Q[-1]
 					del Q[-1]
-					if q in visited:
-						continue
-					if cluster_label[q] > 0:
-						cluster_label[i] = cluster_label[q]
-						break
-					visited.add(q)
-					Q.extend(best_neighbor[q])
+					C.append(i)
+					visited[i] = True
+					k = tuple(point_voxels[i])
+					for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+						if offset!=(0,0,0):
+							kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+							if kk in voxel_map and not visited[voxel_map[kk]] and normals[voxel_map[kk]].dot(normals[i]) > threshold:
+								Q.append(voxel_map[kk])
+				if len(C) > min_cluster_size:
+					cluster_label[C] = cluster_id
+					cluster_id += 1
+		else:
+			#calculate connected components from edges
+			G = nx.Graph(edges)
+			clusters = nx.connected_components(G)
+			clusters = [list(c) for c in clusters]
+			cluster_label = numpy.zeros(len(point_voxels),dtype=int)
+			min_cluster_size = 10
+			cluster_id = 1
+			for i in range(len(clusters)):
+				if len(clusters[i]) > min_cluster_size:
+					cluster_label[clusters[i]] = cluster_id
+					cluster_id += 1
+
+			if mode=='edge':
+				best_neighbor = [[] for i in range(len(points))]
+				for i in range(len(E)):
+					best_neighbor[E[i,0]].append([E[i,1], test_probs[i]])
+					best_neighbor[E[i,1]].append([E[i,0], test_probs[i]])
+				best_neighbor = [sorted(b,key=lambda x:x[1]) for b in best_neighbor]
+				for i in numpy.nonzero(cluster_label==0)[0]:
+					visited = set()
+					Q = [[i,1]]
+					while len(Q) > 0:
+						q = Q[-1][0]
+						del Q[-1]
+						if q in visited:
+							continue
+						if cluster_label[q] > 0:
+							cluster_label[i] = cluster_label[q]
+							break
+						visited.add(q)
+						Q.extend(best_neighbor[q])
 	
 		#calculate statistics 
 		gt_match = 0

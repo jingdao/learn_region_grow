@@ -1,6 +1,6 @@
 import numpy
 import h5py
-#import os
+import os
 #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 #import tensorflow as tf
 import sys
@@ -58,6 +58,41 @@ end_header
 	f.close()
 	print('Saved to %s: (%d points)'%(filename, len(points)))
 
+def loadFPFH(filename):
+	pcd = open(filename,'r')
+	for l in pcd:
+		if l.startswith('DATA'):
+			break
+	features = []
+	for l in pcd:
+		features.append([float(t) for t in l.split()[:33]])
+	features = numpy.array(features)
+	return features
+
+def savePCD(filename,points):
+	if len(points)==0:
+		return
+	f = open(filename,"w")
+	l = len(points)
+	header = """# .PCD v0.7 - Point Cloud Data file format
+VERSION 0.7
+FIELDS x y z rgb normal_x normal_y normal_z curvature
+SIZE 4 4 4 4 4 4 4 4
+TYPE F F F I F F F F
+COUNT 1 1 1 1 1 1 1 1
+WIDTH %d
+HEIGHT 1
+VIEWPOINT 0 0 0 1 0 0 0
+POINTS %d
+DATA ascii
+""" % (l,l)
+	f.write(header)
+	for p in points:
+		rgb = (int(p[3]) << 16) | (int(p[4]) << 8) | int(p[5])
+		f.write("%f %f %f %d %f %f %f %f\n"%(p[0],p[1],p[2],rgb,p[6],p[7],p[8],p[9]))
+	f.close()
+	print('Saved %d points to %s' % (l,filename))
+
 numpy.random.seed(0)
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
@@ -84,6 +119,8 @@ for i in range(len(sys.argv)):
 		elif mode=='color':
 			threshold = 0.005
 		elif mode=='smoothness':
+			threshold = 0.985
+		elif mode=='fpfh':
 			threshold = 0.985
 		else:
 			threshold = 0.99
@@ -172,7 +209,7 @@ for AREA in TEST_AREAS:
 		cls_id = cls_id[equalized_idx]
 
 		#compute normals
-		if mode=='normal' or mode=='curvature' or mode=='smoothness':
+		if mode=='normal' or mode=='curvature' or mode=='smoothness' or mode=='fpfh':
 			normals = []
 			curvatures = []
 			for i in range(len(points)):
@@ -198,8 +235,11 @@ for AREA in TEST_AREAS:
 			curvatures = numpy.array(curvatures) #(N,)
 			if mode == 'normal':
 				points = numpy.hstack((points, normals)).astype(numpy.float32) #(N, 9)
-			if (mode == 'curvature'):
+			if mode == 'curvature':
 				points = numpy.hstack((points,numpy.reshape(curvatures,(curvatures.shape[0],1)))).astype(numpy.float32) #(N, 7)
+			if mode == 'fpfh':
+				points = numpy.hstack((points, normals, curvatures.reshape(-1, 1))).astype(numpy.float32) #(N, 10)
+
 
 		#find connected edges on a voxel grid
 		voxel_map = {}
@@ -304,7 +344,20 @@ for AREA in TEST_AREAS:
 			criteria = numpy.logical_and(test_probs > 0.99 * neighbor_max[E[:,0]], test_probs > 0.99 * neighbor_max[E[:,1]])
 			criteria = numpy.logical_and(criteria, test_probs > 0.9)
 			edges = E[criteria].tolist()
-
+		elif mode=='fpfh':
+			savePCD('data/tmp.pcd', points)
+			os.system('pcl_fpfh_estimation data/tmp.pcd data/fpfh.pcd -radius %f' % (resolution*2))
+			os.system('pcl_convert_pcd_ascii_binary data/fpfh.pcd data/fpfh_ascii.pcd 0')
+			fpfh = loadFPFH('data/fpfh_ascii.pcd')
+			normalizer = numpy.tile(numpy.linalg.norm(fpfh,axis=1).reshape(-1, 1), [1, fpfh.shape[1]])	
+			fpfh /= normalizer
+			for i in range(len(point_voxels)):
+				k = tuple(point_voxels[i])
+				for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+					if offset!=(0,0,0):
+						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+						if kk in voxel_map and fpfh[voxel_map[kk]].dot(fpfh[i]) > threshold:
+							edges.append([i, voxel_map[kk]])
 		if mode=='smoothness':
 			#use smoothness constraint for region growing (Rabbani et al.)
 			cluster_label = numpy.zeros(len(point_voxels), dtype=int)

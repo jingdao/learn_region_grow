@@ -122,6 +122,10 @@ for i in range(len(sys.argv)):
 			threshold = 0.985
 		elif mode=='fpfh':
 			threshold = 0.985
+		elif mode=='feature':
+			threshold = 0.98
+			threshold2 = 0.1
+			threshold3 = 0.1
 		else:
 			threshold = 0.99
 	elif sys.argv[i]=='--area':
@@ -209,7 +213,7 @@ for AREA in TEST_AREAS:
 		cls_id = cls_id[equalized_idx]
 
 		#compute normals
-		if mode=='normal' or mode=='curvature' or mode=='smoothness' or mode=='fpfh':
+		if mode=='normal' or mode=='curvature' or mode=='smoothness' or mode=='fpfh' or mode=='feature':
 			normals = []
 			curvatures = []
 			for i in range(len(points)):
@@ -358,6 +362,18 @@ for AREA in TEST_AREAS:
 						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
 						if kk in voxel_map and fpfh[voxel_map[kk]].dot(fpfh[i]) > threshold:
 							edges.append([i, voxel_map[kk]])
+		elif mode=='feature':
+			for i in range(len(point_voxels)):
+				k = tuple(point_voxels[i])
+				for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+					if offset!=(0,0,0):
+						kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+						if kk in voxel_map and \
+								normals[voxel_map[kk]].dot(normals[i]) > threshold and \
+								abs(curvatures[voxel_map[kk]] - curvatures[i]) < threshold2 and \
+								numpy.sum((points[voxel_map[kk],3:6] - points[i,3:6])**2) < threshold3:
+							edges.append([i, voxel_map[kk]])
+
 		if mode=='smoothness':
 			#use smoothness constraint for region growing (Rabbani et al.)
 			cluster_label = numpy.zeros(len(point_voxels), dtype=int)

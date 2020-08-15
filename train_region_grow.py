@@ -23,7 +23,15 @@ config.log_device_placement = False
 sess = tf.Session(config=config)
 net = LrgNet(BATCH_SIZE, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
 saver = tf.train.Saver()
-MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA
+if FEATURE_SIZE==6:
+	MODEL_PATH = 'models/lrgnet_model%s_xyz.ckpt'%VAL_AREA
+elif FEATURE_SIZE==9:
+	MODEL_PATH = 'models/lrgnet_model%s_xyzrgb.ckpt'%VAL_AREA
+elif FEATURE_SIZE==12:
+	MODEL_PATH = 'models/lrgnet_model%s_xyzrgbn.ckpt'%VAL_AREA
+else:
+	# use full set of features
+	MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA
 AREA_LIST = ['synthetic_train','synthetic_test'] if VAL_AREA=='synthetic' else range(1,7)
 
 init = tf.global_variables_initializer()
@@ -51,7 +59,7 @@ for epoch in range(MAX_EPOCH):
 				remove = f['remove'][:]
 				idp = 0
 				for i in range(len(count)):
-					val_inlier_points.append(points[idp:idp+count[i], :])
+					val_inlier_points.append(points[idp:idp+count[i], :FEATURE_SIZE])
 					val_remove.append(remove[idp:idp+count[i]])
 					idp += count[i]
 				neighbor_count = f['neighbor_count'][:]
@@ -60,7 +68,7 @@ for epoch in range(MAX_EPOCH):
 				add = f['add'][:]
 				idp = 0
 				for i in range(len(neighbor_count)):
-					val_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
+					val_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :FEATURE_SIZE])
 					val_add.append(add[idp:idp+neighbor_count[i]])
 					idp += neighbor_count[i]
 			else:
@@ -70,7 +78,7 @@ for epoch in range(MAX_EPOCH):
 				remove = f['remove'][:]
 				idp = 0
 				for i in range(len(count)):
-					train_inlier_points.append(points[idp:idp+count[i], :])
+					train_inlier_points.append(points[idp:idp+count[i], :FEATURE_SIZE])
 					train_remove.append(remove[idp:idp+count[i]])
 					idp += count[i]
 				neighbor_count = f['neighbor_count'][:]
@@ -79,7 +87,7 @@ for epoch in range(MAX_EPOCH):
 				add = f['add'][:]
 				idp = 0
 				for i in range(len(neighbor_count)):
-					train_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :])
+					train_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :FEATURE_SIZE])
 					train_add.append(add[idp:idp+neighbor_count[i]])
 					idp += neighbor_count[i]
 			if FEATURE_SIZE is None: 
@@ -124,14 +132,14 @@ for epoch in range(MAX_EPOCH):
 			if N >= NUM_INLIER_POINT:
 				subset = numpy.random.choice(N, NUM_INLIER_POINT, replace=False)
 			else:
-				subset = range(N) + list(numpy.random.choice(N, NUM_INLIER_POINT-N, replace=True))
+				subset = list(range(N)) + list(numpy.random.choice(N, NUM_INLIER_POINT-N, replace=True))
 			inlier_points[i,:,:] = train_inlier_points[points_idx][subset, :]
 			input_remove[i,:] = train_remove[points_idx][subset]
 			N = train_neighbor_count[points_idx]
 			if N >= NUM_NEIGHBOR_POINT:
 				subset = numpy.random.choice(N, NUM_NEIGHBOR_POINT, replace=False)
 			else:
-				subset = range(N) + list(numpy.random.choice(N, NUM_NEIGHBOR_POINT-N, replace=True))
+				subset = list(range(N)) + list(numpy.random.choice(N, NUM_NEIGHBOR_POINT-N, replace=True))
 			neighbor_points[i,:,:] = train_neighbor_points[points_idx][subset, :]
 			input_add[i,:] = train_add[points_idx][subset]
 		_, ls, ap, ar, rp, rr = sess.run([net.train_op, net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl],
@@ -159,14 +167,14 @@ for epoch in range(MAX_EPOCH):
 				if N >= NUM_INLIER_POINT:
 					subset = numpy.random.choice(N, NUM_INLIER_POINT, replace=False)
 				else:
-					subset = range(N) + list(numpy.random.choice(N, NUM_INLIER_POINT-N, replace=True))
+					subset = list(range(N)) + list(numpy.random.choice(N, NUM_INLIER_POINT-N, replace=True))
 				inlier_points[i,:,:] = val_inlier_points[points_idx][subset, :]
 				input_remove[i,:] = val_remove[points_idx][subset]
 				N = val_neighbor_count[points_idx]
 				if N >= NUM_INLIER_POINT:
 					subset = numpy.random.choice(N, NUM_NEIGHBOR_POINT, replace=False)
 				else:
-					subset = range(N) + list(numpy.random.choice(N, NUM_NEIGHBOR_POINT-N, replace=True))
+					subset = list(range(N)) + list(numpy.random.choice(N, NUM_NEIGHBOR_POINT-N, replace=True))
 				neighbor_points[i,:,:] = val_neighbor_points[points_idx][subset, :]
 				input_add[i,:] = val_add[points_idx][subset]
 			ls, ap, ar, rp, rr = sess.run([net.loss, net.add_prc, net.add_rcl, net.remove_prc, net.remove_rcl],

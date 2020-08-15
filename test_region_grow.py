@@ -48,7 +48,15 @@ for AREA in TEST_AREAS:
 	if AREA=='scannet':
 		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%'5'
 	else:
-		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
+		if FEATURE_SIZE==6:
+			MODEL_PATH = 'models/lrgnet_model%s_xyz.ckpt'%AREA
+		elif FEATURE_SIZE==9:
+			MODEL_PATH = 'models/lrgnet_model%s_xyzrgb.ckpt'%AREA
+		elif FEATURE_SIZE==12:
+			MODEL_PATH = 'models/lrgnet_model%s_xyzrgbn.ckpt'%AREA
+		else:
+			# use full set of features
+			MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
@@ -119,7 +127,14 @@ for AREA in TEST_AREAS:
 		curvatures = numpy.array(curvatures)
 		curvatures = curvatures/curvatures.max()
 		normals = numpy.array(normals)
-		points = numpy.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
+		if FEATURE_SIZE==6:
+			points = numpy.hstack((xyz, room_coordinates)).astype(numpy.float32)
+		elif FEATURE_SIZE==9:
+			points = numpy.hstack((xyz, room_coordinates, rgb)).astype(numpy.float32)
+		elif FEATURE_SIZE==12:
+			points = numpy.hstack((xyz, room_coordinates, rgb, normals)).astype(numpy.float32)
+		else:
+			points = numpy.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
 
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 		cluster_label = numpy.zeros(len(points), dtype=int)

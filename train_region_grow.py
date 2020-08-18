@@ -31,7 +31,10 @@ elif FEATURE_SIZE==12:
 	MODEL_PATH = 'models/lrgnet_model%s_xyzrgbn.ckpt'%VAL_AREA
 else:
 	# use full set of features
-	MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA
+	if NUM_INLIER_POINT!=512 or NUM_NEIGHBOR_POINT!=512:
+		MODEL_PATH = 'models/lrgnet_model%s_i_%d_j_%d.ckpt'%(VAL_AREA, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT)
+	else:
+		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA
 AREA_LIST = ['synthetic_train','synthetic_test'] if VAL_AREA=='synthetic' else range(1,7)
 
 init = tf.global_variables_initializer()

@@ -56,7 +56,10 @@ for AREA in TEST_AREAS:
 			MODEL_PATH = 'models/lrgnet_model%s_xyzrgbn.ckpt'%AREA
 		else:
 			# use full set of features
-			MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
+			if NUM_INLIER_POINT!=512 or NUM_NEIGHBOR_POINT!=512:
+				MODEL_PATH = 'models/lrgnet_model%s_i_%d_j_%d.ckpt'%(AREA, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT)
+			else:
+				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True

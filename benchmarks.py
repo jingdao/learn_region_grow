@@ -1,8 +1,8 @@
 import numpy
 import h5py
 import os
-#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-#import tensorflow as tf
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import tensorflow as tf
 import sys
 from class_util import classes, class_to_id, class_to_color_rgb
 import itertools
@@ -16,7 +16,7 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
-#from train_pointnet import PointNet, PointNet2
+from train_pointnet import PointNet, PointNet2
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -139,8 +139,8 @@ for i in range(len(sys.argv)):
 print('Using threshold', threshold, 'resolution',resolution)
 
 for AREA in TEST_AREAS:
-#	tf.reset_default_graph()
 	if mode=='pointnet':
+		tf.reset_default_graph()
 		if AREA == 'scannet':
 			MODEL_PATH = 'models/pointnet_model5.ckpt'
 		else:
@@ -155,6 +155,7 @@ for AREA in TEST_AREAS:
 		saver.restore(sess, MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
 	elif mode=='pointnet2':
+		tf.reset_default_graph()
 		if AREA == 'scannet':
 			MODEL_PATH = 'models/pointnet2_model5.ckpt'
 		else:

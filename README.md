@@ -1,4 +1,4 @@
-# Learnable Region Growing for Point Cloud Segmentation
+# LRGNet: Learnable Region Growing for Point Cloud Segmentation
 
 ![architecture](figures/architecture.png?raw=true)
 
@@ -9,6 +9,7 @@
 3. scikit-learn
 4. tensorflow
 5. h5py
+6. networkx
 
 ## Data Staging
 
@@ -57,15 +58,15 @@ do
 done
 ```
 
-Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *curvature*, *pointnet*, *pointnet2*, *edge*.
+Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *curvature*, *pointnet*, *pointnet2*, *edge*, *smoothness*, *fpfh*, *feature*.
 
 ```bash
 python benchmarks.py --mode normal --area 5 --threshold 0.99 --save
 ```
 
-## Learn Region Grow
+## Learn Region Grow (LRGNet)
 
-Run region growing simulations to stage ground truth data for LrgNet.
+Run region growing simulations to stage ground truth data for LRGNet.
 
 ```bash
 python stage_data.py
@@ -76,7 +77,7 @@ do
 done
 ```
 
-Train LrgNet for each area of the S3DIS dataset.
+Train LRGNet for each area of the S3DIS dataset.
 
 ```bash
 for i in 1 2 3 4 5 6
@@ -92,7 +93,7 @@ python test_region_grow.py --area 5 --save
 python test_region_grow.py --area scannet --save
 ```
 
-Test LrgNet using local search methods
+Test LRGNet using local search methods
 ```bash
 python test_random_restart.py --area 5 --scoring ml
 python test_random_restart.py --area 5 --scoring np

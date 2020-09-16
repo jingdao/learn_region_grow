@@ -1,3 +1,4 @@
+import numpy
 
 #list of all classes
 classes = ['clutter', 'board', 'bookcase', 'beam', 'chair', 'column', 'door', 'sofa', 'table', 'window', 'ceiling', 'floor', 'wall']
@@ -38,3 +39,8 @@ class_to_color_rgb = {
 	11: (0,0,255), #floor
 	12: (255,165,0), #wall
 }
+
+#extend colors to NYU 40 classes
+sample_state = numpy.random.RandomState(0)
+for i in range(13, 41):
+	class_to_color_rgb[i] = tuple(numpy.random.randint(0, 255, 3))

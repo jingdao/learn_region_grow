@@ -64,6 +64,12 @@ Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *cur
 python benchmarks.py --mode normal --area 5 --threshold 0.99 --save
 ```
 
+Evaluate the cross-domain performance as follows:
+```bash
+python train_pointnet.py --mode pointnet --train-area scannet --val-area s3dis --cross-domain
+python benchmarks.py --mode pointnet --train-area scannet --area s3dis --cross-domain
+```
+
 ## Learn Region Grow (LRGNet)
 
 Run region growing simulations to stage ground truth data for LRGNet.

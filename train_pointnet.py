@@ -17,14 +17,13 @@ from tf_interpolate import three_nn, three_interpolate
 
 
 BASE_LEARNING_RATE = 2e-4
-NUM_FEATURE_CHANNELS = [64,64,128,512]
+NUM_FEATURE_CHANNELS = [64,64,64,128,1024]
 NUM_CONV_LAYERS = len(NUM_FEATURE_CHANNELS)
-NUM_FC_CHANNELS = [512]
+NUM_FC_CHANNELS = [512,256]
 NUM_FC_LAYERS = len(NUM_FC_CHANNELS)
 
 BATCH_SIZE = 100
 NUM_POINT = 1024
-NUM_CLASSES = len(classes)
 MAX_EPOCH = 50
 VAL_STEP = 10
 GPU_INDEX = 0
@@ -175,7 +174,8 @@ class PointNet2():
 		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size, num_point))
 		self.is_training_pl = tf.placeholder(tf.bool, shape=())
 		l0_xyz = self.pointclouds_pl[:,:,:3]
-		l0_points = None
+#		l0_points = None
+		l0_points = self.pointclouds_pl[:,:,3:]
 
 		# Layer 1
 		l1_xyz, l1_points, l1_indices = pointnet_sa_module(l0_xyz, l0_points, npoint=1024, radius=0.1, nsample=32, mlp=[32,32,64], mlp2=None, group_all=False, is_training=self.is_training_pl, bn_decay=0, scope='layer1')
@@ -292,25 +292,41 @@ def get_even_sampling(labels, batch_size, samples_per_instance):
 
 if __name__=='__main__':
 
-	VAL_AREA = 1
+	TRAIN_AREA = ['1','2','3','4','6']
+	VAL_AREA = ['5']
 	mode = 'pointnet'
+	cross_domain = False
 	for i in range(len(sys.argv)):
 		if sys.argv[i] == '--mode':
 			mode = sys.argv[i+1]
-		if sys.argv[i]=='--area':
-			VAL_AREA = int(sys.argv[i+1])
-	if mode == 'pointnet2':
-		MODEL_PATH = 'models/pointnet2_model'+str(VAL_AREA)+'.ckpt'
+		if sys.argv[i]=='--train-area':
+			TRAIN_AREA = sys.argv[i+1].split(',')
+		if sys.argv[i]=='--val-area':
+			VAL_AREA = sys.argv[i+1].split(',')
+		if sys.argv[i]=='--cross-domain':
+			cross_domain = True
+	if cross_domain:
+		MODEL_PATH = 'models/cross_domain/%s_%s.ckpt' % (mode, TRAIN_AREA[0])
+		NUM_CLASSES = 41 if TRAIN_AREA[0]=='scannet' else len(classes)
 	else:
-		MODEL_PATH = 'models/pointnet_model'+str(VAL_AREA)+'.ckpt'
+		MODEL_PATH = 'models/%s_model%s.ckpt' % (mode, VAL_AREA[0])
+		NUM_CLASSES = len(classes)
+	print('train', TRAIN_AREA, 'val', VAL_AREA, 'model', MODEL_PATH)
 
 	#arrange points into batches of 2048x6
 	train_points = []
 	train_labels = []
 	val_points = []
 	val_labels = []
-	for AREA in [1,2,3,4,5,6]:
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
+	for AREA in ['1','2','3','4','5','6','s3dis','scannet']:
+		if not AREA in TRAIN_AREA and not AREA in VAL_AREA:
+			continue
+		if AREA=='s3dis':
+			all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
+		elif AREA=='scannet':
+			all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
+		else:
+			all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 		for room_id in range(len(all_points)):
 			points = all_points[room_id]
 			cls_id = all_cls_id[room_id]
@@ -328,7 +344,7 @@ if __name__=='__main__':
 				grid_labels = cls_id[grid_mask]
 
 				subset = numpy.random.choice(len(grid_points), NUM_POINT*2, replace=len(grid_points)<NUM_POINT*2)
-				if AREA==VAL_AREA:
+				if AREA in VAL_AREA:
 					val_points.append(grid_points[subset])
 					val_labels.append(grid_labels[subset])
 				else:
@@ -340,9 +356,9 @@ if __name__=='__main__':
 	val_points = numpy.array(val_points)
 	val_labels = numpy.array(val_labels)
 	print('Train Points',train_points.shape)
-	print('Train Labels',train_labels.shape)
+	print('Train Labels',train_labels.shape, train_labels.min(), train_labels.max())
 	print('Validation Points',val_points.shape)
-	print('Validation Labels',val_labels.shape)
+	print('Validation Labels',val_labels.shape, val_labels.min(), val_labels.max())
 
 	with tf.Graph().as_default():
 		with tf.device('/gpu:'+str(GPU_INDEX)):

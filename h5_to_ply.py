@@ -74,8 +74,8 @@ for room_id in range(len(all_points)):
 	cls_id = cls_id[equalized_idx]
 
 	if mode=='rgb':
-		points[:,3:6] = (points[:,3:6]+0.5)*255
-		savePLY('data/rgb/%d.ply'%room_id, points)
+		unequalized_points[:,3:6] = (unequalized_points[:,3:6]+0.5)*255
+		savePLY('data/rgb/%d.ply'%room_id, unequalized_points)
 	elif mode=='seg':
 		if numpy.min(obj_id)==0:
 			obj_id += 1

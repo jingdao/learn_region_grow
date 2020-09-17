@@ -1,8 +1,6 @@
 import numpy
 import h5py
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-import tensorflow as tf
 import sys
 from class_util import classes, class_to_id, class_to_color_rgb
 import itertools
@@ -16,7 +14,6 @@ from scipy.cluster.vq import vq, kmeans
 import time
 import matplotlib.pyplot as plt
 import scipy.special
-from train_pointnet import PointNet, PointNet2
 
 def loadFromH5(filename, load_labels=True):
 	f = h5py.File(filename,'r')
@@ -94,13 +91,15 @@ DATA ascii
 	print('Saved %d points to %s' % (l,filename))
 
 numpy.random.seed(0)
+TRAIN_AREA = 's3dis'
 TEST_AREAS = [1,2,3,4,5,6,'scannet']
 resolution = 0.1
 feature_size = 9
 NUM_POINT = 1024
 mode = 'normal'
-threshold = 0.99
+threshold = None
 save_results = False
+cross_domain = False
 save_id = 0
 agg_nmi = []
 agg_ami = []
@@ -112,67 +111,66 @@ agg_iou = []
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--mode':
 		mode = sys.argv[i+1]
-		if mode=='normal':
-			threshold = 0.99
-		elif mode == 'curvature':
-			threshold = 0.01
-		elif mode=='color':
-			threshold = 0.005
-		elif mode=='smoothness':
-			threshold = 0.985
-		elif mode=='fpfh':
-			threshold = 0.985
-		elif mode=='feature':
-			threshold = 0.98
-			threshold2 = 0.1
-			threshold3 = 0.1
-		else:
-			threshold = 0.99
 	elif sys.argv[i]=='--area':
 		TEST_AREAS = sys.argv[i+1].split(',')
+	elif sys.argv[i]=='--train-area':
+		TRAIN_AREA = sys.argv[i+1]
 	elif sys.argv[i]=='--threshold':
 		threshold = float(sys.argv[i+1])
 	elif sys.argv[i]=='--resolution':
 		resolution = float(sys.argv[i+1])
 	elif sys.argv[i]=='--save':
 		save_results = True
+	elif sys.argv[i]=='--cross-domain':
+		cross_domain = True
+
+if threshold is None:
+    if mode=='normal':
+        threshold = 0.99
+    elif mode == 'curvature':
+        threshold = 0.01
+    elif mode=='color':
+        threshold = 0.005
+    elif mode=='smoothness':
+        threshold = 0.985 if TEST_AREAS[0]=='scannet' else 0.98
+    elif mode=='fpfh':
+        threshold = 0.985
+    elif mode=='feature':
+        threshold = 0.98
+        threshold2 = 0.1
+        threshold3 = 0.1
+    else:
+        threshold = 0.99
 print('Using threshold', threshold, 'resolution',resolution)
+NUM_CLASSES = 41 if TRAIN_AREA=='scannet' else len(classes)
+
+if mode in ['pointnet', 'pointnet2']:
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+    import tensorflow as tf
+    from train_pointnet import PointNet, PointNet2
 
 for AREA in TEST_AREAS:
-	if mode=='pointnet':
+	if mode in ['pointnet', 'pointnet2']:
 		tf.reset_default_graph()
-		if AREA == 'scannet':
-			MODEL_PATH = 'models/pointnet_model5.ckpt'
+		if cross_domain:
+			MODEL_PATH = 'models/cross_domain/%s_%s.ckpt' % (mode, TRAIN_AREA)
 		else:
-			MODEL_PATH = 'models/pointnet_model'+str(AREA)+'.ckpt'
+			if AREA == 'scannet':
+				MODEL_PATH = 'models/%s_model5.ckpt' % mode
+			else:
+				MODEL_PATH = 'models/%s_model%s.ckpt' % (mode, AREA)
 		config = tf.ConfigProto()
 		config.gpu_options.allow_growth = True
 		config.allow_soft_placement = True
 		config.log_device_placement = False
 		sess = tf.Session(config=config)
-		net = PointNet(1,NUM_POINT,len(classes)) 
-		saver = tf.train.Saver()
-		saver.restore(sess, MODEL_PATH)
-		print('Restored from %s'%MODEL_PATH)
-	elif mode=='pointnet2':
-		tf.reset_default_graph()
-		if AREA == 'scannet':
-			MODEL_PATH = 'models/pointnet2_model5.ckpt'
+		if mode=='pointnet':
+			net = PointNet(1,NUM_POINT,NUM_CLASSES) 
 		else:
-			MODEL_PATH = 'models/pointnet2_model'+str(AREA)+'.ckpt'
-		config = tf.ConfigProto()
-		config.gpu_options.allow_growth = True
-		config.allow_soft_placement = True
-		config.log_device_placement = False
-		sess = tf.Session(config=config)
-		net = PointNet2(1,NUM_POINT,len(classes)) 
+			net = PointNet2(1,NUM_POINT,NUM_CLASSES) 
 		saver = tf.train.Saver()
 		saver.restore(sess, MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
-	elif mode=='sgpn':
-		pass
-	elif mode=='mcpnet':
-		pass
 	elif mode=='edge':
 		if AREA == 'scannet':
 			MODEL_PATH = 'models/edge5.pkl'
@@ -185,6 +183,8 @@ for AREA in TEST_AREAS:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
 	elif AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
+	elif AREA=='s3dis':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
 	elif AREA=='vkitti':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/vkitti.h5')
 	else:

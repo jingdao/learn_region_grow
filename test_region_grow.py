@@ -29,6 +29,7 @@ add_threshold = 0.5
 rmv_threshold = 0.5
 cluster_threshold = 10
 save_results = False
+cross_domain = False
 save_id = 0
 agg_nmi = []
 agg_ami = []
@@ -42,11 +43,15 @@ for i in range(len(sys.argv)):
 		TEST_AREAS = sys.argv[i+1].split(',')
 	elif sys.argv[i]=='--save':
 		save_results = True
+	elif sys.argv[i]=='--cross-domain':
+		cross_domain = True
+	elif sys.argv[i]=='--train-area':
+		TRAIN_AREA = sys.argv[i+1]
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
-	if AREA=='scannet':
-		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%'5'
+	if cross_domain:
+		MODEL_PATH = 'models/cross_domain/lrgnet_%s.ckpt' % TRAIN_AREA
 	else:
 		if FEATURE_SIZE==6:
 			MODEL_PATH = 'models/lrgnet_model%s_xyz.ckpt'%AREA
@@ -69,13 +74,13 @@ for AREA in TEST_AREAS:
 	saver = tf.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
-#	room_name=[s.split('/')[-1] for s in glob.glob('/home/jd/Documents/GROMI_Deep_Learning/data/Stanford3dDataset_v1.2/Area_%s/*' % AREA)]
-#	room_name=[s for s in room_name if '.' not in s]
 
 	if AREA=='synthetic':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
 	elif AREA=='scannet':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
+	elif AREA=='s3dis':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 
@@ -311,8 +316,6 @@ for AREA in TEST_AREAS:
 		agg_prc.append(prc)
 		agg_rcl.append(rcl)
 		agg_iou.append(room_iou)
-#		if AREA.isdigit():
-#			print(room_name[room_id])
 		print("Area %s room %d NMI: %.2f AMI: %.2f ARS: %.2f PRC: %.2f RCL: %.2f IOU: %.2f"%(str(AREA), room_id, nmi,ami,ars, prc, rcl, room_iou))
 
 		#save point cloud results to file

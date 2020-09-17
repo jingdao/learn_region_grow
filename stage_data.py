@@ -11,15 +11,20 @@ cluster_threshold = 10
 max_points = 1024
 save_id = 0
 np.random.seed(0)
+AREAS = ['1','2','3','4','5','6']
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--seed':
 		SEED = int(sys.argv[i+1])
 		np.random.seed(SEED)
+	if sys.argv[i]=='--area':
+		AREAS = sys.argv[i+1].split(',')
 
-for AREA in range(1,7):
+for AREA in AREAS:
 #for AREA in [1]:
 #for AREA in ['synthetic_train','synthetic_test']:
 	if isinstance(AREA, str) and AREA.startswith('synthetic'):
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
+	elif AREA in ['s3dis', 'scannet']:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
@@ -197,7 +202,7 @@ for AREA in range(1,7):
 					print('AREA %s room %d target %d: %d steps %d/%d (%.2f/%.2f IOU)'%(str(AREA), room_id, target_id, steps, np.sum(currentMask), np.sum(gt_mask), iou, originalScore))
 					break 
 				else:
-					if np.any(expandClass) or np.any(rejectClass): #continue growing
+					if steps < 500 and (np.any(expandClass) or np.any(rejectClass)): #continue growing
 						#has matching neighbors: expand in those directions
 						#update current mask
 						currentMask[expandID] = True

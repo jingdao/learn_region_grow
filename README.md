@@ -52,10 +52,7 @@ Saved to data/viz/23.ply: (20749 points)
 
 Train benchmark networks such as PointNet and PointNet++ (pointnet2).
 ```bash
-for i in 1 2 3 4 5 6
-do
-	python -u train_pointnet.py --mode pointnet --area $i >> models/log_pointnet_model$i.txt
-done
+python train_pointnet.py --mode pointnet --train-area 1,2,3,4,6 --val-area 5
 ```
 
 Run benchmark algorithms on each dataset. Mode is one of *normal*, *color*, *curvature*, *pointnet*, *pointnet2*, *edge*, *smoothness*, *fpfh*, *feature*.
@@ -79,17 +76,17 @@ python stage_data.py
 #To apply data augmentation, run stage_data with different random seeds
 for i in 0 1 2 3 4 5 6 7
 do
-	python stage_data.py --seed $i
+	for j in s3dis scannet
+	do
+		python stage_data.py --seed $i --area $j
+	done
 done
 ```
 
 Train LRGNet for each area of the S3DIS dataset.
 
 ```bash
-for i in 1 2 3 4 5 6
-do
-	python train_region_grow.py --area $i >> models/log_lrgnet_model$i.txt
-done
+python train_region_grow.py --train-area 1,2,3,4,6 --val-area 5
 ```
 
 Test LrgNet and measure the accuracy metrics.
@@ -105,6 +102,13 @@ python test_random_restart.py --area 5 --scoring ml
 python test_random_restart.py --area 5 --scoring np
 python test_beam_search.py --area 5 --scoring ml
 python test_beam_search.py --area 5 --scoring np
+```
+
+Evaluate the cross-domain performance as follows:
+```bash
+python train_region_grow.py --train-area scannet --cross-domain
+python test_region_grow.py --train-area scannet --area s3dis --cross-domain
+python test_random_restart.py --train-area scannet --area s3dis --cross-domain --scoring np
 ```
 
 ## Results

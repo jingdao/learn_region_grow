@@ -1,7 +1,4 @@
-data/*.h5
-data/viz/*.ply
-data/results/*.ply
-data/normal/*.ply
+data
 **/.*.swp
 *.pyc
 models/

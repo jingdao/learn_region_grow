@@ -2,7 +2,7 @@ import h5py
 import sys
 import numpy
 import matplotlib.pyplot as plt
-from class_util import classes
+from class_util import classes_s3dis, classes_nyu40
 
 def loadFromH5(filename):
 	f = h5py.File(filename,'r')
@@ -43,8 +43,8 @@ end_header
 
 numRooms = 0
 combined_points = []
-all_room_id = None
 resolution = 0.1
+target_room_id = None
 
 mode = 'rgb'
 if '--rgb' in sys.argv:
@@ -52,9 +52,15 @@ if '--rgb' in sys.argv:
 if '--seg' in sys.argv:
 	mode = 'seg'
 
-all_points, all_obj_id, all_cls_id = loadFromH5(sys.argv[1])
+for i in range(len(sys.argv)):
+	if sys.argv[i] == '--target':
+		mode = 'target'
+		target_room_id = int(sys.argv[i+1])
 
-for room_id in range(len(all_points)):
+all_points, all_obj_id, all_cls_id = loadFromH5(sys.argv[1])
+classes = classes_nyu40 if 'scannet' in sys.argv[1] else classes_s3dis
+
+for room_id in range(len(all_points)) if target_room_id is None else [target_room_id]:
 	unequalized_points = all_points[room_id]
 	obj_id = all_obj_id[room_id]
 	cls_id = all_cls_id[room_id]
@@ -76,7 +82,7 @@ for room_id in range(len(all_points)):
 	if mode=='rgb':
 		unequalized_points[:,3:6] = (unequalized_points[:,3:6]+0.5)*255
 		savePLY('data/rgb/%d.ply'%room_id, unequalized_points)
-	elif mode=='seg':
+	elif mode=='seg' or mode=='target':
 		if numpy.min(obj_id)==0:
 			obj_id += 1
 		color_sample_state = numpy.random.RandomState(0)
@@ -86,11 +92,13 @@ for room_id in range(len(all_points)):
 		for k in range(len(unique_id)):
 			i = unique_id[numpy.argsort(count)][::-1][k]
 			target_class = classes[cls_id[numpy.nonzero(obj_id==i)[0][0]]]
-			if target_class!='ceiling':
+			if mode=='target' and target_class not in ['ceiling', 'none']:
 				plt.scatter(0,0,color=tuple(obj_color[k+1]/255.0),label='%s #%d'%(target_class, k),s=200)
 			reorder_id[obj_id==i] = k+1
-		plt.legend(ncol=min(7,(k+1)/2),prop={'size': 16},loc='lower left')
-#		plt.show()
-		obj_color[0,:] = [200,200,200]
-		unequalized_points[:,3:6] = obj_color[reorder_id,:][unequalized_idx]
-		savePLY('data/gt/%d.ply'%room_id, unequalized_points)
+		if mode=='target':
+			plt.legend(ncol=min(7,(k+1)/2),prop={'size': 16},loc='lower left')
+			plt.show()
+		else:
+			obj_color[0,:] = [200,200,200]
+			unequalized_points[:,3:6] = obj_color[reorder_id,:][unequalized_idx]
+			savePLY('data/gt/%d.ply'%room_id, unequalized_points)

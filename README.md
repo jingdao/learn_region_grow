@@ -48,6 +48,13 @@ Saved to data/viz/22.ply: (18464 points)
 Saved to data/viz/23.ply: (20749 points)
 ```
 
+To plot the instance color legend for a target room:
+
+```bash
+#Plot color legend for room #100 in ScanNet
+python h5_to_ply.py data/scannet.h5 --target 100
+```
+
 ## Benchmarks
 
 Train benchmark networks such as PointNet and PointNet++ (pointnet2).

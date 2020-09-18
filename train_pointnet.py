@@ -5,7 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import time
 import sys
-from class_util import classes_s3dis, classes_scannet
+from class_util import classes_s3dis, classes_nyu40
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(ROOT_DIR, 'tf_ops/sampling'))
@@ -307,7 +307,7 @@ if __name__=='__main__':
 			cross_domain = True
 	if cross_domain:
 		MODEL_PATH = 'models/cross_domain/%s_%s.ckpt' % (mode, TRAIN_AREA[0])
-		NUM_CLASSES = len(classes_scannet) if TRAIN_AREA[0]=='scannet' else len(classes_s3dis)
+		NUM_CLASSES = len(classes_nyu40) if TRAIN_AREA[0]=='scannet' else len(classes_s3dis)
 	else:
 		MODEL_PATH = 'models/%s_model%s.ckpt' % (mode, VAL_AREA[0])
 		NUM_CLASSES = len(classes_s3dis)

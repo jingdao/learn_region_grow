@@ -2,7 +2,7 @@ import numpy
 import h5py
 import os
 import sys
-from class_util import classes_s3ds, classes_scannet, class_to_id, class_to_color_rgb
+from class_util import classes_s3dis, classes_nyu40, class_to_id, class_to_color_rgb
 import itertools
 import random
 from sklearn.decomposition import PCA
@@ -142,7 +142,7 @@ if threshold is None:
     else:
         threshold = 0.99
 print('Using threshold', threshold, 'resolution',resolution)
-NUM_CLASSES = len(classes_scannet) if TRAIN_AREA=='scannet' else len(classes_s3dis)
+NUM_CLASSES = len(classes_nyu40) if TRAIN_AREA=='scannet' else len(classes_s3dis)
 
 if mode in ['pointnet', 'pointnet2']:
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'

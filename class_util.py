@@ -2,6 +2,11 @@ import numpy
 
 #list of all classes
 classes = ['clutter', 'board', 'bookcase', 'beam', 'chair', 'column', 'door', 'sofa', 'table', 'window', 'ceiling', 'floor', 'wall']
+classes_s3dis = ['clutter', 'board', 'bookcase', 'beam', 'chair', 'column', 'door', 'sofa', 'table', 'window', 'ceiling', 'floor', 'wall']
+classes_nyu40 = ['none','wall','floor','cabinet', 'bed', 'chair', 'sofa', 'table', 'door', 'window', 'bookshelf', 'picture', 'counter', 'blinds',
+                'desk', 'shelves', 'curtain', 'dresser', 'pillow', 'mirror', 'floor mat', 'clothes', 'ceiling', 'books', 'refrigerator',
+                'television', 'paper', 'towel', 'shower curtain', 'box', 'whiteboard', 'person', 'nightstand', 'toilet', 'sink', 'lamp',
+                'bathtub', 'bag', 'otherstructure', 'otherfurniture', 'otherprop']
 
 #integer ID for each class
 class_to_id = {classes[i] : i for i in range(len(classes))}

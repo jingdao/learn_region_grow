@@ -5,7 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import time
 import sys
-from class_util import classes
+from class_util import classes_s3dis, classes_scannet
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(ROOT_DIR, 'tf_ops/sampling'))
@@ -307,10 +307,10 @@ if __name__=='__main__':
 			cross_domain = True
 	if cross_domain:
 		MODEL_PATH = 'models/cross_domain/%s_%s.ckpt' % (mode, TRAIN_AREA[0])
-		NUM_CLASSES = 41 if TRAIN_AREA[0]=='scannet' else len(classes)
+		NUM_CLASSES = len(classes_scannet) if TRAIN_AREA[0]=='scannet' else len(classes_s3dis)
 	else:
 		MODEL_PATH = 'models/%s_model%s.ckpt' % (mode, VAL_AREA[0])
-		NUM_CLASSES = len(classes)
+		NUM_CLASSES = len(classes_s3dis)
 	print('train', TRAIN_AREA, 'val', VAL_AREA, 'model', MODEL_PATH)
 
 	#arrange points into batches of 2048x6

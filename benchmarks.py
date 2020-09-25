@@ -191,6 +191,8 @@ for AREA in TEST_AREAS:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 
 	for room_id in range(len(all_points)):
+#	for room_id in [162, 157, 166, 169, 200]:
+#	for room_id in [10, 44, 87, 111, 198]:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]

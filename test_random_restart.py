@@ -4,7 +4,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import sys
-from class_util import classes, class_to_id, class_to_color_rgb
+from class_util import classes_s3dis, classes_nyu40, class_to_id, class_to_color_rgb
 import itertools
 import random
 from sklearn.decomposition import PCA
@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 import scipy.special
 from learn_region_grow_util import *
 import glob
-from class_util import classes
 
 numpy.random.seed(0)
 NUM_INLIER_POINT = 512
@@ -76,6 +75,7 @@ for AREA in TEST_AREAS:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
+	classes = classes_nyu40 if AREA=='scannet' else classes_s3dis
 
 	for room_id in range(len(all_points)):
 #	for room_id in [0]:

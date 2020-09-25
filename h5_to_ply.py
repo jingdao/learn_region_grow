@@ -96,7 +96,7 @@ for room_id in range(len(all_points)) if target_room_id is None else [target_roo
 				plt.scatter(0,0,color=tuple(obj_color[k+1]/255.0),label='%s #%d'%(target_class, k),s=200)
 			reorder_id[obj_id==i] = k+1
 		if mode=='target':
-			plt.legend(ncol=min(7,(k+1)/2),prop={'size': 16},loc='lower left')
+			plt.legend(ncol=min(7,int((k+1)/2)),prop={'size': 16},loc='lower left')
 			plt.show()
 		else:
 			obj_color[0,:] = [200,200,200]

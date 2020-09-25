@@ -1,0 +1,1906 @@
+Using threshold 0.985 resolution 0.1
+Saved 3955 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m26[0;m[0;m ms : [0;36m3955[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m26[0;m[0;m ms : [0;36m3955[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3955[0;m[0;m points]
+Area s3dis room 0 NMI: 0.63 AMI: 0.62 ARS: 0.56 PRC: 0.18 RCL: 0.29 IOU: 0.35
+Saved 20213 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m137[0;m[0;m ms : [0;36m20213[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m148[0;m[0;m ms : [0;36m20213[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m20213[0;m[0;m points]
+Area s3dis room 1 NMI: 0.65 AMI: 0.64 ARS: 0.42 PRC: 0.08 RCL: 0.19 IOU: 0.31
+Saved 5004 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m33[0;m[0;m ms : [0;36m5004[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m34[0;m[0;m ms : [0;36m5004[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5004[0;m[0;m points]
+Area s3dis room 2 NMI: 0.62 AMI: 0.61 ARS: 0.39 PRC: 0.17 RCL: 0.38 IOU: 0.39
+Saved 11833 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11833[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m83[0;m[0;m ms : [0;36m11833[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11833[0;m[0;m points]
+Area s3dis room 3 NMI: 0.66 AMI: 0.65 ARS: 0.49 PRC: 0.18 RCL: 0.34 IOU: 0.34
+Saved 9102 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9102[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m9102[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9102[0;m[0;m points]
+Area s3dis room 4 NMI: 0.63 AMI: 0.62 ARS: 0.42 PRC: 0.10 RCL: 0.28 IOU: 0.38
+Saved 3843 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m26[0;m[0;m ms : [0;36m3843[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m26[0;m[0;m ms : [0;36m3843[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3843[0;m[0;m points]
+Area s3dis room 5 NMI: 0.62 AMI: 0.62 ARS: 0.39 PRC: 0.14 RCL: 0.29 IOU: 0.36
+Saved 3654 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m24[0;m[0;m ms : [0;36m3654[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m24[0;m[0;m ms : [0;36m3654[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3654[0;m[0;m points]
+Area s3dis room 6 NMI: 0.63 AMI: 0.63 ARS: 0.57 PRC: 0.13 RCL: 0.19 IOU: 0.30
+Saved 6914 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6914[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m6914[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6914[0;m[0;m points]
+Area s3dis room 7 NMI: 0.61 AMI: 0.60 ARS: 0.33 PRC: 0.13 RCL: 0.22 IOU: 0.29
+Saved 8609 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8609[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8609[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8609[0;m[0;m points]
+Area s3dis room 8 NMI: 0.64 AMI: 0.62 ARS: 0.41 PRC: 0.13 RCL: 0.20 IOU: 0.30
+Saved 16426 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m109[0;m[0;m ms : [0;36m16426[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m122[0;m[0;m ms : [0;36m16426[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m16426[0;m[0;m points]
+Area s3dis room 9 NMI: 0.61 AMI: 0.59 ARS: 0.42 PRC: 0.03 RCL: 0.07 IOU: 0.26
+Saved 8938 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8938[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8938[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8938[0;m[0;m points]
+Area s3dis room 10 NMI: 0.61 AMI: 0.59 ARS: 0.33 PRC: 0.08 RCL: 0.14 IOU: 0.30
+Saved 5570 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5570[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m5570[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5570[0;m[0;m points]
+Area s3dis room 11 NMI: 0.56 AMI: 0.54 ARS: 0.21 PRC: 0.08 RCL: 0.18 IOU: 0.27
+Saved 8729 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8729[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8729[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8729[0;m[0;m points]
+Area s3dis room 12 NMI: 0.61 AMI: 0.59 ARS: 0.32 PRC: 0.10 RCL: 0.17 IOU: 0.30
+Saved 5492 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5492[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5492[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5492[0;m[0;m points]
+Area s3dis room 13 NMI: 0.57 AMI: 0.55 ARS: 0.24 PRC: 0.09 RCL: 0.22 IOU: 0.32
+Saved 40818 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m272[0;m[0;m ms : [0;36m40818[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m294[0;m[0;m ms : [0;36m40818[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m40818[0;m[0;m points]
+Area s3dis room 14 NMI: 0.60 AMI: 0.57 ARS: 0.49 PRC: 0.05 RCL: 0.09 IOU: 0.23
+Saved 8664 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8664[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8664[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8664[0;m[0;m points]
+Area s3dis room 15 NMI: 0.64 AMI: 0.62 ARS: 0.28 PRC: 0.13 RCL: 0.22 IOU: 0.34
+Saved 7339 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m7339[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7339[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7339[0;m[0;m points]
+Area s3dis room 16 NMI: 0.55 AMI: 0.54 ARS: 0.24 PRC: 0.05 RCL: 0.11 IOU: 0.27
+Saved 9060 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9060[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9060[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9060[0;m[0;m points]
+Area s3dis room 17 NMI: 0.55 AMI: 0.54 ARS: 0.24 PRC: 0.07 RCL: 0.09 IOU: 0.24
+Saved 9053 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9053[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m9053[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9053[0;m[0;m points]
+Area s3dis room 18 NMI: 0.63 AMI: 0.61 ARS: 0.39 PRC: 0.12 RCL: 0.22 IOU: 0.30
+Saved 6844 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6844[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m47[0;m[0;m ms : [0;36m6844[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6844[0;m[0;m points]
+Area s3dis room 19 NMI: 0.61 AMI: 0.60 ARS: 0.32 PRC: 0.12 RCL: 0.27 IOU: 0.34
+Saved 8789 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8789[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8789[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8789[0;m[0;m points]
+Area s3dis room 20 NMI: 0.65 AMI: 0.63 ARS: 0.35 PRC: 0.12 RCL: 0.29 IOU: 0.39
+Saved 9401 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m9401[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9401[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9401[0;m[0;m points]
+Area s3dis room 21 NMI: 0.63 AMI: 0.62 ARS: 0.42 PRC: 0.07 RCL: 0.14 IOU: 0.31
+Saved 9712 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9712[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m69[0;m[0;m ms : [0;36m9712[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9712[0;m[0;m points]
+Area s3dis room 22 NMI: 0.61 AMI: 0.59 ARS: 0.27 PRC: 0.12 RCL: 0.22 IOU: 0.29
+Saved 7152 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m7152[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m7152[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7152[0;m[0;m points]
+Area s3dis room 23 NMI: 0.62 AMI: 0.60 ARS: 0.24 PRC: 0.17 RCL: 0.31 IOU: 0.35
+Saved 4824 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m33[0;m[0;m ms : [0;36m4824[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m32[0;m[0;m ms : [0;36m4824[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4824[0;m[0;m points]
+Area s3dis room 24 NMI: 0.66 AMI: 0.65 ARS: 0.57 PRC: 0.29 RCL: 0.55 IOU: 0.38
+Saved 5502 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5502[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5502[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5502[0;m[0;m points]
+Area s3dis room 25 NMI: 0.60 AMI: 0.58 ARS: 0.22 PRC: 0.12 RCL: 0.22 IOU: 0.32
+Saved 6610 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6610[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6610[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6610[0;m[0;m points]
+Area s3dis room 26 NMI: 0.60 AMI: 0.58 ARS: 0.30 PRC: 0.11 RCL: 0.26 IOU: 0.30
+Saved 9219 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9219[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9219[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9219[0;m[0;m points]
+Area s3dis room 27 NMI: 0.63 AMI: 0.61 ARS: 0.38 PRC: 0.13 RCL: 0.24 IOU: 0.38
+Saved 12383 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m84[0;m[0;m ms : [0;36m12383[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m87[0;m[0;m ms : [0;36m12383[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12383[0;m[0;m points]
+Area s3dis room 28 NMI: 0.72 AMI: 0.72 ARS: 0.58 PRC: 0.29 RCL: 0.60 IOU: 0.48
+Saved 12153 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m83[0;m[0;m ms : [0;36m12153[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m85[0;m[0;m ms : [0;36m12153[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12153[0;m[0;m points]
+Area s3dis room 29 NMI: 0.68 AMI: 0.67 ARS: 0.53 PRC: 0.11 RCL: 0.25 IOU: 0.34
+Saved 8754 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8754[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8754[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8754[0;m[0;m points]
+Area s3dis room 30 NMI: 0.62 AMI: 0.61 ARS: 0.38 PRC: 0.13 RCL: 0.22 IOU: 0.29
+Saved 8891 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8891[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8891[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8891[0;m[0;m points]
+Area s3dis room 31 NMI: 0.60 AMI: 0.58 ARS: 0.31 PRC: 0.15 RCL: 0.29 IOU: 0.34
+Saved 6568 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6568[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6568[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6568[0;m[0;m points]
+Area s3dis room 32 NMI: 0.64 AMI: 0.63 ARS: 0.39 PRC: 0.26 RCL: 0.40 IOU: 0.34
+Saved 9141 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9141[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9141[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9141[0;m[0;m points]
+Area s3dis room 33 NMI: 0.63 AMI: 0.61 ARS: 0.38 PRC: 0.11 RCL: 0.19 IOU: 0.27
+Saved 9417 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m64[0;m[0;m ms : [0;36m9417[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9417[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9417[0;m[0;m points]
+Area s3dis room 34 NMI: 0.64 AMI: 0.63 ARS: 0.40 PRC: 0.13 RCL: 0.33 IOU: 0.37
+Saved 9462 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m9462[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m67[0;m[0;m ms : [0;36m9462[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9462[0;m[0;m points]
+Area s3dis room 35 NMI: 0.61 AMI: 0.59 ARS: 0.30 PRC: 0.12 RCL: 0.22 IOU: 0.31
+Saved 40070 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m282[0;m[0;m ms : [0;36m40070[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m281[0;m[0;m ms : [0;36m40070[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m40070[0;m[0;m points]
+Area s3dis room 36 NMI: 0.72 AMI: 0.70 ARS: 0.75 PRC: 0.05 RCL: 0.09 IOU: 0.27
+Saved 5974 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m39[0;m[0;m ms : [0;36m5974[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m5974[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m5974[0;m[0;m points]
+Area s3dis room 37 NMI: 0.65 AMI: 0.64 ARS: 0.61 PRC: 0.14 RCL: 0.31 IOU: 0.37
+Saved 8863 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8863[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8863[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8863[0;m[0;m points]
+Area s3dis room 38 NMI: 0.59 AMI: 0.58 ARS: 0.35 PRC: 0.11 RCL: 0.20 IOU: 0.30
+Saved 9337 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m9337[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9337[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9337[0;m[0;m points]
+Area s3dis room 39 NMI: 0.62 AMI: 0.60 ARS: 0.32 PRC: 0.14 RCL: 0.29 IOU: 0.35
+Saved 14942 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m100[0;m[0;m ms : [0;36m14942[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m106[0;m[0;m ms : [0;36m14942[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m14942[0;m[0;m points]
+Area s3dis room 40 NMI: 0.64 AMI: 0.62 ARS: 0.34 PRC: 0.13 RCL: 0.21 IOU: 0.31
+Saved 8571 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8571[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8571[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8571[0;m[0;m points]
+Area s3dis room 41 NMI: 0.61 AMI: 0.59 ARS: 0.34 PRC: 0.17 RCL: 0.28 IOU: 0.28
+Saved 7962 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m7962[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m7962[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7962[0;m[0;m points]
+Area s3dis room 42 NMI: 0.58 AMI: 0.57 ARS: 0.23 PRC: 0.10 RCL: 0.17 IOU: 0.31
+Saved 35379 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m239[0;m[0;m ms : [0;36m35379[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m245[0;m[0;m ms : [0;36m35379[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m35379[0;m[0;m points]
+Area s3dis room 43 NMI: 0.70 AMI: 0.68 ARS: 0.69 PRC: 0.07 RCL: 0.13 IOU: 0.29
+Saved 12209 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m81[0;m[0;m ms : [0;36m12209[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m89[0;m[0;m ms : [0;36m12209[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m12209[0;m[0;m points]
+Area s3dis room 44 NMI: 0.49 AMI: 0.47 ARS: 0.20 PRC: 0.06 RCL: 0.08 IOU: 0.23
+Saved 4698 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m31[0;m[0;m ms : [0;36m4698[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m34[0;m[0;m ms : [0;36m4698[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4698[0;m[0;m points]
+Area s3dis room 45 NMI: 0.66 AMI: 0.66 ARS: 0.53 PRC: 0.36 RCL: 0.45 IOU: 0.39
+Saved 74284 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m495[0;m[0;m ms : [0;36m74284[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m559[0;m[0;m ms : [0;36m74284[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m74284[0;m[0;m points]
+Area s3dis room 46 NMI: 0.62 AMI: 0.60 ARS: 0.47 PRC: 0.05 RCL: 0.08 IOU: 0.24
+Saved 6390 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6390[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6390[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6390[0;m[0;m points]
+Area s3dis room 47 NMI: 0.43 AMI: 0.41 ARS: 0.14 PRC: 0.11 RCL: 0.19 IOU: 0.26
+Saved 2514 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m16[0;m[0;m ms : [0;36m2514[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m17[0;m[0;m ms : [0;36m2514[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2514[0;m[0;m points]
+Area s3dis room 48 NMI: 0.68 AMI: 0.68 ARS: 0.56 PRC: 0.43 RCL: 0.75 IOU: 0.58
+Saved 3366 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3366[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3366[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3366[0;m[0;m points]
+Area s3dis room 49 NMI: 0.70 AMI: 0.69 ARS: 0.67 PRC: 0.38 RCL: 0.60 IOU: 0.52
+Saved 8718 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8718[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m64[0;m[0;m ms : [0;36m8718[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8718[0;m[0;m points]
+Area s3dis room 50 NMI: 0.62 AMI: 0.61 ARS: 0.36 PRC: 0.19 RCL: 0.31 IOU: 0.37
+Saved 2910 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m20[0;m[0;m ms : [0;36m2910[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m20[0;m[0;m ms : [0;36m2910[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2910[0;m[0;m points]
+Area s3dis room 51 NMI: 0.50 AMI: 0.49 ARS: 0.26 PRC: 0.14 RCL: 0.18 IOU: 0.24
+Saved 11573 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m77[0;m[0;m ms : [0;36m11573[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m87[0;m[0;m ms : [0;36m11573[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11573[0;m[0;m points]
+Area s3dis room 52 NMI: 0.64 AMI: 0.63 ARS: 0.47 PRC: 0.11 RCL: 0.19 IOU: 0.29
+Saved 3391 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m23[0;m[0;m ms : [0;36m3391[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m23[0;m[0;m ms : [0;36m3391[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3391[0;m[0;m points]
+Area s3dis room 53 NMI: 0.54 AMI: 0.53 ARS: 0.36 PRC: 0.21 RCL: 0.22 IOU: 0.25
+Saved 2097 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m14[0;m[0;m ms : [0;36m2097[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m14[0;m[0;m ms : [0;36m2097[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2097[0;m[0;m points]
+Area s3dis room 54 NMI: 0.53 AMI: 0.52 ARS: 0.31 PRC: 0.08 RCL: 0.17 IOU: 0.31
+Saved 4118 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m27[0;m[0;m ms : [0;36m4118[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m29[0;m[0;m ms : [0;36m4118[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4118[0;m[0;m points]
+Area s3dis room 55 NMI: 0.56 AMI: 0.55 ARS: 0.31 PRC: 0.07 RCL: 0.10 IOU: 0.35
+Saved 6266 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m42[0;m[0;m ms : [0;36m6266[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6266[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6266[0;m[0;m points]
+Area s3dis room 56 NMI: 0.61 AMI: 0.60 ARS: 0.38 PRC: 0.19 RCL: 0.30 IOU: 0.30
+Saved 5970 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m5970[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m43[0;m[0;m ms : [0;36m5970[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5970[0;m[0;m points]
+Area s3dis room 57 NMI: 0.59 AMI: 0.58 ARS: 0.30 PRC: 0.12 RCL: 0.29 IOU: 0.31
+Saved 4668 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m31[0;m[0;m ms : [0;36m4668[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m34[0;m[0;m ms : [0;36m4668[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4668[0;m[0;m points]
+Area s3dis room 58 NMI: 0.55 AMI: 0.53 ARS: 0.17 PRC: 0.09 RCL: 0.11 IOU: 0.22
+Saved 99395 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m666[0;m[0;m ms : [0;36m99395[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m758[0;m[0;m ms : [0;36m99395[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m99395[0;m[0;m points]
+Area s3dis room 59 NMI: 0.66 AMI: 0.63 ARS: 0.48 PRC: 0.06 RCL: 0.07 IOU: 0.23
+Saved 6187 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m6187[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6187[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m6187[0;m[0;m points]
+Area s3dis room 60 NMI: 0.52 AMI: 0.50 ARS: 0.18 PRC: 0.07 RCL: 0.19 IOU: 0.27
+Saved 4546 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m30[0;m[0;m ms : [0;36m4546[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m32[0;m[0;m ms : [0;36m4546[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4546[0;m[0;m points]
+Area s3dis room 61 NMI: 0.62 AMI: 0.61 ARS: 0.35 PRC: 0.17 RCL: 0.19 IOU: 0.28
+Saved 4365 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m29[0;m[0;m ms : [0;36m4365[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m32[0;m[0;m ms : [0;36m4365[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4365[0;m[0;m points]
+Area s3dis room 62 NMI: 0.59 AMI: 0.58 ARS: 0.32 PRC: 0.10 RCL: 0.18 IOU: 0.32
+Saved 3124 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m20[0;m[0;m ms : [0;36m3124[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3124[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3124[0;m[0;m points]
+Area s3dis room 63 NMI: 0.60 AMI: 0.59 ARS: 0.28 PRC: 0.14 RCL: 0.24 IOU: 0.40
+Saved 14785 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m99[0;m[0;m ms : [0;36m14785[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m112[0;m[0;m ms : [0;36m14785[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m14785[0;m[0;m points]
+Area s3dis room 64 NMI: 0.54 AMI: 0.50 ARS: 0.11 PRC: 0.05 RCL: 0.11 IOU: 0.25
+Saved 30541 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m203[0;m[0;m ms : [0;36m30541[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m218[0;m[0;m ms : [0;36m30541[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m30541[0;m[0;m points]
+Area s3dis room 65 NMI: 0.61 AMI: 0.60 ARS: 0.43 PRC: 0.11 RCL: 0.21 IOU: 0.26
+Saved 4701 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m32[0;m[0;m ms : [0;36m4701[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m33[0;m[0;m ms : [0;36m4701[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m4701[0;m[0;m points]
+Area s3dis room 66 NMI: 0.58 AMI: 0.56 ARS: 0.23 PRC: 0.07 RCL: 0.13 IOU: 0.32
+Saved 2830 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m19[0;m[0;m ms : [0;36m2830[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m21[0;m[0;m ms : [0;36m2830[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2830[0;m[0;m points]
+Area s3dis room 67 NMI: 0.56 AMI: 0.56 ARS: 0.50 PRC: 0.31 RCL: 0.31 IOU: 0.31
+Saved 42614 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m283[0;m[0;m ms : [0;36m42614[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m294[0;m[0;m ms : [0;36m42614[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m42614[0;m[0;m points]
+Area s3dis room 68 NMI: 0.59 AMI: 0.58 ARS: 0.47 PRC: 0.03 RCL: 0.08 IOU: 0.22
+Saved 23707 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m159[0;m[0;m ms : [0;36m23707[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m172[0;m[0;m ms : [0;36m23707[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m23707[0;m[0;m points]
+Area s3dis room 69 NMI: 0.66 AMI: 0.64 ARS: 0.56 PRC: 0.08 RCL: 0.14 IOU: 0.26
+Saved 25597 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m173[0;m[0;m ms : [0;36m25597[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m188[0;m[0;m ms : [0;36m25597[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m25597[0;m[0;m points]
+Area s3dis room 70 NMI: 0.49 AMI: 0.47 ARS: 0.17 PRC: 0.06 RCL: 0.11 IOU: 0.22
+Saved 6208 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m6208[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6208[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6208[0;m[0;m points]
+Area s3dis room 71 NMI: 0.57 AMI: 0.55 ARS: 0.25 PRC: 0.06 RCL: 0.09 IOU: 0.22
+Saved 3823 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m25[0;m[0;m ms : [0;36m3823[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m25[0;m[0;m ms : [0;36m3823[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3823[0;m[0;m points]
+Area s3dis room 72 NMI: 0.67 AMI: 0.67 ARS: 0.48 PRC: 0.42 RCL: 0.62 IOU: 0.50
+Saved 11953 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m80[0;m[0;m ms : [0;36m11953[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m87[0;m[0;m ms : [0;36m11953[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11953[0;m[0;m points]
+Area s3dis room 73 NMI: 0.59 AMI: 0.57 ARS: 0.23 PRC: 0.10 RCL: 0.18 IOU: 0.25
+Saved 5983 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m5983[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m43[0;m[0;m ms : [0;36m5983[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m5983[0;m[0;m points]
+Area s3dis room 74 NMI: 0.61 AMI: 0.60 ARS: 0.35 PRC: 0.24 RCL: 0.24 IOU: 0.27
+Saved 4982 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m33[0;m[0;m ms : [0;36m4982[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m4982[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4982[0;m[0;m points]
+Area s3dis room 75 NMI: 0.58 AMI: 0.57 ARS: 0.27 PRC: 0.19 RCL: 0.23 IOU: 0.32
+Saved 2753 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m18[0;m[0;m ms : [0;36m2753[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m18[0;m[0;m ms : [0;36m2753[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2753[0;m[0;m points]
+Area s3dis room 76 NMI: 0.61 AMI: 0.60 ARS: 0.44 PRC: 0.24 RCL: 0.36 IOU: 0.38
+Saved 11037 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m11037[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11037[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11037[0;m[0;m points]
+Area s3dis room 77 NMI: 0.54 AMI: 0.53 ARS: 0.32 PRC: 0.06 RCL: 0.10 IOU: 0.23
+Saved 5622 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5622[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m39[0;m[0;m ms : [0;36m5622[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5622[0;m[0;m points]
+Area s3dis room 78 NMI: 0.64 AMI: 0.63 ARS: 0.41 PRC: 0.29 RCL: 0.45 IOU: 0.40
+Saved 5658 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5658[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5658[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5658[0;m[0;m points]
+Area s3dis room 79 NMI: 0.63 AMI: 0.63 ARS: 0.46 PRC: 0.35 RCL: 0.47 IOU: 0.34
+Saved 3809 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m26[0;m[0;m ms : [0;36m3809[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m25[0;m[0;m ms : [0;36m3809[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3809[0;m[0;m points]
+Area s3dis room 80 NMI: 0.69 AMI: 0.69 ARS: 0.63 PRC: 0.30 RCL: 0.43 IOU: 0.42
+Saved 12131 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m81[0;m[0;m ms : [0;36m12131[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m84[0;m[0;m ms : [0;36m12131[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12131[0;m[0;m points]
+Area s3dis room 81 NMI: 0.67 AMI: 0.67 ARS: 0.49 PRC: 0.19 RCL: 0.33 IOU: 0.40
+Saved 2501 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m16[0;m[0;m ms : [0;36m2501[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m16[0;m[0;m ms : [0;36m2501[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2501[0;m[0;m points]
+Area s3dis room 82 NMI: 0.66 AMI: 0.66 ARS: 0.54 PRC: 0.24 RCL: 0.40 IOU: 0.41
+Saved 3927 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m26[0;m[0;m ms : [0;36m3927[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m28[0;m[0;m ms : [0;36m3927[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3927[0;m[0;m points]
+Area s3dis room 83 NMI: 0.57 AMI: 0.56 ARS: 0.27 PRC: 0.15 RCL: 0.21 IOU: 0.30
+Saved 1885 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m12[0;m[0;m ms : [0;36m1885[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m12[0;m[0;m ms : [0;36m1885[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m1885[0;m[0;m points]
+Area s3dis room 84 NMI: 0.68 AMI: 0.68 ARS: 0.55 PRC: 0.42 RCL: 0.42 IOU: 0.45
+Saved 11046 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m11046[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m76[0;m[0;m ms : [0;36m11046[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11046[0;m[0;m points]
+Area s3dis room 85 NMI: 0.58 AMI: 0.57 ARS: 0.45 PRC: 0.12 RCL: 0.17 IOU: 0.21
+Saved 11009 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m11009[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m76[0;m[0;m ms : [0;36m11009[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11009[0;m[0;m points]
+Area s3dis room 86 NMI: 0.70 AMI: 0.68 ARS: 0.50 PRC: 0.21 RCL: 0.27 IOU: 0.34
+Saved 15926 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m107[0;m[0;m ms : [0;36m15926[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m110[0;m[0;m ms : [0;36m15926[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m15926[0;m[0;m points]
+Area s3dis room 87 NMI: 0.69 AMI: 0.68 ARS: 0.61 PRC: 0.12 RCL: 0.20 IOU: 0.28
+Saved 11958 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m80[0;m[0;m ms : [0;36m11958[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m84[0;m[0;m ms : [0;36m11958[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11958[0;m[0;m points]
+Area s3dis room 88 NMI: 0.67 AMI: 0.66 ARS: 0.49 PRC: 0.16 RCL: 0.28 IOU: 0.32
+Saved 10213 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m68[0;m[0;m ms : [0;36m10213[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m69[0;m[0;m ms : [0;36m10213[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10213[0;m[0;m points]
+Area s3dis room 89 NMI: 0.62 AMI: 0.62 ARS: 0.54 PRC: 0.10 RCL: 0.12 IOU: 0.32
+Saved 8419 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8419[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8419[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8419[0;m[0;m points]
+Area s3dis room 90 NMI: 0.61 AMI: 0.60 ARS: 0.38 PRC: 0.15 RCL: 0.30 IOU: 0.34
+Saved 2138 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m14[0;m[0;m ms : [0;36m2138[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m15[0;m[0;m ms : [0;36m2138[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2138[0;m[0;m points]
+Area s3dis room 91 NMI: 0.50 AMI: 0.48 ARS: 0.13 PRC: 0.17 RCL: 0.36 IOU: 0.37
+Saved 9554 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m64[0;m[0;m ms : [0;36m9554[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m9554[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9554[0;m[0;m points]
+Area s3dis room 92 NMI: 0.62 AMI: 0.61 ARS: 0.25 PRC: 0.18 RCL: 0.33 IOU: 0.36
+Saved 8300 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8300[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8300[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8300[0;m[0;m points]
+Area s3dis room 93 NMI: 0.63 AMI: 0.62 ARS: 0.40 PRC: 0.10 RCL: 0.16 IOU: 0.26
+Saved 20689 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m140[0;m[0;m ms : [0;36m20689[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m146[0;m[0;m ms : [0;36m20689[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m20689[0;m[0;m points]
+Area s3dis room 94 NMI: 0.68 AMI: 0.66 ARS: 0.64 PRC: 0.08 RCL: 0.27 IOU: 0.41
+Saved 1176 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m8[0;m[0;m ms : [0;36m1176[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m7[0;m[0;m ms : [0;36m1176[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m1176[0;m[0;m points]
+Area s3dis room 95 NMI: 0.74 AMI: 0.74 ARS: 0.70 PRC: 0.80 RCL: 1.00 IOU: 0.78
+Saved 8319 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8319[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8319[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8319[0;m[0;m points]
+Area s3dis room 96 NMI: 0.58 AMI: 0.56 ARS: 0.31 PRC: 0.06 RCL: 0.11 IOU: 0.22
+Saved 13555 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m90[0;m[0;m ms : [0;36m13555[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m96[0;m[0;m ms : [0;36m13555[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m13555[0;m[0;m points]
+Area s3dis room 97 NMI: 0.69 AMI: 0.68 ARS: 0.54 PRC: 0.12 RCL: 0.22 IOU: 0.39
+Saved 10841 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m10841[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m81[0;m[0;m ms : [0;36m10841[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10841[0;m[0;m points]
+Area s3dis room 98 NMI: 0.62 AMI: 0.60 ARS: 0.29 PRC: 0.09 RCL: 0.16 IOU: 0.31
+Saved 8749 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8749[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m8749[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8749[0;m[0;m points]
+Area s3dis room 99 NMI: 0.58 AMI: 0.56 ARS: 0.23 PRC: 0.12 RCL: 0.16 IOU: 0.24
+Saved 8714 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8714[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m8714[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8714[0;m[0;m points]
+Area s3dis room 100 NMI: 0.65 AMI: 0.63 ARS: 0.36 PRC: 0.17 RCL: 0.31 IOU: 0.34
+Saved 8165 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8165[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8165[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8165[0;m[0;m points]
+Area s3dis room 101 NMI: 0.59 AMI: 0.57 ARS: 0.28 PRC: 0.09 RCL: 0.12 IOU: 0.25
+Saved 2115 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m14[0;m[0;m ms : [0;36m2115[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m13[0;m[0;m ms : [0;36m2115[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2115[0;m[0;m points]
+Area s3dis room 102 NMI: 0.76 AMI: 0.76 ARS: 0.78 PRC: 0.57 RCL: 0.80 IOU: 0.67
+Saved 12344 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m83[0;m[0;m ms : [0;36m12344[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m83[0;m[0;m ms : [0;36m12344[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12344[0;m[0;m points]
+Area s3dis room 103 NMI: 0.64 AMI: 0.63 ARS: 0.51 PRC: 0.08 RCL: 0.12 IOU: 0.24
+Saved 6576 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6576[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m47[0;m[0;m ms : [0;36m6576[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6576[0;m[0;m points]
+Area s3dis room 104 NMI: 0.58 AMI: 0.56 ARS: 0.22 PRC: 0.11 RCL: 0.23 IOU: 0.32
+Saved 6533 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6533[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6533[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6533[0;m[0;m points]
+Area s3dis room 105 NMI: 0.59 AMI: 0.57 ARS: 0.21 PRC: 0.11 RCL: 0.15 IOU: 0.25
+Saved 1118 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m7[0;m[0;m ms : [0;36m1118[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m7[0;m[0;m ms : [0;36m1118[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m1118[0;m[0;m points]
+Area s3dis room 106 NMI: 0.50 AMI: 0.49 ARS: 0.15 PRC: 0.29 RCL: 0.50 IOU: 0.41
+Saved 21782 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m145[0;m[0;m ms : [0;36m21782[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m152[0;m[0;m ms : [0;36m21782[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m21782[0;m[0;m points]
+Area s3dis room 107 NMI: 0.64 AMI: 0.63 ARS: 0.58 PRC: 0.06 RCL: 0.10 IOU: 0.23
+Saved 7709 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7709[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m7709[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7709[0;m[0;m points]
+Area s3dis room 108 NMI: 0.68 AMI: 0.68 ARS: 0.60 PRC: 0.21 RCL: 0.33 IOU: 0.35
+Saved 7494 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m50[0;m[0;m ms : [0;36m7494[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m7494[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7494[0;m[0;m points]
+Area s3dis room 109 NMI: 0.60 AMI: 0.58 ARS: 0.31 PRC: 0.11 RCL: 0.14 IOU: 0.22
+Saved 2806 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m18[0;m[0;m ms : [0;36m2806[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m18[0;m[0;m ms : [0;36m2806[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2806[0;m[0;m points]
+Area s3dis room 110 NMI: 0.67 AMI: 0.66 ARS: 0.54 PRC: 0.33 RCL: 0.75 IOU: 0.54
+Saved 12197 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m81[0;m[0;m ms : [0;36m12197[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m85[0;m[0;m ms : [0;36m12197[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12197[0;m[0;m points]
+Area s3dis room 111 NMI: 0.64 AMI: 0.64 ARS: 0.49 PRC: 0.20 RCL: 0.37 IOU: 0.34
+Saved 5018 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m5018[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m36[0;m[0;m ms : [0;36m5018[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5018[0;m[0;m points]
+Area s3dis room 112 NMI: 0.61 AMI: 0.61 ARS: 0.39 PRC: 0.20 RCL: 0.29 IOU: 0.39
+Saved 14396 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m95[0;m[0;m ms : [0;36m14396[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m101[0;m[0;m ms : [0;36m14396[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m14396[0;m[0;m points]
+Area s3dis room 113 NMI: 0.62 AMI: 0.60 ARS: 0.49 PRC: 0.10 RCL: 0.21 IOU: 0.29
+Saved 10093 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m67[0;m[0;m ms : [0;36m10093[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m75[0;m[0;m ms : [0;36m10093[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10093[0;m[0;m points]
+Area s3dis room 114 NMI: 0.58 AMI: 0.57 ARS: 0.33 PRC: 0.09 RCL: 0.12 IOU: 0.23
+Saved 1748 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m11[0;m[0;m ms : [0;36m1748[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m11[0;m[0;m ms : [0;36m1748[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m1748[0;m[0;m points]
+Area s3dis room 115 NMI: 0.54 AMI: 0.53 ARS: 0.16 PRC: 0.18 RCL: 0.31 IOU: 0.36
+Saved 17358 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m115[0;m[0;m ms : [0;36m17358[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m122[0;m[0;m ms : [0;36m17358[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m17358[0;m[0;m points]
+Area s3dis room 116 NMI: 0.68 AMI: 0.67 ARS: 0.58 PRC: 0.09 RCL: 0.21 IOU: 0.33
+Saved 41086 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m275[0;m[0;m ms : [0;36m41086[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m303[0;m[0;m ms : [0;36m41086[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m5[0;m[0;m ms : [0;36m41086[0;m[0;m points]
+Area s3dis room 117 NMI: 0.63 AMI: 0.61 ARS: 0.30 PRC: 0.07 RCL: 0.20 IOU: 0.26
+Saved 4015 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m27[0;m[0;m ms : [0;36m4015[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m30[0;m[0;m ms : [0;36m4015[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m4015[0;m[0;m points]
+Area s3dis room 118 NMI: 0.52 AMI: 0.52 ARS: 0.29 PRC: 0.07 RCL: 0.15 IOU: 0.27
+Saved 8193 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8193[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8193[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8193[0;m[0;m points]
+Area s3dis room 119 NMI: 0.52 AMI: 0.50 ARS: 0.20 PRC: 0.02 RCL: 0.03 IOU: 0.20
+Saved 6856 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6856[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m6856[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6856[0;m[0;m points]
+Area s3dis room 120 NMI: 0.57 AMI: 0.55 ARS: 0.26 PRC: 0.11 RCL: 0.15 IOU: 0.22
+Saved 7449 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m50[0;m[0;m ms : [0;36m7449[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7449[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7449[0;m[0;m points]
+Area s3dis room 121 NMI: 0.62 AMI: 0.61 ARS: 0.35 PRC: 0.10 RCL: 0.20 IOU: 0.28
+Saved 5344 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m5344[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5344[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5344[0;m[0;m points]
+Area s3dis room 122 NMI: 0.56 AMI: 0.54 ARS: 0.21 PRC: 0.07 RCL: 0.11 IOU: 0.24
+Saved 7220 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m7220[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7220[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7220[0;m[0;m points]
+Area s3dis room 123 NMI: 0.57 AMI: 0.55 ARS: 0.24 PRC: 0.05 RCL: 0.07 IOU: 0.24
+Saved 7603 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m51[0;m[0;m ms : [0;36m7603[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m7603[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7603[0;m[0;m points]
+Area s3dis room 124 NMI: 0.62 AMI: 0.61 ARS: 0.38 PRC: 0.12 RCL: 0.23 IOU: 0.31
+Saved 6069 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m6069[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m43[0;m[0;m ms : [0;36m6069[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6069[0;m[0;m points]
+Area s3dis room 125 NMI: 0.63 AMI: 0.62 ARS: 0.39 PRC: 0.15 RCL: 0.35 IOU: 0.35
+Saved 11317 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m75[0;m[0;m ms : [0;36m11317[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m80[0;m[0;m ms : [0;36m11317[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11317[0;m[0;m points]
+Area s3dis room 126 NMI: 0.62 AMI: 0.60 ARS: 0.34 PRC: 0.11 RCL: 0.20 IOU: 0.27
+Saved 3276 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3276[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m23[0;m[0;m ms : [0;36m3276[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3276[0;m[0;m points]
+Area s3dis room 127 NMI: 0.54 AMI: 0.52 ARS: 0.16 PRC: 0.08 RCL: 0.18 IOU: 0.30
+Saved 2730 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m18[0;m[0;m ms : [0;36m2730[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m18[0;m[0;m ms : [0;36m2730[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2730[0;m[0;m points]
+Area s3dis room 128 NMI: 0.58 AMI: 0.56 ARS: 0.30 PRC: 0.09 RCL: 0.21 IOU: 0.31
+Saved 10495 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m71[0;m[0;m ms : [0;36m10495[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m10495[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10495[0;m[0;m points]
+Area s3dis room 129 NMI: 0.67 AMI: 0.67 ARS: 0.48 PRC: 0.23 RCL: 0.30 IOU: 0.34
+Saved 909 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m6[0;m[0;m ms : [0;36m909[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m5[0;m[0;m ms : [0;36m909[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m909[0;m[0;m points]
+Area s3dis room 130 NMI: 0.74 AMI: 0.74 ARS: 0.72 PRC: 0.50 RCL: 0.50 IOU: 0.49
+Saved 7213 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m7213[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m51[0;m[0;m ms : [0;36m7213[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m7213[0;m[0;m points]
+Area s3dis room 131 NMI: 0.60 AMI: 0.59 ARS: 0.29 PRC: 0.15 RCL: 0.26 IOU: 0.31
+Saved 10640 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m71[0;m[0;m ms : [0;36m10640[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m75[0;m[0;m ms : [0;36m10640[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10640[0;m[0;m points]
+Area s3dis room 132 NMI: 0.62 AMI: 0.61 ARS: 0.40 PRC: 0.09 RCL: 0.19 IOU: 0.24
+Saved 957 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m6[0;m[0;m ms : [0;36m957[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m6[0;m[0;m ms : [0;36m957[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m957[0;m[0;m points]
+Area s3dis room 133 NMI: 0.70 AMI: 0.69 ARS: 0.67 PRC: 0.56 RCL: 0.62 IOU: 0.51
+Saved 11864 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m80[0;m[0;m ms : [0;36m11864[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m83[0;m[0;m ms : [0;36m11864[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m11864[0;m[0;m points]
+Area s3dis room 134 NMI: 0.61 AMI: 0.59 ARS: 0.45 PRC: 0.11 RCL: 0.17 IOU: 0.23
+Saved 13379 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m89[0;m[0;m ms : [0;36m13379[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m93[0;m[0;m ms : [0;36m13379[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m13379[0;m[0;m points]
+Area s3dis room 135 NMI: 0.65 AMI: 0.64 ARS: 0.60 PRC: 0.08 RCL: 0.13 IOU: 0.26
+Saved 6823 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6823[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m6823[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6823[0;m[0;m points]
+Area s3dis room 136 NMI: 0.56 AMI: 0.54 ARS: 0.24 PRC: 0.08 RCL: 0.12 IOU: 0.26
+Saved 6903 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6903[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m6903[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6903[0;m[0;m points]
+Area s3dis room 137 NMI: 0.61 AMI: 0.60 ARS: 0.36 PRC: 0.12 RCL: 0.26 IOU: 0.30
+Saved 8915 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8915[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m8915[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8915[0;m[0;m points]
+Area s3dis room 138 NMI: 0.60 AMI: 0.59 ARS: 0.34 PRC: 0.09 RCL: 0.13 IOU: 0.23
+Saved 6299 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m6299[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6299[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6299[0;m[0;m points]
+Area s3dis room 139 NMI: 0.63 AMI: 0.62 ARS: 0.39 PRC: 0.20 RCL: 0.32 IOU: 0.30
+Saved 5423 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m36[0;m[0;m ms : [0;36m5423[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m5423[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5423[0;m[0;m points]
+Area s3dis room 140 NMI: 0.53 AMI: 0.51 ARS: 0.17 PRC: 0.11 RCL: 0.13 IOU: 0.23
+Saved 10043 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m67[0;m[0;m ms : [0;36m10043[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m72[0;m[0;m ms : [0;36m10043[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10043[0;m[0;m points]
+Area s3dis room 141 NMI: 0.60 AMI: 0.58 ARS: 0.27 PRC: 0.08 RCL: 0.17 IOU: 0.28
+Saved 1569 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m10[0;m[0;m ms : [0;36m1569[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m10[0;m[0;m ms : [0;36m1569[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m1569[0;m[0;m points]
+Area s3dis room 142 NMI: 0.61 AMI: 0.60 ARS: 0.41 PRC: 0.25 RCL: 0.50 IOU: 0.49
+Saved 6368 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m42[0;m[0;m ms : [0;36m6368[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6368[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6368[0;m[0;m points]
+Area s3dis room 143 NMI: 0.55 AMI: 0.54 ARS: 0.29 PRC: 0.05 RCL: 0.08 IOU: 0.26
+Saved 11769 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11769[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11769[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11769[0;m[0;m points]
+Area s3dis room 144 NMI: 0.74 AMI: 0.73 ARS: 0.77 PRC: 0.25 RCL: 0.41 IOU: 0.43
+Saved 11108 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m74[0;m[0;m ms : [0;36m11108[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m81[0;m[0;m ms : [0;36m11108[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11108[0;m[0;m points]
+Area s3dis room 145 NMI: 0.62 AMI: 0.61 ARS: 0.32 PRC: 0.13 RCL: 0.23 IOU: 0.25
+Saved 2411 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m16[0;m[0;m ms : [0;36m2411[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m16[0;m[0;m ms : [0;36m2411[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2411[0;m[0;m points]
+Area s3dis room 146 NMI: 0.63 AMI: 0.63 ARS: 0.44 PRC: 0.35 RCL: 0.50 IOU: 0.38
+Saved 9624 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m64[0;m[0;m ms : [0;36m9624[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m71[0;m[0;m ms : [0;36m9624[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9624[0;m[0;m points]
+Area s3dis room 147 NMI: 0.61 AMI: 0.59 ARS: 0.32 PRC: 0.06 RCL: 0.13 IOU: 0.32
+Saved 22558 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m152[0;m[0;m ms : [0;36m22558[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m173[0;m[0;m ms : [0;36m22558[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m22558[0;m[0;m points]
+Area s3dis room 148 NMI: 0.64 AMI: 0.62 ARS: 0.38 PRC: 0.09 RCL: 0.16 IOU: 0.27
+Saved 11276 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m76[0;m[0;m ms : [0;36m11276[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m82[0;m[0;m ms : [0;36m11276[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11276[0;m[0;m points]
+Area s3dis room 149 NMI: 0.60 AMI: 0.58 ARS: 0.29 PRC: 0.09 RCL: 0.18 IOU: 0.28
+Saved 4198 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m28[0;m[0;m ms : [0;36m4198[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m28[0;m[0;m ms : [0;36m4198[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4198[0;m[0;m points]
+Area s3dis room 150 NMI: 0.64 AMI: 0.64 ARS: 0.58 PRC: 0.30 RCL: 0.33 IOU: 0.35
+Saved 10129 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m68[0;m[0;m ms : [0;36m10129[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m68[0;m[0;m ms : [0;36m10129[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10129[0;m[0;m points]
+Area s3dis room 151 NMI: 0.64 AMI: 0.64 ARS: 0.50 PRC: 0.20 RCL: 0.27 IOU: 0.30
+Saved 16551 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m112[0;m[0;m ms : [0;36m16551[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m114[0;m[0;m ms : [0;36m16551[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m16551[0;m[0;m points]
+Area s3dis room 152 NMI: 0.60 AMI: 0.59 ARS: 0.44 PRC: 0.20 RCL: 0.29 IOU: 0.28
+Saved 3624 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m24[0;m[0;m ms : [0;36m3624[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m24[0;m[0;m ms : [0;36m3624[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3624[0;m[0;m points]
+Area s3dis room 153 NMI: 0.69 AMI: 0.68 ARS: 0.60 PRC: 0.26 RCL: 0.55 IOU: 0.52
+Saved 8713 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8713[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8713[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8713[0;m[0;m points]
+Area s3dis room 154 NMI: 0.69 AMI: 0.68 ARS: 0.58 PRC: 0.18 RCL: 0.29 IOU: 0.36
+Saved 21239 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m141[0;m[0;m ms : [0;36m21239[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m154[0;m[0;m ms : [0;36m21239[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m21239[0;m[0;m points]
+Area s3dis room 155 NMI: 0.65 AMI: 0.64 ARS: 0.54 PRC: 0.05 RCL: 0.08 IOU: 0.22
+Saved 13381 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m89[0;m[0;m ms : [0;36m13381[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m89[0;m[0;m ms : [0;36m13381[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m13381[0;m[0;m points]
+Area s3dis room 156 NMI: 0.67 AMI: 0.67 ARS: 0.64 PRC: 0.08 RCL: 0.33 IOU: 0.34
+Saved 5202 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m5202[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m5202[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5202[0;m[0;m points]
+Area s3dis room 157 NMI: 0.56 AMI: 0.55 ARS: 0.26 PRC: 0.09 RCL: 0.13 IOU: 0.34
+Saved 29406 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m199[0;m[0;m ms : [0;36m29406[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m219[0;m[0;m ms : [0;36m29406[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m29406[0;m[0;m points]
+Area s3dis room 158 NMI: 0.58 AMI: 0.56 ARS: 0.20 PRC: 0.03 RCL: 0.10 IOU: 0.24
+Saved 9032 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m9032[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m9032[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9032[0;m[0;m points]
+Area s3dis room 159 NMI: 0.64 AMI: 0.63 ARS: 0.39 PRC: 0.12 RCL: 0.27 IOU: 0.36
+Saved 8198 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8198[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m8198[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8198[0;m[0;m points]
+Area s3dis room 160 NMI: 0.76 AMI: 0.75 ARS: 0.79 PRC: 0.25 RCL: 0.67 IOU: 0.65
+Saved 13750 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m93[0;m[0;m ms : [0;36m13750[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m99[0;m[0;m ms : [0;36m13750[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m13750[0;m[0;m points]
+Area s3dis room 161 NMI: 0.59 AMI: 0.58 ARS: 0.35 PRC: 0.07 RCL: 0.17 IOU: 0.24
+Saved 7610 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m51[0;m[0;m ms : [0;36m7610[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7610[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7610[0;m[0;m points]
+Area s3dis room 162 NMI: 0.70 AMI: 0.70 ARS: 0.63 PRC: 0.32 RCL: 0.52 IOU: 0.47
+Saved 9566 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m64[0;m[0;m ms : [0;36m9566[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m69[0;m[0;m ms : [0;36m9566[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9566[0;m[0;m points]
+Area s3dis room 163 NMI: 0.60 AMI: 0.58 ARS: 0.28 PRC: 0.09 RCL: 0.23 IOU: 0.28
+Saved 10789 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m73[0;m[0;m ms : [0;36m10789[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m75[0;m[0;m ms : [0;36m10789[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10789[0;m[0;m points]
+Area s3dis room 164 NMI: 0.54 AMI: 0.53 ARS: 0.42 PRC: 0.08 RCL: 0.21 IOU: 0.29
+Saved 8772 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8772[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8772[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8772[0;m[0;m points]
+Area s3dis room 165 NMI: 0.61 AMI: 0.60 ARS: 0.32 PRC: 0.12 RCL: 0.31 IOU: 0.33
+Saved 6852 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6852[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6852[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6852[0;m[0;m points]
+Area s3dis room 166 NMI: 0.66 AMI: 0.66 ARS: 0.56 PRC: 0.29 RCL: 0.40 IOU: 0.39
+Saved 32695 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m217[0;m[0;m ms : [0;36m32695[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m239[0;m[0;m ms : [0;36m32695[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m32695[0;m[0;m points]
+Area s3dis room 167 NMI: 0.64 AMI: 0.64 ARS: 0.65 PRC: 0.07 RCL: 0.31 IOU: 0.34
+Saved 8053 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8053[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8053[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8053[0;m[0;m points]
+Area s3dis room 168 NMI: 0.63 AMI: 0.62 ARS: 0.41 PRC: 0.17 RCL: 0.47 IOU: 0.46
+Saved 7272 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m7272[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m48[0;m[0;m ms : [0;36m7272[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7272[0;m[0;m points]
+Area s3dis room 169 NMI: 0.60 AMI: 0.58 ARS: 0.17 PRC: 0.17 RCL: 0.39 IOU: 0.38
+Saved 6740 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6740[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m47[0;m[0;m ms : [0;36m6740[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6740[0;m[0;m points]
+Area s3dis room 170 NMI: 0.59 AMI: 0.57 ARS: 0.23 PRC: 0.12 RCL: 0.23 IOU: 0.29
+Saved 20721 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m139[0;m[0;m ms : [0;36m20721[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m144[0;m[0;m ms : [0;36m20721[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m20721[0;m[0;m points]
+Area s3dis room 171 NMI: 0.69 AMI: 0.68 ARS: 0.48 PRC: 0.13 RCL: 0.26 IOU: 0.30
+Saved 13031 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m86[0;m[0;m ms : [0;36m13031[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m91[0;m[0;m ms : [0;36m13031[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m13031[0;m[0;m points]
+Area s3dis room 172 NMI: 0.56 AMI: 0.54 ARS: 0.32 PRC: 0.07 RCL: 0.16 IOU: 0.27
+Saved 7995 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m7995[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m7995[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7995[0;m[0;m points]
+Area s3dis room 173 NMI: 0.61 AMI: 0.59 ARS: 0.27 PRC: 0.09 RCL: 0.23 IOU: 0.29
+Saved 10244 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m68[0;m[0;m ms : [0;36m10244[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m74[0;m[0;m ms : [0;36m10244[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m10244[0;m[0;m points]
+Area s3dis room 174 NMI: 0.64 AMI: 0.63 ARS: 0.45 PRC: 0.12 RCL: 0.25 IOU: 0.33
+Saved 14775 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m99[0;m[0;m ms : [0;36m14775[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m106[0;m[0;m ms : [0;36m14775[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m14775[0;m[0;m points]
+Area s3dis room 175 NMI: 0.66 AMI: 0.64 ARS: 0.48 PRC: 0.14 RCL: 0.28 IOU: 0.33
+Saved 11148 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m74[0;m[0;m ms : [0;36m11148[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m78[0;m[0;m ms : [0;36m11148[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m11148[0;m[0;m points]
+Area s3dis room 176 NMI: 0.63 AMI: 0.62 ARS: 0.61 PRC: 0.12 RCL: 0.12 IOU: 0.17
+Saved 2180 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m14[0;m[0;m ms : [0;36m2180[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m14[0;m[0;m ms : [0;36m2180[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m2180[0;m[0;m points]
+Area s3dis room 177 NMI: 0.58 AMI: 0.57 ARS: 0.31 PRC: 0.19 RCL: 0.25 IOU: 0.40
+Saved 13397 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m90[0;m[0;m ms : [0;36m13397[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m94[0;m[0;m ms : [0;36m13397[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m13397[0;m[0;m points]
+Area s3dis room 178 NMI: 0.72 AMI: 0.71 ARS: 0.63 PRC: 0.14 RCL: 0.30 IOU: 0.40
+Saved 14116 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m94[0;m[0;m ms : [0;36m14116[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m96[0;m[0;m ms : [0;36m14116[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m14116[0;m[0;m points]
+Area s3dis room 179 NMI: 0.72 AMI: 0.71 ARS: 0.78 PRC: 0.07 RCL: 0.29 IOU: 0.41
+Saved 7465 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m7465[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m50[0;m[0;m ms : [0;36m7465[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7465[0;m[0;m points]
+Area s3dis room 180 NMI: 0.59 AMI: 0.58 ARS: 0.43 PRC: 0.13 RCL: 0.30 IOU: 0.34
+Saved 8914 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8914[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m8914[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8914[0;m[0;m points]
+Area s3dis room 181 NMI: 0.61 AMI: 0.59 ARS: 0.34 PRC: 0.15 RCL: 0.20 IOU: 0.28
+Saved 9024 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m9024[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9024[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9024[0;m[0;m points]
+Area s3dis room 182 NMI: 0.61 AMI: 0.59 ARS: 0.31 PRC: 0.12 RCL: 0.22 IOU: 0.30
+Saved 11181 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m75[0;m[0;m ms : [0;36m11181[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11181[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11181[0;m[0;m points]
+Area s3dis room 183 NMI: 0.64 AMI: 0.62 ARS: 0.43 PRC: 0.11 RCL: 0.12 IOU: 0.19
+Saved 8498 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8498[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8498[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8498[0;m[0;m points]
+Area s3dis room 184 NMI: 0.60 AMI: 0.59 ARS: 0.34 PRC: 0.10 RCL: 0.20 IOU: 0.30
+Saved 17352 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m116[0;m[0;m ms : [0;36m17352[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m125[0;m[0;m ms : [0;36m17352[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m17352[0;m[0;m points]
+Area s3dis room 185 NMI: 0.62 AMI: 0.59 ARS: 0.33 PRC: 0.06 RCL: 0.11 IOU: 0.26
+Saved 9128 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m9128[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9128[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9128[0;m[0;m points]
+Area s3dis room 186 NMI: 0.64 AMI: 0.62 ARS: 0.38 PRC: 0.12 RCL: 0.20 IOU: 0.26
+Saved 9685 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9685[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m69[0;m[0;m ms : [0;36m9685[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9685[0;m[0;m points]
+Area s3dis room 187 NMI: 0.57 AMI: 0.56 ARS: 0.35 PRC: 0.07 RCL: 0.21 IOU: 0.28
+Saved 9374 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m9374[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m67[0;m[0;m ms : [0;36m9374[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9374[0;m[0;m points]
+Area s3dis room 188 NMI: 0.59 AMI: 0.58 ARS: 0.33 PRC: 0.11 RCL: 0.36 IOU: 0.38
+Saved 8781 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8781[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8781[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8781[0;m[0;m points]
+Area s3dis room 189 NMI: 0.65 AMI: 0.63 ARS: 0.40 PRC: 0.15 RCL: 0.26 IOU: 0.31
+Saved 9955 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9955[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m71[0;m[0;m ms : [0;36m9955[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9955[0;m[0;m points]
+Area s3dis room 190 NMI: 0.63 AMI: 0.62 ARS: 0.37 PRC: 0.14 RCL: 0.29 IOU: 0.31
+Saved 7706 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m51[0;m[0;m ms : [0;36m7706[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m51[0;m[0;m ms : [0;36m7706[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7706[0;m[0;m points]
+Area s3dis room 191 NMI: 0.67 AMI: 0.67 ARS: 0.51 PRC: 0.18 RCL: 0.42 IOU: 0.37
+Saved 12794 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m85[0;m[0;m ms : [0;36m12794[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m94[0;m[0;m ms : [0;36m12794[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12794[0;m[0;m points]
+Area s3dis room 192 NMI: 0.56 AMI: 0.53 ARS: 0.24 PRC: 0.06 RCL: 0.12 IOU: 0.26
+Saved 7795 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7795[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m52[0;m[0;m ms : [0;36m7795[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7795[0;m[0;m points]
+Area s3dis room 193 NMI: 0.68 AMI: 0.68 ARS: 0.60 PRC: 0.18 RCL: 0.41 IOU: 0.33
+Saved 27377 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m184[0;m[0;m ms : [0;36m27377[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m190[0;m[0;m ms : [0;36m27377[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m27377[0;m[0;m points]
+Area s3dis room 194 NMI: 0.44 AMI: 0.43 ARS: 0.26 PRC: 0.08 RCL: 0.18 IOU: 0.20
+Saved 17703 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m118[0;m[0;m ms : [0;36m17703[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m130[0;m[0;m ms : [0;36m17703[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m17703[0;m[0;m points]
+Area s3dis room 195 NMI: 0.62 AMI: 0.60 ARS: 0.39 PRC: 0.09 RCL: 0.14 IOU: 0.24
+Saved 8215 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8215[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8215[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8215[0;m[0;m points]
+Area s3dis room 196 NMI: 0.63 AMI: 0.62 ARS: 0.41 PRC: 0.12 RCL: 0.20 IOU: 0.27
+Saved 9139 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9139[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9139[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9139[0;m[0;m points]
+Area s3dis room 197 NMI: 0.60 AMI: 0.59 ARS: 0.33 PRC: 0.09 RCL: 0.22 IOU: 0.32
+Saved 15823 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m106[0;m[0;m ms : [0;36m15823[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m115[0;m[0;m ms : [0;36m15823[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m15823[0;m[0;m points]
+Area s3dis room 198 NMI: 0.63 AMI: 0.62 ARS: 0.53 PRC: 0.11 RCL: 0.17 IOU: 0.23
+Saved 7994 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m7994[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m7994[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7994[0;m[0;m points]
+Area s3dis room 199 NMI: 0.65 AMI: 0.64 ARS: 0.41 PRC: 0.18 RCL: 0.31 IOU: 0.32
+Saved 5438 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m36[0;m[0;m ms : [0;36m5438[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5438[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5438[0;m[0;m points]
+Area s3dis room 200 NMI: 0.73 AMI: 0.73 ARS: 0.72 PRC: 0.40 RCL: 0.67 IOU: 0.53
+Saved 11065 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m74[0;m[0;m ms : [0;36m11065[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m76[0;m[0;m ms : [0;36m11065[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11065[0;m[0;m points]
+Area s3dis room 201 NMI: 0.64 AMI: 0.63 ARS: 0.48 PRC: 0.16 RCL: 0.24 IOU: 0.29
+Saved 12613 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m84[0;m[0;m ms : [0;36m12613[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m84[0;m[0;m ms : [0;36m12613[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12613[0;m[0;m points]
+Area s3dis room 202 NMI: 0.74 AMI: 0.73 ARS: 0.74 PRC: 0.15 RCL: 0.50 IOU: 0.51
+Saved 9800 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9800[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m72[0;m[0;m ms : [0;36m9800[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9800[0;m[0;m points]
+Area s3dis room 203 NMI: 0.63 AMI: 0.61 ARS: 0.36 PRC: 0.07 RCL: 0.26 IOU: 0.37
+Saved 17618 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m117[0;m[0;m ms : [0;36m17618[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m125[0;m[0;m ms : [0;36m17618[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m17618[0;m[0;m points]
+Area s3dis room 204 NMI: 0.65 AMI: 0.63 ARS: 0.47 PRC: 0.09 RCL: 0.21 IOU: 0.29
+Saved 9598 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9598[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m68[0;m[0;m ms : [0;36m9598[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9598[0;m[0;m points]
+Area s3dis room 205 NMI: 0.61 AMI: 0.59 ARS: 0.34 PRC: 0.06 RCL: 0.14 IOU: 0.29
+Saved 9004 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m9004[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m9004[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9004[0;m[0;m points]
+Area s3dis room 206 NMI: 0.64 AMI: 0.63 ARS: 0.40 PRC: 0.15 RCL: 0.42 IOU: 0.38
+Saved 31755 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m214[0;m[0;m ms : [0;36m31755[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m243[0;m[0;m ms : [0;36m31755[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m31755[0;m[0;m points]
+Area s3dis room 207 NMI: 0.54 AMI: 0.51 ARS: 0.10 PRC: 0.02 RCL: 0.09 IOU: 0.24
+Saved 8409 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8409[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8409[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8409[0;m[0;m points]
+Area s3dis room 208 NMI: 0.65 AMI: 0.64 ARS: 0.48 PRC: 0.12 RCL: 0.21 IOU: 0.31
+Saved 9370 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m9370[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9370[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9370[0;m[0;m points]
+Area s3dis room 209 NMI: 0.57 AMI: 0.56 ARS: 0.32 PRC: 0.08 RCL: 0.21 IOU: 0.26
+Saved 27385 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m182[0;m[0;m ms : [0;36m27385[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m200[0;m[0;m ms : [0;36m27385[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m27385[0;m[0;m points]
+Area s3dis room 210 NMI: 0.67 AMI: 0.66 ARS: 0.47 PRC: 0.10 RCL: 0.22 IOU: 0.29
+Saved 21702 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m146[0;m[0;m ms : [0;36m21702[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m155[0;m[0;m ms : [0;36m21702[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m3[0;m[0;m ms : [0;36m21702[0;m[0;m points]
+Area s3dis room 211 NMI: 0.61 AMI: 0.60 ARS: 0.41 PRC: 0.06 RCL: 0.17 IOU: 0.28
+Saved 11742 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11742[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m79[0;m[0;m ms : [0;36m11742[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11742[0;m[0;m points]
+Area s3dis room 212 NMI: 0.30 AMI: 0.29 ARS: 0.14 PRC: 0.05 RCL: 0.03 IOU: 0.07
+Saved 45727 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m307[0;m[0;m ms : [0;36m45727[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m316[0;m[0;m ms : [0;36m45727[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m5[0;m[0;m ms : [0;36m45727[0;m[0;m points]
+Area s3dis room 213 NMI: 0.61 AMI: 0.60 ARS: 0.43 PRC: 0.04 RCL: 0.12 IOU: 0.23
+Saved 8512 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8512[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8512[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8512[0;m[0;m points]
+Area s3dis room 214 NMI: 0.61 AMI: 0.59 ARS: 0.29 PRC: 0.09 RCL: 0.25 IOU: 0.32
+Saved 5637 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5637[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m39[0;m[0;m ms : [0;36m5637[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5637[0;m[0;m points]
+Area s3dis room 215 NMI: 0.63 AMI: 0.61 ARS: 0.34 PRC: 0.15 RCL: 0.29 IOU: 0.33
+Saved 7961 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m53[0;m[0;m ms : [0;36m7961[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m7961[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m7961[0;m[0;m points]
+Area s3dis room 216 NMI: 0.64 AMI: 0.63 ARS: 0.43 PRC: 0.17 RCL: 0.26 IOU: 0.27
+Saved 8197 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8197[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8197[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8197[0;m[0;m points]
+Area s3dis room 217 NMI: 0.66 AMI: 0.65 ARS: 0.49 PRC: 0.13 RCL: 0.26 IOU: 0.36
+Saved 8452 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8452[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8452[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8452[0;m[0;m points]
+Area s3dis room 218 NMI: 0.63 AMI: 0.62 ARS: 0.37 PRC: 0.11 RCL: 0.14 IOU: 0.24
+Saved 12525 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m85[0;m[0;m ms : [0;36m12525[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m84[0;m[0;m ms : [0;36m12525[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12525[0;m[0;m points]
+Area s3dis room 219 NMI: 0.63 AMI: 0.62 ARS: 0.54 PRC: 0.10 RCL: 0.28 IOU: 0.33
+Saved 8196 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8196[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8196[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8196[0;m[0;m points]
+Area s3dis room 220 NMI: 0.63 AMI: 0.63 ARS: 0.57 PRC: 0.22 RCL: 0.50 IOU: 0.36
+Saved 12802 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m85[0;m[0;m ms : [0;36m12802[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m89[0;m[0;m ms : [0;36m12802[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m12802[0;m[0;m points]
+Area s3dis room 221 NMI: 0.45 AMI: 0.45 ARS: 0.25 PRC: 0.06 RCL: 0.07 IOU: 0.12
+Saved 8911 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8911[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8911[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8911[0;m[0;m points]
+Area s3dis room 222 NMI: 0.56 AMI: 0.54 ARS: 0.10 PRC: 0.07 RCL: 0.15 IOU: 0.28
+Saved 13483 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m91[0;m[0;m ms : [0;36m13483[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m88[0;m[0;m ms : [0;36m13483[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m13483[0;m[0;m points]
+Area s3dis room 223 NMI: 0.73 AMI: 0.72 ARS: 0.75 PRC: 0.09 RCL: 0.38 IOU: 0.46
+Saved 3322 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3322[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m21[0;m[0;m ms : [0;36m3322[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3322[0;m[0;m points]
+Area s3dis room 224 NMI: 0.64 AMI: 0.64 ARS: 0.54 PRC: 0.11 RCL: 0.11 IOU: 0.32
+Saved 8215 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8215[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8215[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8215[0;m[0;m points]
+Area s3dis room 225 NMI: 0.65 AMI: 0.64 ARS: 0.43 PRC: 0.12 RCL: 0.21 IOU: 0.32
+Saved 8629 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8629[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8629[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8629[0;m[0;m points]
+Area s3dis room 226 NMI: 0.64 AMI: 0.62 ARS: 0.37 PRC: 0.11 RCL: 0.21 IOU: 0.31
+Saved 8241 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8241[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8241[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8241[0;m[0;m points]
+Area s3dis room 227 NMI: 0.59 AMI: 0.58 ARS: 0.32 PRC: 0.13 RCL: 0.23 IOU: 0.28
+Saved 14487 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m97[0;m[0;m ms : [0;36m14487[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m104[0;m[0;m ms : [0;36m14487[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m14487[0;m[0;m points]
+Area s3dis room 228 NMI: 0.64 AMI: 0.63 ARS: 0.52 PRC: 0.13 RCL: 0.22 IOU: 0.29
+Saved 5525 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5525[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5525[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5525[0;m[0;m points]
+Area s3dis room 229 NMI: 0.60 AMI: 0.59 ARS: 0.29 PRC: 0.10 RCL: 0.19 IOU: 0.34
+Saved 8561 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8561[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8561[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8561[0;m[0;m points]
+Area s3dis room 230 NMI: 0.62 AMI: 0.61 ARS: 0.37 PRC: 0.14 RCL: 0.28 IOU: 0.32
+Saved 3383 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3383[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m22[0;m[0;m ms : [0;36m3383[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m3383[0;m[0;m points]
+Area s3dis room 231 NMI: 0.49 AMI: 0.49 ARS: 0.28 PRC: 0.14 RCL: 0.11 IOU: 0.27
+Saved 8765 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8765[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8765[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8765[0;m[0;m points]
+Area s3dis room 232 NMI: 0.65 AMI: 0.64 ARS: 0.39 PRC: 0.20 RCL: 0.38 IOU: 0.42
+Saved 33565 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m226[0;m[0;m ms : [0;36m33565[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m232[0;m[0;m ms : [0;36m33565[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m33565[0;m[0;m points]
+Area s3dis room 233 NMI: 0.73 AMI: 0.71 ARS: 0.77 PRC: 0.04 RCL: 0.08 IOU: 0.23
+Saved 8748 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8748[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8748[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8748[0;m[0;m points]
+Area s3dis room 234 NMI: 0.60 AMI: 0.58 ARS: 0.39 PRC: 0.10 RCL: 0.18 IOU: 0.30
+Saved 8499 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8499[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8499[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8499[0;m[0;m points]
+Area s3dis room 235 NMI: 0.62 AMI: 0.60 ARS: 0.31 PRC: 0.14 RCL: 0.24 IOU: 0.33
+Saved 8757 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8757[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8757[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8757[0;m[0;m points]
+Area s3dis room 236 NMI: 0.61 AMI: 0.59 ARS: 0.31 PRC: 0.09 RCL: 0.21 IOU: 0.33
+Saved 8634 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8634[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m63[0;m[0;m ms : [0;36m8634[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8634[0;m[0;m points]
+Area s3dis room 237 NMI: 0.60 AMI: 0.58 ARS: 0.27 PRC: 0.08 RCL: 0.15 IOU: 0.28
+Saved 5784 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5784[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m5784[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5784[0;m[0;m points]
+Area s3dis room 238 NMI: 0.56 AMI: 0.55 ARS: 0.19 PRC: 0.07 RCL: 0.19 IOU: 0.30
+Saved 5467 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5467[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5467[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5467[0;m[0;m points]
+Area s3dis room 239 NMI: 0.65 AMI: 0.64 ARS: 0.45 PRC: 0.22 RCL: 0.40 IOU: 0.38
+Saved 5250 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m5250[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m36[0;m[0;m ms : [0;36m5250[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5250[0;m[0;m points]
+Area s3dis room 240 NMI: 0.51 AMI: 0.49 ARS: 0.20 PRC: 0.07 RCL: 0.14 IOU: 0.27
+Saved 5803 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5803[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m5803[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5803[0;m[0;m points]
+Area s3dis room 241 NMI: 0.57 AMI: 0.55 ARS: 0.23 PRC: 0.08 RCL: 0.19 IOU: 0.30
+Saved 6603 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6603[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m46[0;m[0;m ms : [0;36m6603[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6603[0;m[0;m points]
+Area s3dis room 242 NMI: 0.59 AMI: 0.57 ARS: 0.24 PRC: 0.18 RCL: 0.24 IOU: 0.30
+Saved 5418 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m36[0;m[0;m ms : [0;36m5418[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5418[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5418[0;m[0;m points]
+Area s3dis room 243 NMI: 0.60 AMI: 0.59 ARS: 0.38 PRC: 0.12 RCL: 0.31 IOU: 0.42
+Saved 4964 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m33[0;m[0;m ms : [0;36m4964[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m33[0;m[0;m ms : [0;36m4964[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m4964[0;m[0;m points]
+Area s3dis room 244 NMI: 0.58 AMI: 0.56 ARS: 0.26 PRC: 0.17 RCL: 0.24 IOU: 0.29
+Saved 8588 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8588[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8588[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8588[0;m[0;m points]
+Area s3dis room 245 NMI: 0.59 AMI: 0.57 ARS: 0.26 PRC: 0.10 RCL: 0.24 IOU: 0.30
+Saved 8286 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8286[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8286[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8286[0;m[0;m points]
+Area s3dis room 246 NMI: 0.55 AMI: 0.53 ARS: 0.25 PRC: 0.08 RCL: 0.13 IOU: 0.22
+Saved 8431 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8431[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8431[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8431[0;m[0;m points]
+Area s3dis room 247 NMI: 0.61 AMI: 0.60 ARS: 0.31 PRC: 0.09 RCL: 0.19 IOU: 0.34
+Saved 6212 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m41[0;m[0;m ms : [0;36m6212[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m45[0;m[0;m ms : [0;36m6212[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6212[0;m[0;m points]
+Area s3dis room 248 NMI: 0.56 AMI: 0.54 ARS: 0.17 PRC: 0.11 RCL: 0.18 IOU: 0.26
+Saved 8559 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8559[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m60[0;m[0;m ms : [0;36m8559[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8559[0;m[0;m points]
+Area s3dis room 249 NMI: 0.60 AMI: 0.58 ARS: 0.29 PRC: 0.10 RCL: 0.21 IOU: 0.28
+Saved 5807 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m39[0;m[0;m ms : [0;36m5807[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m5807[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5807[0;m[0;m points]
+Area s3dis room 250 NMI: 0.60 AMI: 0.59 ARS: 0.28 PRC: 0.12 RCL: 0.35 IOU: 0.36
+Saved 5177 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m34[0;m[0;m ms : [0;36m5177[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m35[0;m[0;m ms : [0;36m5177[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5177[0;m[0;m points]
+Area s3dis room 251 NMI: 0.62 AMI: 0.61 ARS: 0.32 PRC: 0.20 RCL: 0.33 IOU: 0.36
+Saved 20742 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m141[0;m[0;m ms : [0;36m20742[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m153[0;m[0;m ms : [0;36m20742[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m20742[0;m[0;m points]
+Area s3dis room 252 NMI: 0.65 AMI: 0.64 ARS: 0.66 PRC: 0.12 RCL: 0.19 IOU: 0.27
+Saved 6061 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m42[0;m[0;m ms : [0;36m6061[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m6061[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6061[0;m[0;m points]
+Area s3dis room 253 NMI: 0.66 AMI: 0.65 ARS: 0.62 PRC: 0.21 RCL: 0.39 IOU: 0.40
+Saved 8753 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8753[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m62[0;m[0;m ms : [0;36m8753[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8753[0;m[0;m points]
+Area s3dis room 254 NMI: 0.54 AMI: 0.53 ARS: 0.28 PRC: 0.10 RCL: 0.16 IOU: 0.29
+Saved 8557 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8557[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m61[0;m[0;m ms : [0;36m8557[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8557[0;m[0;m points]
+Area s3dis room 255 NMI: 0.57 AMI: 0.56 ARS: 0.29 PRC: 0.11 RCL: 0.25 IOU: 0.33
+Saved 8205 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8205[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8205[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8205[0;m[0;m points]
+Area s3dis room 256 NMI: 0.63 AMI: 0.61 ARS: 0.35 PRC: 0.14 RCL: 0.24 IOU: 0.33
+Saved 11109 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m75[0;m[0;m ms : [0;36m11109[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m77[0;m[0;m ms : [0;36m11109[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m11109[0;m[0;m points]
+Area s3dis room 257 NMI: 0.64 AMI: 0.63 ARS: 0.47 PRC: 0.11 RCL: 0.28 IOU: 0.32
+Saved 16172 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m108[0;m[0;m ms : [0;36m16172[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m117[0;m[0;m ms : [0;36m16172[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m16172[0;m[0;m points]
+Area s3dis room 258 NMI: 0.55 AMI: 0.53 ARS: 0.21 PRC: 0.08 RCL: 0.12 IOU: 0.24
+Saved 5558 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m37[0;m[0;m ms : [0;36m5558[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m39[0;m[0;m ms : [0;36m5558[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m5558[0;m[0;m points]
+Area s3dis room 259 NMI: 0.61 AMI: 0.60 ARS: 0.34 PRC: 0.17 RCL: 0.42 IOU: 0.42
+Saved 8041 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m54[0;m[0;m ms : [0;36m8041[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8041[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8041[0;m[0;m points]
+Area s3dis room 260 NMI: 0.63 AMI: 0.62 ARS: 0.39 PRC: 0.15 RCL: 0.29 IOU: 0.32
+Saved 8182 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8182[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8182[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8182[0;m[0;m points]
+Area s3dis room 261 NMI: 0.59 AMI: 0.57 ARS: 0.34 PRC: 0.07 RCL: 0.13 IOU: 0.27
+Saved 8187 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8187[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8187[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8187[0;m[0;m points]
+Area s3dis room 262 NMI: 0.62 AMI: 0.61 ARS: 0.29 PRC: 0.14 RCL: 0.27 IOU: 0.34
+Saved 8293 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m56[0;m[0;m ms : [0;36m8293[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m58[0;m[0;m ms : [0;36m8293[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8293[0;m[0;m points]
+Area s3dis room 263 NMI: 0.62 AMI: 0.60 ARS: 0.34 PRC: 0.07 RCL: 0.14 IOU: 0.26
+Saved 6056 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m6056[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m42[0;m[0;m ms : [0;36m6056[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m6056[0;m[0;m points]
+Area s3dis room 264 NMI: 0.59 AMI: 0.58 ARS: 0.32 PRC: 0.10 RCL: 0.19 IOU: 0.35
+Saved 9669 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m65[0;m[0;m ms : [0;36m9669[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m66[0;m[0;m ms : [0;36m9669[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m9669[0;m[0;m points]
+Area s3dis room 265 NMI: 0.79 AMI: 0.79 ARS: 0.72 PRC: 0.31 RCL: 0.45 IOU: 0.49
+Saved 33217 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m222[0;m[0;m ms : [0;36m33217[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m229[0;m[0;m ms : [0;36m33217[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m4[0;m[0;m ms : [0;36m33217[0;m[0;m points]
+Area s3dis room 266 NMI: 0.72 AMI: 0.71 ARS: 0.74 PRC: 0.10 RCL: 0.19 IOU: 0.30
+Saved 17207 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m115[0;m[0;m ms : [0;36m17207[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m128[0;m[0;m ms : [0;36m17207[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m2[0;m[0;m ms : [0;36m17207[0;m[0;m points]
+Area s3dis room 267 NMI: 0.62 AMI: 0.59 ARS: 0.24 PRC: 0.09 RCL: 0.18 IOU: 0.28
+Saved 5729 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m38[0;m[0;m ms : [0;36m5729[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m40[0;m[0;m ms : [0;36m5729[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m5729[0;m[0;m points]
+Area s3dis room 268 NMI: 0.61 AMI: 0.60 ARS: 0.36 PRC: 0.10 RCL: 0.24 IOU: 0.31
+Saved 6645 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m44[0;m[0;m ms : [0;36m6645[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m49[0;m[0;m ms : [0;36m6645[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m0[0;m[0;m ms : [0;36m6645[0;m[0;m points]
+Area s3dis room 269 NMI: 0.60 AMI: 0.58 ARS: 0.21 PRC: 0.12 RCL: 0.22 IOU: 0.31
+Saved 8481 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m57[0;m[0;m ms : [0;36m8481[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8481[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8481[0;m[0;m points]
+Area s3dis room 270 NMI: 0.62 AMI: 0.60 ARS: 0.33 PRC: 0.13 RCL: 0.22 IOU: 0.30
+Saved 8340 points to data/tmp.pcd
+[0;mEstimate FPFH (33) descriptors using pcl::FPFHEstimation. For more information, use: pcl_fpfh_estimation -h
+[1;32m> [0;mLoading [0;36mdata/tmp.pcd [0;m[0;m[done, [0;36m55[0;m[0;m ms : [0;36m8340[0;m[0;m points]
+[0;mAvailable dimensions: [0;36mx y z rgb normal_x normal_y normal_z curvature
+[0;m[0;m[done, [0;36m59[0;m[0;m ms : [0;36m8340[0;m[0;m points]
+[1;32m> [0;mSaving [0;36mdata/fpfh.pcd [0;m[0;m[done, [0;36m1[0;m[0;m ms : [0;36m8340[0;m[0;m points]
+Area s3dis room 271 NMI: 0.61 AMI: 0.59 ARS: 0.27 PRC: 0.10 RCL: 0.17 IOU: 0.30
+NMI: 0.62+-0.06 AMI: 0.60+-0.06 ARS: 0.39+-0.15 PRC 0.14+-0.09 RCL 0.25+-0.14 IOU 0.32+-0.08

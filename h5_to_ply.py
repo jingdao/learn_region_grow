@@ -31,9 +31,9 @@ element vertex %d
 property float x
 property float y
 property float z
-property uchar r
-property uchar g
-property uchar b
+property uchar red
+property uchar green
+property uchar blue
 end_header
 """ % len(points))
 	for p in points:
@@ -91,9 +91,10 @@ for room_id in range(len(all_points)) if target_room_id is None else [target_roo
 		reorder_id = numpy.zeros(len(obj_id), dtype=int)
 		for k in range(len(unique_id)):
 			i = unique_id[numpy.argsort(count)][::-1][k]
-			target_class = classes[cls_id[numpy.nonzero(obj_id==i)[0][0]]]
-			if mode=='target' and target_class not in ['ceiling', 'none']:
-				plt.scatter(0,0,color=tuple(obj_color[k+1]/255.0),label='%s #%d'%(target_class, k),s=200)
+			if mode=='target':
+				target_class = classes[cls_id[numpy.nonzero(obj_id==i)[0][0]]]
+				if target_class not in ['ceiling', 'none']:
+					plt.scatter(0,0,color=tuple(obj_color[k+1]/255.0),label='%s #%d'%(target_class, k),s=200)
 			reorder_id[obj_id==i] = k+1
 		if mode=='target':
 			plt.legend(ncol=min(7,int((k+1)/2)),prop={'size': 16},loc='lower left')

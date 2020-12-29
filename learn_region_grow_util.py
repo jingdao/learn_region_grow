@@ -59,9 +59,9 @@ element vertex %d
 property float x
 property float y
 property float z
-property uchar r
-property uchar g
-property uchar b
+property uchar red
+property uchar green
+property uchar blue
 end_header
 """ % len(points))
 	for p in points:

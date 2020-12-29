@@ -14,7 +14,6 @@ import scipy.special
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-from scipy.misc import imsave
 from PIL import Image
 from PIL import ImageOps
 from PIL import ImageDraw
@@ -101,7 +100,7 @@ DATA ascii
 		rgb = (int(p[3]) << 16) | (int(p[4]) << 8) | int(p[5])
 		f.write("%f %f %f %d\n"%(p[0],p[1],p[2],rgb))
 	f.close()
-	print 'Saved %d points to %s' % (l,filename)
+	print('Saved %d points to %s' % (l,filename))
 
 
 all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
@@ -330,7 +329,7 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		if len(currentPoints) >= NUM_INLIER_POINT:
 			subset = numpy.random.choice(len(currentPoints), NUM_INLIER_POINT, replace=False)
 		else:
-			subset = range(len(currentPoints)) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
+			subset = list(range(len(currentPoints))) + list(numpy.random.choice(len(currentPoints), NUM_INLIER_POINT-len(currentPoints), replace=True))
 		center = numpy.median(currentPoints, axis=0)
 		expandPoints = numpy.array(expandPoints)
 		expandPoints[:,:2] -= center[:2]
@@ -342,7 +341,7 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		if len(expandPoints) >= NUM_NEIGHBOR_POINT:
 			subset = numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT, replace=False)
 		else:
-			subset = range(len(expandPoints)) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
+			subset = list(range(len(expandPoints))) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
 		neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 		input_add[0,:] = numpy.array(expandClass)[subset]
 		ls, add,add_acc, rmv,rmv_acc = sess.run([net.loss, net.add_output, net.add_acc, net.remove_output, net.remove_acc],

@@ -14,6 +14,35 @@ FLAGS, unparsed = parser.parse_known_args()
 all_points = []
 count = []
 for sequence in FLAGS.sequences.split(','):
+    # get camera calibration
+    calib_file = open(os.path.join(FLAGS.dataset, "sequences", sequence, "calib.txt"), 'r')
+    calib = {}
+    for line in calib_file:
+        key, content = line.strip().split(":")
+        values = [float(v) for v in content.strip().split()]
+        pose = np.zeros((4, 4))
+        pose[0, 0:4] = values[0:4]
+        pose[1, 0:4] = values[4:8]
+        pose[2, 0:4] = values[8:12]
+        pose[3, 3] = 1.0
+        calib[key] = pose
+    calib_file.close()
+
+    # get poses
+    poses = []
+    Tr = calib["Tr"]
+    Tr_inv = np.linalg.inv(Tr)
+    pose_file = open(os.path.join(FLAGS.dataset, "sequences", sequence, "poses.txt"), 'r')
+    for line in pose_file:
+        values = [float(v) for v in line.strip().split()]
+        pose = np.zeros((4, 4))
+        pose[0, 0:4] = values[0:4]
+        pose[1, 0:4] = values[4:8]
+        pose[2, 0:4] = values[8:12]
+        pose[3, 3] = 1.0
+        poses.append(np.matmul(Tr_inv, np.matmul(pose, Tr)))
+    pose_file.close()
+
     scan_paths = os.path.join(FLAGS.dataset, "sequences",
                             sequence, "velodyne")
     scan_names = [os.path.join(dp, f) for dp, dn, fn in os.walk(
@@ -29,6 +58,9 @@ for sequence in FLAGS.sequences.split(','):
         scan = np.fromfile(scan_names[offset], dtype=np.float32)
         scan = scan.reshape((-1, 4))
         xyz = scan[:, 0:3]
+        rotation = poses[offset][:3, :3]
+        translation = poses[offset][:3, 3]
+        xyz = xyz.dot(rotation.T) + translation
         label = np.fromfile(label_names[offset], dtype=np.uint32)
         obj_id = [l >> 16 for l in label]
         cls_id = [l & 0xFFFF for l in label]

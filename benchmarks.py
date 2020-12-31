@@ -45,9 +45,9 @@ element vertex %d
 property float x
 property float y
 property float z
-property uchar r
-property uchar g
-property uchar b
+property uchar red
+property uchar green
+property uchar blue
 end_header
 """ % len(points))
 	for p in points:
@@ -185,8 +185,8 @@ for AREA in TEST_AREAS:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
 	elif AREA=='s3dis':
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
-	elif AREA=='vkitti':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/vkitti.h5')
+	elif AREA=='kitti':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/kitti.h5')
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 
@@ -489,6 +489,7 @@ for AREA in TEST_AREAS:
 				savePLY('data/class/%d.ply'%save_id, unequalized_points)
 			color_sample_state = numpy.random.RandomState(0)
 			obj_color = color_sample_state.randint(0,255,(numpy.max(cluster_label2)+1,3))
+			obj_color[0] = [100,100,100]
 			unequalized_points[:,3:6] = obj_color[cluster_label2,:][unequalized_idx]
 			if AREA == 'scannet':
 				savePLY('data/results/%s/scannet%d.ply'%(mode,save_id), unequalized_points)

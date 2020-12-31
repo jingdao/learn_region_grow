@@ -12,10 +12,11 @@ parser = argparse.ArgumentParser("")
 parser.add_argument( '--dataset', '-d', type=str, required=True, help='')
 parser.add_argument( '--output', '-o', type=str, required=True, help='')
 parser.add_argument( '--sequences', '-s', type=str, default='00,01,02,03,04,05,06,07,08,09,10', help='')
-parser.add_argument( '--interval', '-i', type=int, default=10, help='')
+parser.add_argument( '--interval', '-i', type=int, default=20, help='')
 parser.add_argument( '--min-cluster', '-m', type=int, default=50, help='')
 parser.add_argument( '--voxel-resolution', '-v', type=float, default=0.3, help='')
-parser.add_argument( '--downsample-resolution', '-r', type=float, default=0.05, help='')
+parser.add_argument( '--downsample-resolution', '-r', type=float, default=0.1, help='')
+parser.add_argument( '--distance-span', '-p', type=float, default=50.0, help='')
 FLAGS, unparsed = parser.parse_known_args()
 
 def downsample(cloud, resolution):
@@ -185,6 +186,14 @@ for sequence in FLAGS.sequences.split(','):
             all_points.extend(stacked_points)
             count.append(len(stacked_points))
             stacked_points = []
+
+            # filter rgb map based on distance to reduce memory consumption
+            min_span = (t_world_local - FLAGS.distance_span) / FLAGS.voxel_resolution
+            max_span = (t_world_local + FLAGS.distance_span) / FLAGS.voxel_resolution
+            for v in list(rgb_map):
+                if np.any(min_span > v) or np.any(max_span < v):
+                    del rgb_map[v]
+            break
 
 h5_fout = h5py.File(FLAGS.output,'w')
 h5_fout.create_dataset('points', data=all_points, compression='gzip', compression_opts=4, dtype=np.float32)

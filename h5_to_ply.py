@@ -100,6 +100,6 @@ for room_id in range(len(all_points)) if target_room_id is None else [target_roo
 			plt.legend(ncol=min(7,int((k+1)/2)),prop={'size': 16},loc='lower left')
 			plt.show()
 		else:
-			obj_color[0,:] = [200,200,200]
+			obj_color[0,:] = [100,100,100]
 			unequalized_points[:,3:6] = obj_color[reorder_id,:][unequalized_idx]
 			savePLY('data/gt/%d.ply'%room_id, unequalized_points)

@@ -18,13 +18,15 @@ for i in range(len(sys.argv)):
 		np.random.seed(SEED)
 	if sys.argv[i]=='--area':
 		AREAS = sys.argv[i+1].split(',')
+	if sys.argv[i]=='--resolution':
+		resolution = float(sys.argv[i+1])
 
 for AREA in AREAS:
 #for AREA in [1]:
 #for AREA in ['synthetic_train','synthetic_test']:
 	if isinstance(AREA, str) and AREA.startswith('synthetic'):
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
-	elif AREA in ['s3dis', 'scannet']:
+	elif AREA in ['s3dis', 'scannet', 'kitti_train', 'kitti_val']:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)

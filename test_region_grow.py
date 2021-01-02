@@ -4,7 +4,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import sys
-from class_util import classes_s3dis, classes_nyu40, class_to_id, class_to_color_rgb
+from class_util import classes_s3dis, classes_nyu40, classes_kitti, class_to_id, class_to_color_rgb
 import itertools
 import random
 from sklearn.decomposition import PCA
@@ -46,6 +46,8 @@ for i in range(len(sys.argv)):
 		cross_domain = True
 	elif sys.argv[i]=='--train-area':
 		TRAIN_AREA = sys.argv[i+1]
+	elif sys.argv[i]=='--resolution':
+		resolution = float(sys.argv[i+1])
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
@@ -63,7 +65,8 @@ for AREA in TEST_AREAS:
 			if NUM_INLIER_POINT!=512 or NUM_NEIGHBOR_POINT!=512:
 				MODEL_PATH = 'models/lrgnet_model%s_i_%d_j_%d.ckpt'%(AREA, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT)
 			else:
-				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
+#				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
+				MODEL_PATH = 'models/cross_domain/lrgnet_scannet.ckpt'
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
@@ -74,20 +77,16 @@ for AREA in TEST_AREAS:
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
 
-	if AREA=='synthetic':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
-	elif AREA=='scannet':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
-	elif AREA=='s3dis':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
+	if AREA in ['scannet', 's3dis', 'kitti_train', 'kitti_val']:
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
-	classes = classes_nyu40 if AREA=='scannet' else classes_s3dis
+	classes = classes_kitti if 'kitti' in AREA else classes_nyu40 if AREA=='scannet' else classes_s3dis
 
-#	for room_id in range(len(all_points)):
+	for room_id in range(len(all_points)):
 #	for room_id in [0]:
 #	for room_id in [162, 157, 166, 169, 200]:
-	for room_id in [10, 44, 87, 111, 198]:
+#	for room_id in [10, 44, 87, 111, 198]:
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]

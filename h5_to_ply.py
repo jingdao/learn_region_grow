@@ -2,7 +2,7 @@ import h5py
 import sys
 import numpy
 import matplotlib.pyplot as plt
-from class_util import classes_s3dis, classes_nyu40
+from class_util import classes_s3dis, classes_nyu40, classes_kitti
 
 def loadFromH5(filename):
 	f = h5py.File(filename,'r')
@@ -58,7 +58,7 @@ for i in range(len(sys.argv)):
 		target_room_id = int(sys.argv[i+1])
 
 all_points, all_obj_id, all_cls_id = loadFromH5(sys.argv[1])
-classes = classes_nyu40 if 'scannet' in sys.argv[1] else classes_s3dis
+classes = classes_kitti if 'kitti' in sys.argv[1] else classes_nyu40 if 'scannet' in sys.argv[1] else classes_s3dis
 
 for room_id in range(len(all_points)) if target_room_id is None else [target_room_id]:
 	unequalized_points = all_points[room_id]

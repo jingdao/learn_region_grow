@@ -4,7 +4,7 @@ import sys
 BATCH_SIZE = 100
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 40
+MAX_EPOCH = 50
 VAL_STEP = 7
 TRAIN_AREA = ['1','2','3','4','6']
 #VAL_AREA = ['5']
@@ -22,6 +22,8 @@ for i in range(len(sys.argv)):
 		VAL_AREA = sys.argv[i+1].split(',')
 	if sys.argv[i]=='--cross-domain':
 		cross_domain = True
+	if sys.argv[i]=='--multiseed':
+		MULTISEED = int(sys.argv[i+1])
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -83,7 +85,7 @@ for epoch in range(MAX_EPOCH):
 					val_neighbor_points.append(neighbor_points[idp:idp+neighbor_count[i], :FEATURE_SIZE])
 					val_add.append(add[idp:idp+neighbor_count[i]])
 					idp += neighbor_count[i]
-			else:
+			if AREA in TRAIN_AREA:
 				count = f['count'][:]
 				train_inlier_count.extend(count)
 				points = f['points'][:]

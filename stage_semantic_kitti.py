@@ -193,7 +193,7 @@ for sequence in FLAGS.sequences.split(','):
             for v in list(rgb_map):
                 if np.any(min_span > v) or np.any(max_span < v):
                     del rgb_map[v]
-            break
+#            break
 
 h5_fout = h5py.File(FLAGS.output,'w')
 h5_fout.create_dataset('points', data=all_points, compression='gzip', compression_opts=4, dtype=np.float32)

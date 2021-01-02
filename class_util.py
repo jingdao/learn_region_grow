@@ -7,6 +7,41 @@ classes_nyu40 = ['none','wall','floor','cabinet', 'bed', 'chair', 'sofa', 'table
                 'desk', 'shelves', 'curtain', 'dresser', 'pillow', 'mirror', 'floor mat', 'clothes', 'ceiling', 'books', 'refrigerator',
                 'television', 'paper', 'towel', 'shower curtain', 'box', 'whiteboard', 'person', 'nightstand', 'toilet', 'sink', 'lamp',
                 'bathtub', 'bag', 'otherstructure', 'otherfurniture', 'otherprop']
+classes_kitti = [''] * 260
+classes_kitti[0] = "unlabeled"
+classes_kitti[1] = "outlier"
+classes_kitti[10] = "car"
+classes_kitti[11] = "bicycle"
+classes_kitti[13] = "bus"
+classes_kitti[15] = "motorcycle"
+classes_kitti[16] = "on-rails"
+classes_kitti[18] = "truck"
+classes_kitti[20] = "other-vehicle"
+classes_kitti[30] = "person"
+classes_kitti[31] = "bicyclist"
+classes_kitti[32] = "motorcyclist"
+classes_kitti[40] = "road"
+classes_kitti[44] = "parking"
+classes_kitti[48] = "sidewalk"
+classes_kitti[49] = "other-ground"
+classes_kitti[50] = "building"
+classes_kitti[51] = "fence"
+classes_kitti[52] = "other-structure"
+classes_kitti[60] = "lane-marking"
+classes_kitti[70] = "vegetation"
+classes_kitti[71] = "trunk"
+classes_kitti[72] = "terrain"
+classes_kitti[80] = "pole"
+classes_kitti[81] = "traffic-sign"
+classes_kitti[99] = "other-object"
+classes_kitti[252] = "moving-car"
+classes_kitti[253] = "moving-bicyclist"
+classes_kitti[254] = "moving-person"
+classes_kitti[255] = "moving-motorcyclist"
+classes_kitti[256] = "moving-on-rails"
+classes_kitti[257] = "moving-bus"
+classes_kitti[258] = "moving-truck"
+classes_kitti[259] = "moving-other-vehicle"
 
 #integer ID for each class
 class_to_id = {classes[i] : i for i in range(len(classes))}
@@ -45,7 +80,7 @@ class_to_color_rgb = {
 	12: (255,165,0), #wall
 }
 
-#extend colors to NYU 40 classes
+#extend colors to larger number of classes
 sample_state = numpy.random.RandomState(0)
-for i in range(13, 41):
+for i in range(13, max(len(classes_s3dis), len(classes_nyu40), len(classes_kitti))):
 	class_to_color_rgb[i] = tuple(numpy.random.randint(0, 255, 3))

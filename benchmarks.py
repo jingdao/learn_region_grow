@@ -2,7 +2,7 @@ import numpy
 import h5py
 import os
 import sys
-from class_util import classes_s3dis, classes_nyu40, class_to_id, class_to_color_rgb
+from class_util import classes_s3dis, classes_nyu40, classes_kitti, class_to_id, class_to_color_rgb
 import itertools
 import random
 from sklearn.decomposition import PCA
@@ -142,7 +142,7 @@ if threshold is None:
     else:
         threshold = 0.99
 print('Using threshold', threshold, 'resolution',resolution)
-NUM_CLASSES = len(classes_nyu40) if TRAIN_AREA=='scannet' else len(classes_s3dis)
+NUM_CLASSES = len(classes_kitti) if 'kitti' in TRAIN_AREA else len(classes_nyu40) if 'scannet' in TRAIN_AREA else len(classes_s3dis)
 
 if mode in ['pointnet', 'pointnet2']:
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
@@ -179,14 +179,8 @@ for AREA in TEST_AREAS:
 		svc = joblib.load(MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
 
-	if AREA=='synthetic':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/synthetic_test.h5')
-	elif AREA=='scannet':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
-	elif AREA=='s3dis':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
-	elif AREA=='kitti':
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/kitti.h5')
+	if AREA in ['scannet', 's3dis', 'kitti_train', 'kitti_val']:
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 

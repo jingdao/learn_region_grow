@@ -360,11 +360,16 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		rmvVoxels = numpy.round(rmvPoints[:,:3]/resolution).astype(int)
 		rmvSet = set([tuple(p) for p in rmvVoxels])
 		updated = False
+		add_mask = numpy.zeros(len(points), dtype=bool)
+		remove_mask = numpy.zeros(len(points), dtype=bool)
+		previousMask = currentMask.copy()
 		for i in range(len(point_voxels)):
 			if not currentMask[i] and tuple(point_voxels[i]) in addSet:
+				add_mask[i] = True
 				currentMask[i] = True
 				updated = True
 			if tuple(point_voxels[i]) in rmvSet:
+				remove_mask[i] = True
 				currentMask[i] = False
 		steps += 1
 		
@@ -390,10 +395,10 @@ for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
 		d = ImageDraw.Draw(image)
 		fnt = ImageFont.truetype('FreeMono.ttf', 40)
 		d.text((10,10), "Step %d"%steps, font=fnt, fill=(255,255,255,255))
-		d.text((10,60), "Inlier Set: %d points"%(numpy.sum(currentMask)), font=fnt, fill=(255,255,255,255))
-		d.text((10,110), "Neighbor Set: %d points"%(numpy.sum(mask)), font=fnt, fill=(255,255,255,255))
-		d.text((10,160), "Add: %d points"%len(addSet), font=fnt, fill=(255,255,255,255))
-		d.text((10,210), "Remove: %d points"%len(rmvSet), font=fnt, fill=(255,255,255,255))
+		d.text((10,60), "Inlier Set: %d points"%(numpy.sum(previousMask[unequalized_idx])), font=fnt, fill=(255,255,255,255))
+		d.text((10,110), "Neighbor Set: %d points"%(numpy.sum(mask[unequalized_idx])), font=fnt, fill=(255,255,255,255))
+		d.text((10,160), "Add: %d points"%numpy.sum(add_mask[unequalized_idx]), font=fnt, fill=(255,255,255,255))
+		d.text((10,210), "Remove: %d points"%numpy.sum(remove_mask[unequalized_idx]), font=fnt, fill=(255,255,255,255))
 		image.save('tmp/step%03d.png' % img_id, 'PNG')
 		instance_color[currentMask] = instance_color_id[cluster_id]
 		result_points[:,3:6] = instance_color[unequalized_idx]

@@ -65,8 +65,7 @@ for AREA in TEST_AREAS:
 			if NUM_INLIER_POINT!=512 or NUM_NEIGHBOR_POINT!=512:
 				MODEL_PATH = 'models/lrgnet_model%s_i_%d_j_%d.ckpt'%(AREA, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT)
 			else:
-#				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
-				MODEL_PATH = 'models/cross_domain/lrgnet_scannet.ckpt'
+				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 	config = tf.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
@@ -244,8 +243,8 @@ for AREA in TEST_AREAS:
 				rmvSet = set([tuple(p) for p in rmvVoxels])
 				updated = False
 				iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-#				print('%d/%d points %d outliers %d add %d rmv %.2f iou'%(numpy.sum(numpy.logical_and(currentMask, gt_mask)), numpy.sum(gt_mask),
-#					numpy.sum(numpy.logical_and(gt_mask==0, currentMask)), len(addSet), len(rmvSet), iou))
+#				print('%d/%d points %d outliers %d/%d add %d/%d rmv %.2f iou'%(numpy.sum(numpy.logical_and(currentMask, gt_mask)), numpy.sum(gt_mask),
+#					numpy.sum(numpy.logical_and(gt_mask==0, currentMask)), len(addSet), len(expandPoints), len(rmvSet), len(currentPoints), iou))
 				for i in range(len(point_voxels)):
 					if not currentMask[i] and tuple(point_voxels[i]) in addSet:
 						currentMask[i] = True

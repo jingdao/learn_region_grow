@@ -1,5 +1,6 @@
 from learn_region_grow_util import *
 import sys
+import time
 
 BATCH_SIZE = 100
 NUM_INLIER_POINT = 512
@@ -47,6 +48,7 @@ else:
 	else:
 		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA[0]
 AREA_LIST = TRAIN_AREA + VAL_AREA if VAL_AREA is not None else TRAIN_AREA
+epoch_time = []
 
 init = tf.global_variables_initializer()
 sess.run(init, {})
@@ -137,6 +139,7 @@ for epoch in range(MAX_EPOCH):
 	rmv_prc_arr = []
 	rmv_rcl_arr = []
 	num_batches = int(len(train_inlier_points) / BATCH_SIZE)
+	start_time = time.time()
 	for batch_id in range(num_batches):
 		start_idx = batch_id * BATCH_SIZE
 		end_idx = (batch_id + 1) * BATCH_SIZE
@@ -163,6 +166,7 @@ for epoch in range(MAX_EPOCH):
 		add_rcl_arr.append(ar)
 		rmv_prc_arr.append(rp)
 		rmv_rcl_arr.append(rr)
+	epoch_time.append(time.time() - start_time)
 	print("Epoch %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr)))
 
 	if VAL_AREA is not None and epoch % VAL_STEP == VAL_STEP - 1:
@@ -200,4 +204,6 @@ for epoch in range(MAX_EPOCH):
 			rmv_rcl_arr.append(rr)
 		print("Validation %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr)))
 
+print("Avg Epoch Time: %.3f" % numpy.mean(epoch_time))
+print("GPU Mem: %.1f" % (sess.run(tf.contrib.memory_stats.MaxBytesInUse()) / 1.0e6))
 saver.save(sess, MODEL_PATH)

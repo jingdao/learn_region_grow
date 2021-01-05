@@ -29,7 +29,7 @@ for AREA in AREAS:
 	elif AREA in ['s3dis', 'scannet', 'kitti_train', 'kitti_val']:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
-		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%d.h5' % AREA)
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 	stacked_points = []
 	stacked_neighbor_points = []
 	stacked_count = []

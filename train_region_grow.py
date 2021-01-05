@@ -12,6 +12,7 @@ TRAIN_AREA = ['1','2','3','4','6']
 VAL_AREA = None
 FEATURE_SIZE = 13
 MULTISEED = 8
+LITE = None
 initialized = False
 cross_domain = False
 numpy.random.seed(0)
@@ -25,13 +26,15 @@ for i in range(len(sys.argv)):
 		cross_domain = True
 	if sys.argv[i]=='--multiseed':
 		MULTISEED = int(sys.argv[i+1])
+	if sys.argv[i]=='--lite':
+		LITE = int(sys.argv[i+1])
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
 sess = tf.Session(config=config)
-net = LrgNet(BATCH_SIZE, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+net = LrgNet(BATCH_SIZE, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE, LITE)
 saver = tf.train.Saver()
 if cross_domain:
 	MODEL_PATH = 'models/cross_domain/lrgnet_%s.ckpt'%TRAIN_AREA[0]
@@ -45,6 +48,8 @@ else:
 	# use full set of features
 	if NUM_INLIER_POINT!=512 or NUM_NEIGHBOR_POINT!=512:
 		MODEL_PATH = 'models/lrgnet_model%s_i_%d_j_%d.ckpt'%(VAL_AREA[0], NUM_INLIER_POINT, NUM_NEIGHBOR_POINT)
+	elif LITE is not None:
+		MODEL_PATH = 'models/lrgnet_model%s_lite_%d.ckpt'%(VAL_AREA[0], LITE)
 	else:
 		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA[0]
 AREA_LIST = TRAIN_AREA + VAL_AREA if VAL_AREA is not None else TRAIN_AREA

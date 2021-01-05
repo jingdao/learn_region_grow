@@ -22,6 +22,7 @@ numpy.random.seed(0)
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
 FEATURE_SIZE = 13
+LITE = None
 TEST_AREAS = ['1','2','3','4','5','6','scannet']
 resolution = 0.1
 add_threshold = 0.5
@@ -48,6 +49,8 @@ for i in range(len(sys.argv)):
 		TRAIN_AREA = sys.argv[i+1]
 	elif sys.argv[i]=='--resolution':
 		resolution = float(sys.argv[i+1])
+	elif sys.argv[i]=='--lite':
+		LITE = int(sys.argv[i+1])
 
 for AREA in TEST_AREAS:
 	tf.reset_default_graph()
@@ -64,6 +67,8 @@ for AREA in TEST_AREAS:
 			# use full set of features
 			if NUM_INLIER_POINT!=512 or NUM_NEIGHBOR_POINT!=512:
 				MODEL_PATH = 'models/lrgnet_model%s_i_%d_j_%d.ckpt'%(AREA, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT)
+			elif LITE is not None:
+				MODEL_PATH = 'models/lrgnet_model%s_lite_%d.ckpt'%(AREA, LITE)
 			else:
 				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 	config = tf.ConfigProto()
@@ -71,7 +76,7 @@ for AREA in TEST_AREAS:
 	config.allow_soft_placement = True
 	config.log_device_placement = False
 	sess = tf.Session(config=config)
-	net = LrgNet(1, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
+	net = LrgNet(1, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE, LITE)
 	saver = tf.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
@@ -174,18 +179,21 @@ for AREA in TEST_AREAS:
 			steps = 0
 			stuck = 0
 			maskLogProb = 0
+			start_time = time.time()
 
 			#perform region growing
 			while True:
 
 				def stop_growing(reason):
-					global cluster_id
+					global cluster_id, start_time
 					visited[currentMask] = True
 					if numpy.sum(currentMask) > cluster_threshold:
 						cluster_label[currentMask] = cluster_id
 						cluster_id += 1
 						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-						print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f %s'%(room_id, target_id, target_class, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, reason))
+						obj_time = time.time() - start_time
+						start_time = time.time()
+						print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f %.2fs %s'%(room_id, target_id, target_class, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, obj_time, reason))
 
 				#determine the current points and the neighboring points
 				currentPoints = points[currentMask, :].copy()

@@ -70,16 +70,19 @@ end_header
 	print('Saved to %s: (%d points)'%(filename, len(points)))
 
 class LrgNet:
-	def __init__(self,batch_size, seq_len, num_inlier_points, num_neighbor_points, feature_size):
-		CONV_CHANNELS = [64,64,64,128,512]
-		CONV2_CHANNELS = [256, 128]
-		FC_CHANNELS = [256, 128]
+	def __init__(self,batch_size, seq_len, num_inlier_points, num_neighbor_points, feature_size, lite=0):
+		if lite==0:
+			CONV_CHANNELS = [64,64,64,128,512]
+			CONV2_CHANNELS = [256, 128]
+		elif lite==1:
+			CONV_CHANNELS = [64,64]
+			CONV2_CHANNELS = [64]
+		elif lite==2:
+			CONV_CHANNELS = [64,64,256]
+			CONV2_CHANNELS = [64,64]
 		self.kernel = [None]*len(CONV_CHANNELS)
 		self.bias = [None]*len(CONV_CHANNELS)
 		self.conv = [None]*len(CONV_CHANNELS)
-		self.fc = [None]*(len(FC_CHANNELS) + 1)
-		self.fc_kernel = [None]*(len(FC_CHANNELS) + 1)
-		self.fc_bias = [None]*(len(FC_CHANNELS) + 1)
 		self.neighbor_kernel = [None]*len(CONV_CHANNELS)
 		self.neighbor_bias = [None]*len(CONV_CHANNELS)
 		self.neighbor_conv = [None]*len(CONV_CHANNELS)
@@ -113,8 +116,8 @@ class LrgNet:
 			self.neighbor_conv[i] = tf.nn.relu(self.neighbor_conv[i])
 
 		#MAX POOLING
-		self.pool = tf.reduce_max(self.conv[4], axis=1)
-		self.neighbor_pool = tf.reduce_max(self.neighbor_conv[4], axis=1)
+		self.pool = tf.reduce_max(self.conv[-1], axis=1)
+		self.neighbor_pool = tf.reduce_max(self.neighbor_conv[-1], axis=1)
 		self.combined_pool = tf.concat(axis=1, values=[self.pool, self.neighbor_pool])
 		self.pooled_feature = self.combined_pool
 

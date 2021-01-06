@@ -71,7 +71,7 @@ end_header
 
 class LrgNet:
 	def __init__(self,batch_size, seq_len, num_inlier_points, num_neighbor_points, feature_size, lite=0):
-		if lite==0:
+		if lite==0 or lite is None:
 			CONV_CHANNELS = [64,64,64,128,512]
 			CONV2_CHANNELS = [256, 128]
 		elif lite==1:

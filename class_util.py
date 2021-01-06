@@ -83,4 +83,4 @@ class_to_color_rgb = {
 #extend colors to larger number of classes
 sample_state = numpy.random.RandomState(0)
 for i in range(13, max(len(classes_s3dis), len(classes_nyu40), len(classes_kitti))):
-	class_to_color_rgb[i] = tuple(numpy.random.randint(0, 255, 3))
+	class_to_color_rgb[i] = tuple(sample_state.randint(0, 255, 3))

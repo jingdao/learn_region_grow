@@ -274,7 +274,7 @@ for AREA in TEST_AREAS:
 							edges.append([i, voxel_map[kk]])
 		elif mode=='pointnet' or mode=='pointnet2':
 			class_labels = numpy.zeros(len(points))
-			grid_resolution = 1.0
+			grid_resolution = 3.0 if 'kitti' in AREA else 1.0
 			grid = numpy.round(points[:,:2]/grid_resolution).astype(int)
 			grid_set = set([tuple(g) for g in grid])
 			for g in grid_set:

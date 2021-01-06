@@ -17,6 +17,7 @@ parser.add_argument( '--min-cluster', '-m', type=int, default=50, help='')
 parser.add_argument( '--voxel-resolution', '-v', type=float, default=0.3, help='')
 parser.add_argument( '--downsample-resolution', '-r', type=float, default=0.1, help='')
 parser.add_argument( '--distance-span', '-p', type=float, default=50.0, help='')
+parser.add_argument( '--skip', '-k', type=int, default=10, help='')
 FLAGS, unparsed = parser.parse_known_args()
 
 def downsample(cloud, resolution):
@@ -85,7 +86,8 @@ for sequence in FLAGS.sequences.split(','):
 
     rgb_map = {}
     stacked_points = []
-    for offset in range(0, len(scan_names)):
+    offset = 0
+    while offset < len(scan_names):
         scan = np.fromfile(scan_names[offset], dtype=np.float32)
         scan = scan.reshape((-1, 4))
 
@@ -167,9 +169,9 @@ for sequence in FLAGS.sequences.split(','):
                 if obj_id[i] > 0:
                     continue
                 k = point_voxels[i]
-                for offset in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
-                    if offset!=(0,0,0):
-                        kk = (k[0]+offset[0], k[1]+offset[1], k[2]+offset[2])
+                for d in itertools.product([-1,0,1],[-1,0,1],[-1,0,1]):
+                    if d!=(0,0,0):
+                        kk = (k[0]+d[0], k[1]+d[1], k[2]+d[2])
                         if kk in equalized_map and cls_id[i] == cls_id[equalized_map[kk]]:
                             edges.append([i, equalized_map[kk]])
             G = nx.Graph(edges)
@@ -185,15 +187,19 @@ for sequence in FLAGS.sequences.split(','):
             print('Creating data sample with %d->%d points %d->%d objects' % (len(stacked_points), len(points), len(original_obj_id), len(set(new_obj_id))))
             all_points.extend(stacked_points)
             count.append(len(stacked_points))
+            offset += FLAGS.skip * FLAGS.interval + 1
             stacked_points = []
+            rgb_map = {}
 
             # filter rgb map based on distance to reduce memory consumption
-            min_span = (t_world_local - FLAGS.distance_span) / FLAGS.voxel_resolution
-            max_span = (t_world_local + FLAGS.distance_span) / FLAGS.voxel_resolution
-            for v in list(rgb_map):
-                if np.any(min_span > v) or np.any(max_span < v):
-                    del rgb_map[v]
+#            min_span = (t_world_local - FLAGS.distance_span) / FLAGS.voxel_resolution
+#            max_span = (t_world_local + FLAGS.distance_span) / FLAGS.voxel_resolution
+#            for v in list(rgb_map):
+#                if np.any(min_span > v) or np.any(max_span < v):
+#                    del rgb_map[v]
 #            break
+        else:
+            offset += 1
 
 h5_fout = h5py.File(FLAGS.output,'w')
 h5_fout.create_dataset('points', data=all_points, compression='gzip', compression_opts=4, dtype=np.float32)

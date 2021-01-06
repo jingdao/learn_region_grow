@@ -5,7 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 import time
 import sys
-from class_util import classes_s3dis, classes_nyu40
+from class_util import classes_s3dis, classes_nyu40, classes_kitti
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(ROOT_DIR, 'tf_ops/sampling'))
@@ -307,33 +307,31 @@ if __name__=='__main__':
 			cross_domain = True
 	if cross_domain:
 		MODEL_PATH = 'models/cross_domain/%s_%s.ckpt' % (mode, TRAIN_AREA[0])
-		NUM_CLASSES = len(classes_nyu40) if TRAIN_AREA[0]=='scannet' else len(classes_s3dis)
 	else:
 		MODEL_PATH = 'models/%s_model%s.ckpt' % (mode, VAL_AREA[0])
-		NUM_CLASSES = len(classes_s3dis)
-	print('train', TRAIN_AREA, 'val', VAL_AREA, 'model', MODEL_PATH)
+	NUM_CLASSES = len(classes_kitti) if 'kitti' in TRAIN_AREA[0] else len(classes_nyu40) if 'scannet' in TRAIN_AREA[0] else len(classes_s3dis)
+	print('train', TRAIN_AREA, 'val', VAL_AREA, 'model', MODEL_PATH, 'classes', NUM_CLASSES)
 
 	#arrange points into batches of 2048x6
 	train_points = []
 	train_labels = []
 	val_points = []
 	val_labels = []
-	for AREA in ['1','2','3','4','5','6','s3dis','scannet']:
+	for AREA in ['1','2','3','4','5','6','s3dis','scannet','kitti_train','kitti_val']:
 		if not AREA in TRAIN_AREA and not AREA in VAL_AREA:
 			continue
-		if AREA=='s3dis':
-			all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis.h5')
-		elif AREA=='scannet':
-			all_points,all_obj_id,all_cls_id = loadFromH5('data/scannet.h5')
+		if AREA in ['scannet', 's3dis', 'kitti_train', 'kitti_val']:
+			all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 		else:
 			all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 		for room_id in range(len(all_points)):
 			points = all_points[room_id]
 			cls_id = all_cls_id[room_id]
 
-			grid_resolution = 1.0
+			grid_resolution = 3.0 if 'kitti' in AREA else 1.0
 			grid = numpy.round(points[:,:2]/grid_resolution).astype(int)
 			grid_set = set([tuple(g) for g in grid])
+			print('room_id %d/%d grid %d' % (room_id, len(all_points), len(grid_set)))
 			for g in grid_set:
 				grid_mask = numpy.all(grid==g, axis=1)
 				grid_points = points[grid_mask, :6]
@@ -347,7 +345,7 @@ if __name__=='__main__':
 				if AREA in VAL_AREA:
 					val_points.append(grid_points[subset])
 					val_labels.append(grid_labels[subset])
-				else:
+				if AREA in TRAIN_AREA:
 					train_points.append(grid_points[subset])
 					train_labels.append(grid_labels[subset])
 

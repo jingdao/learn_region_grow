@@ -2,7 +2,7 @@ import h5py
 import sys
 import numpy
 import matplotlib.pyplot as plt
-from class_util import classes_s3dis, classes_nyu40, classes_kitti
+from class_util import classes_s3dis, classes_nyu40, classes_kitti, class_to_color_rgb
 
 def loadFromH5(filename):
 	f = h5py.File(filename,'r')
@@ -51,6 +51,8 @@ if '--rgb' in sys.argv:
 	mode = 'rgb'
 if '--seg' in sys.argv:
 	mode = 'seg'
+if '--cls' in sys.argv:
+	mode = 'cls'
 
 for i in range(len(sys.argv)):
 	if sys.argv[i] == '--target':
@@ -103,3 +105,6 @@ for room_id in range(len(all_points)) if target_room_id is None else [target_roo
 			obj_color[0,:] = [100,100,100]
 			unequalized_points[:,3:6] = obj_color[reorder_id,:][unequalized_idx]
 			savePLY('data/gt/%d.ply'%room_id, unequalized_points)
+	elif mode=='cls':
+		unequalized_points[:,3:6] = [class_to_color_rgb[c] for c in cls_id[unequalized_idx]]
+		savePLY('data/class/%d.ply'%room_id, unequalized_points)

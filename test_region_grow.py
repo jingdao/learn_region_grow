@@ -37,6 +37,15 @@ agg_ars = []
 agg_prc = []
 agg_rcl = []
 agg_iou = []
+comp_time_analysis = {
+	'feature': [],
+	'net': [],
+	'neighbor': [],
+	'inlier': [],
+	'current_net' : 0,
+	'current_neighbor' : 0,
+	'current_inlier' : 0,
+}
 
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
@@ -88,7 +97,6 @@ for AREA in TEST_AREAS:
 	classes = classes_kitti if 'kitti' in AREA else classes_nyu40 if AREA=='scannet' else classes_s3dis
 
 	for room_id in range(len(all_points)):
-#	for room_id in [0]:
 #	for room_id in [162, 157, 166, 169, 200]:
 #	for room_id in [10, 44, 87, 111, 198]:
 		unequalized_points = all_points[room_id]
@@ -96,6 +104,7 @@ for AREA in TEST_AREAS:
 		cls_id = all_cls_id[room_id]
 
 		#equalize resolution
+		t = time.time()
 		equalized_idx = []
 		unequalized_idx = []
 		equalized_map = {}
@@ -148,6 +157,7 @@ for AREA in TEST_AREAS:
 			points = numpy.hstack((xyz, room_coordinates, rgb, normals)).astype(numpy.float32)
 		else:
 			points = numpy.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
+		comp_time_analysis['feature'].append(time.time() - t)
 
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 		cluster_label = numpy.zeros(len(points), dtype=int)
@@ -157,9 +167,10 @@ for AREA in TEST_AREAS:
 		neighbor_points = numpy.zeros((1, NUM_NEIGHBOR_POINT, FEATURE_SIZE), dtype=numpy.float32)
 		input_add = numpy.zeros((1, NUM_NEIGHBOR_POINT), dtype=numpy.int32)
 		input_remove = numpy.zeros((1, NUM_INLIER_POINT), dtype=numpy.int32)
+		order = numpy.argsort(curvatures)
 		#iterate over each object in the room
 #		for seed_id in range(len(point_voxels)):
-		for seed_id in numpy.arange(len(points))[numpy.argsort(curvatures)]:
+		for seed_id in numpy.arange(len(points))[order]:
 			if visited[seed_id]:
 				continue
 			seed_voxel = point_voxels[seed_id]
@@ -179,7 +190,6 @@ for AREA in TEST_AREAS:
 			steps = 0
 			stuck = 0
 			maskLogProb = 0
-			start_time = time.time()
 
 			#perform region growing
 			while True:
@@ -191,11 +201,10 @@ for AREA in TEST_AREAS:
 						cluster_label[currentMask] = cluster_id
 						cluster_id += 1
 						iou = 1.0 * numpy.sum(numpy.logical_and(gt_mask,currentMask)) / numpy.sum(numpy.logical_or(gt_mask,currentMask))
-						obj_time = time.time() - start_time
-						start_time = time.time()
-						print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f %.2fs %s'%(room_id, target_id, target_class, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, obj_time, reason))
+						print('room %d target %3d %.4s: step %3d %4d/%4d points IOU %.3f add %.3f rmv %.3f %s'%(room_id, target_id, target_class, steps, numpy.sum(currentMask), numpy.sum(gt_mask), iou, add_acc, rmv_acc, reason))
 
 				#determine the current points and the neighboring points
+				t = time.time()
 				currentPoints = points[currentMask, :].copy()
 				newMinDims = minDims.copy()	
 				newMaxDims = maxDims.copy()	
@@ -230,8 +239,12 @@ for AREA in TEST_AREAS:
 					subset = list(range(len(expandPoints))) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 				input_add[0,:] = numpy.array(expandClass)[subset]
+				comp_time_analysis['current_neighbor'] += time.time() - t
+				t = time.time()
 				ls, add,add_acc, rmv,rmv_acc = sess.run([net.loss, net.add_output, net.add_acc, net.remove_output, net.remove_acc],
 					{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
+				comp_time_analysis['current_net'] += time.time() - t
+				t = time.time()
 
 				add_conf = scipy.special.softmax(add[0], axis=-1)[:,1]
 				rmv_conf = scipy.special.softmax(rmv[0], axis=-1)[:,1]
@@ -260,6 +273,7 @@ for AREA in TEST_AREAS:
 					if tuple(point_voxels[i]) in rmvSet:
 						currentMask[i] = False
 				steps += 1
+				comp_time_analysis['current_inlier'] += time.time() - t
 
 				if updated: #continue growing
 					minDims = point_voxels[currentMask, :].min(axis=0)
@@ -326,6 +340,13 @@ for AREA in TEST_AREAS:
 		agg_iou.append(room_iou)
 		print("Area %s room %d NMI: %.2f AMI: %.2f ARS: %.2f PRC: %.2f RCL: %.2f IOU: %.2f"%(str(AREA), room_id, nmi,ami,ars, prc, rcl, room_iou))
 
+		comp_time_analysis['neighbor'].append(comp_time_analysis['current_neighbor'])
+		comp_time_analysis['current_neighbor'] = 0
+		comp_time_analysis['net'].append(comp_time_analysis['current_net'])
+		comp_time_analysis['current_net'] = 0
+		comp_time_analysis['inlier'].append(comp_time_analysis['current_inlier'])
+		comp_time_analysis['current_inlier'] = 0
+
 		#save point cloud results to file
 		if save_results:
 			color_sample_state = numpy.random.RandomState(0)
@@ -341,4 +362,12 @@ for AREA in TEST_AREAS:
 print('NMI: %.2f+-%.2f AMI: %.2f+-%.2f ARS: %.2f+-%.2f PRC %.2f+-%.2f RCL %.2f+-%.2f IOU %.2f+-%.2f'%
 	(numpy.mean(agg_nmi), numpy.std(agg_nmi),numpy.mean(agg_ami),numpy.std(agg_ami),numpy.mean(agg_ars),numpy.std(agg_ars),
 	numpy.mean(agg_prc), numpy.std(agg_prc), numpy.mean(agg_rcl), numpy.std(agg_rcl), numpy.mean(agg_iou), numpy.std(agg_iou)))
-
+total_time = 0
+for i in list(comp_time_analysis.keys()):
+	if not i.startswith('current'):
+		comp_time_analysis['std_'+i] = numpy.std(comp_time_analysis[i])
+		comp_time_analysis[i] = numpy.mean(comp_time_analysis[i])
+		total_time += comp_time_analysis[i]
+for i in comp_time_analysis:
+	if not i.startswith('current') and not i.startswith('std'):
+		print('%10s %6.2f+-%5.2fs %4.1f' % (i, comp_time_analysis[i], comp_time_analysis['std_'+i], 100.0 * comp_time_analysis[i] / total_time))

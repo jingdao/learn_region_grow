@@ -95,7 +95,7 @@ for room_id in range(len(all_points)) if target_room_id is None else [target_roo
 			i = unique_id[numpy.argsort(count)][::-1][k]
 			if mode=='target':
 				target_class = classes[cls_id[numpy.nonzero(obj_id==i)[0][0]]]
-				if target_class not in ['ceiling', 'none']:
+				if target_class not in ['ceiling', 'none', 'unlabeled']:
 					plt.scatter(0,0,color=tuple(obj_color[k+1]/255.0),label='%s #%d'%(target_class, k),s=200)
 			reorder_id[obj_id==i] = k+1
 		if mode=='target':

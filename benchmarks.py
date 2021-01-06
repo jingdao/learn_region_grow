@@ -179,7 +179,7 @@ for AREA in TEST_AREAS:
 		svc = joblib.load(MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
 
-	if AREA in ['scannet', 's3dis', 'kitti_train', 'kitti_val']:
+	if AREA in ['scannet', 's3dis', 'kitti_train', 'kitti_val', 'kitti_small']:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)

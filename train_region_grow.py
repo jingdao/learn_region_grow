@@ -5,7 +5,7 @@ import time
 BATCH_SIZE = 100
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 50
+MAX_EPOCH = 40
 VAL_STEP = 7
 TRAIN_AREA = ['1','2','3','4','6']
 #VAL_AREA = ['5']
@@ -52,7 +52,6 @@ else:
 		MODEL_PATH = 'models/lrgnet_model%s_lite_%d.ckpt'%(VAL_AREA[0], LITE)
 	else:
 		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA[0]
-AREA_LIST = TRAIN_AREA + VAL_AREA if VAL_AREA is not None else TRAIN_AREA
 epoch_time = []
 
 init = tf.global_variables_initializer()
@@ -64,10 +63,14 @@ for epoch in range(MAX_EPOCH):
 		train_inlier_points, train_inlier_count, train_neighbor_points, train_neighbor_count, train_add, train_remove = [], [], [], [], [], []
 		val_inlier_points, val_inlier_count, val_neighbor_points, val_neighbor_count, val_add, val_remove = [], [], [], [], [], []
 
+		if VAL_AREA is not None and epoch % VAL_STEP == VAL_STEP - 1:
+			AREA_LIST = TRAIN_AREA + VAL_AREA
+		else:
+			AREA_LIST = TRAIN_AREA
 		for AREA in AREA_LIST:
 			if isinstance(AREA, str) and AREA.startswith('synthetic'):
 				f = h5py.File('data/staged_%s.h5' % AREA, 'r')
-			elif MULTISEED > 0:
+			elif MULTISEED > 0 and AREA in TRAIN_AREA:
 				SEED = epoch % MULTISEED
 				f = h5py.File('data/multiseed/seed%d_area%s.h5'%(SEED,AREA),'r')
 			else:

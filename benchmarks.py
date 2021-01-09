@@ -183,6 +183,11 @@ for AREA in TEST_AREAS:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
+	room_name_file = 'data/%s_room_name.txt' % AREA
+	if os.path.exists(room_name_file):
+		room_names = open(room_name_file, 'r').read().split('\n')
+	else:
+		room_names = None
 
 	for room_id in range(len(all_points)):
 #	for room_id in [162, 157, 166, 169, 200]:
@@ -208,6 +213,7 @@ for AREA in TEST_AREAS:
 		points = unequalized_points[equalized_idx] #(N,6)
 		obj_id = obj_id[equalized_idx]
 		cls_id = cls_id[equalized_idx]
+		t = time.time()
 
 		#compute normals
 		if mode=='normal' or mode=='curvature' or mode=='smoothness' or mode=='fpfh' or mode=='feature':
@@ -428,6 +434,8 @@ for AREA in TEST_AREAS:
 							break
 						visited.add(q)
 						Q.extend(best_neighbor[q])
+		print('%s %d points: %.2fs' % (room_names[room_id] if room_names is not None else '', len(unequalized_points), time.time() - t))
+
 	
 		#calculate statistics 
 		gt_match = 0

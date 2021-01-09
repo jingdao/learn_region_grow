@@ -42,9 +42,12 @@ comp_time_analysis = {
 	'net': [],
 	'neighbor': [],
 	'inlier': [],
-	'current_net' : 0,
-	'current_neighbor' : 0,
-	'current_inlier' : 0,
+	'current_net' : [],
+	'current_neighbor' : [],
+	'current_inlier' : [],
+	'iter_net' : [],
+	'iter_neighbor' : [],
+	'iter_inlier' : [],
 }
 
 for i in range(len(sys.argv)):
@@ -95,16 +98,26 @@ for AREA in TEST_AREAS:
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 	classes = classes_kitti if 'kitti' in AREA else classes_nyu40 if AREA=='scannet' else classes_s3dis
+	room_name_file = 'data/%s_room_name.txt' % AREA
+	if os.path.exists(room_name_file):
+		room_names = open(room_name_file, 'r').read().split('\n')
+	else:
+		room_names = None
+	sample_file = open('/media/jd/9638A1E538A1C519/Users/jchen490/Desktop/jsis3d/data/s3dis/metadata/s3dis_sampled.txt', 'r')
+	sample_list = set(sample_file.read().split('\n'))
+	sample_file.close()
 
 	for room_id in range(len(all_points)):
 #	for room_id in [162, 157, 166, 169, 200]:
 #	for room_id in [10, 44, 87, 111, 198]:
+		if not '_'.join(room_names[room_id].split())+'.h5' in sample_list:
+			continue
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]
 		cls_id = all_cls_id[room_id]
 
 		#equalize resolution
-		t = time.time()
+		t1 = time.time()
 		equalized_idx = []
 		unequalized_idx = []
 		equalized_map = {}
@@ -157,7 +170,7 @@ for AREA in TEST_AREAS:
 			points = numpy.hstack((xyz, room_coordinates, rgb, normals)).astype(numpy.float32)
 		else:
 			points = numpy.hstack((xyz, room_coordinates, rgb, normals, curvatures.reshape(-1,1))).astype(numpy.float32)
-		comp_time_analysis['feature'].append(time.time() - t)
+		comp_time_analysis['feature'].append(time.time() - t1)
 
 		point_voxels = numpy.round(points[:,:3]/resolution).astype(int)
 		cluster_label = numpy.zeros(len(points), dtype=int)
@@ -239,11 +252,11 @@ for AREA in TEST_AREAS:
 					subset = list(range(len(expandPoints))) + list(numpy.random.choice(len(expandPoints), NUM_NEIGHBOR_POINT-len(expandPoints), replace=True))
 				neighbor_points[0,:,:] = numpy.array(expandPoints)[subset, :]
 				input_add[0,:] = numpy.array(expandClass)[subset]
-				comp_time_analysis['current_neighbor'] += time.time() - t
+				comp_time_analysis['current_neighbor'].append(time.time() - t)
 				t = time.time()
 				ls, add,add_acc, rmv,rmv_acc = sess.run([net.loss, net.add_output, net.add_acc, net.remove_output, net.remove_acc],
 					{net.inlier_pl:inlier_points, net.neighbor_pl:neighbor_points, net.add_mask_pl:input_add, net.remove_mask_pl:input_remove})
-				comp_time_analysis['current_net'] += time.time() - t
+				comp_time_analysis['current_net'].append(time.time() - t)
 				t = time.time()
 
 				add_conf = scipy.special.softmax(add[0], axis=-1)[:,1]
@@ -273,7 +286,7 @@ for AREA in TEST_AREAS:
 					if tuple(point_voxels[i]) in rmvSet:
 						currentMask[i] = False
 				steps += 1
-				comp_time_analysis['current_inlier'] += time.time() - t
+				comp_time_analysis['current_inlier'].append(time.time() - t)
 
 				if updated: #continue growing
 					minDims = point_voxels[currentMask, :].min(axis=0)
@@ -301,6 +314,7 @@ for AREA in TEST_AREAS:
 			closest_idx = numpy.argmin(d)
 			filled_cluster_label[i] = cluster_label[nonzero_idx[closest_idx]]
 		cluster_label = filled_cluster_label
+		print('%s %d points: %.2fs' % (room_names[room_id] if room_names is not None else '', len(unequalized_points), time.time() - t1))
 
 		#calculate statistics 
 		gt_match = 0
@@ -340,12 +354,15 @@ for AREA in TEST_AREAS:
 		agg_iou.append(room_iou)
 		print("Area %s room %d NMI: %.2f AMI: %.2f ARS: %.2f PRC: %.2f RCL: %.2f IOU: %.2f"%(str(AREA), room_id, nmi,ami,ars, prc, rcl, room_iou))
 
-		comp_time_analysis['neighbor'].append(comp_time_analysis['current_neighbor'])
-		comp_time_analysis['current_neighbor'] = 0
-		comp_time_analysis['net'].append(comp_time_analysis['current_net'])
-		comp_time_analysis['current_net'] = 0
-		comp_time_analysis['inlier'].append(comp_time_analysis['current_inlier'])
-		comp_time_analysis['current_inlier'] = 0
+		comp_time_analysis['neighbor'].append(sum(comp_time_analysis['current_neighbor']))
+		comp_time_analysis['iter_neighbor'].extend(comp_time_analysis['current_neighbor'])
+		comp_time_analysis['current_neighbor'] = []
+		comp_time_analysis['net'].append(sum(comp_time_analysis['current_net']))
+		comp_time_analysis['iter_net'].extend(comp_time_analysis['current_net'])
+		comp_time_analysis['current_net'] = []
+		comp_time_analysis['inlier'].append(sum(comp_time_analysis['current_inlier']))
+		comp_time_analysis['iter_inlier'].extend(comp_time_analysis['current_inlier'])
+		comp_time_analysis['current_inlier'] = []
 
 		#save point cloud results to file
 		if save_results:

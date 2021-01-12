@@ -19,6 +19,14 @@ Run the following script to download the necessary point cloud files in H5 forma
 bash download_data.sh
 ```
 
+To use the Semantic KITTI dataset, follow the instructions on the [Semantic KITTI website](http://semantic-kitti.org/dataset.html)
+and then run the following script:
+
+```
+python stage_semantic_kitti.py --dataset semantic_kitti/dataset/ --output data/kitti_train.h5 --sequences 00,01,02,03,04,05,06,07,09,10
+python stage_semantic_kitti.py --dataset semantic_kitti/dataset/ --output data/kitti_val.h5 --sequences 08
+```
+
 ## Data Visualization
 
 To check the data shape/size contained in each H5 file:
@@ -74,6 +82,13 @@ python train_pointnet.py --mode pointnet --train-area scannet --val-area s3dis -
 python benchmarks.py --mode pointnet --train-area scannet --area s3dis --cross-domain
 ```
 
+Evaluate the performance on the Semantic KITTI dataset as follows:
+```bash
+python benchmarks.py --mode feature --area kitti_val --resolution 0.3
+python train_pointnet.py --mode pointnet --train-area kitti_train --val-area kitti_val
+python benchmarks.py --mode pointnet --train-area kitti_train --area kitti_val --resolution 0.3
+```
+
 ## Learn Region Grow (LRGNet)
 
 Run region growing simulations to stage ground truth data for LRGNet.
@@ -118,6 +133,20 @@ python test_region_grow.py --train-area scannet --area s3dis --cross-domain
 python test_random_restart.py --train-area scannet --area s3dis --cross-domain --scoring np
 ```
 
+Evaluate the performance on the Semantic KITTI dataset as follows:
+```bash
+for i in 01 02 03 04 05 06 07 09 10
+do
+    python stage_semantic_kitti.py --dataset semantic_kitti/dataset/ --output data/kitti_train_"$i".h5 --sequences $i --skip 1
+done
+for i in 0 1 2 3 4 5 6 7 9 10
+do
+    python stage_data.py --area kitti_train --resolution 0.3 --seed $i
+done
+python train_region_grow.py --train-area kitti_train --val-area kitti_val --multiseed 11 
+python test_region_grow.py --area kitti_val --resolution 0.3 --save
+```
+
 ## Results
 
 Segmentation results on S3DIS dataset
@@ -127,4 +156,8 @@ Segmentation results on S3DIS dataset
 Segmentation results on ScanNet dataset
 
 ![scannet-results](figures/scannet_results.png?raw=true)
+
+Segmentation results on Semantic KITTI dataset
+
+![kitti-results](figures/kitti_combined.png?raw=true)
 

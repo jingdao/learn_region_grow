@@ -58,6 +58,8 @@ for i in range(len(sys.argv)):
 	if sys.argv[i] == '--target':
 		mode = 'target'
 		target_room_id = int(sys.argv[i+1])
+	elif sys.argv[i]=='--resolution':
+		resolution = float(sys.argv[i+1])
 
 all_points, all_obj_id, all_cls_id = loadFromH5(sys.argv[1])
 classes = classes_kitti if 'kitti' in sys.argv[1] else classes_nyu40 if 'scannet' in sys.argv[1] else classes_s3dis

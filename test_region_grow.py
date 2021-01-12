@@ -110,7 +110,7 @@ for AREA in TEST_AREAS:
 	for room_id in range(len(all_points)):
 #	for room_id in [162, 157, 166, 169, 200]:
 #	for room_id in [10, 44, 87, 111, 198]:
-		if not '_'.join(room_names[room_id].split())+'.h5' in sample_list:
+		if room_names is not None and not '_'.join(room_names[room_id].split())+'.h5' in sample_list:
 			continue
 		unequalized_points = all_points[room_id]
 		obj_id = all_obj_id[room_id]

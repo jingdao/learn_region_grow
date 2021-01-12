@@ -26,8 +26,10 @@ for AREA in AREAS:
 #for AREA in ['synthetic_train','synthetic_test']:
 	if isinstance(AREA, str) and AREA.startswith('synthetic'):
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
-	elif AREA in ['s3dis', 'scannet', 'kitti_train', 'kitti_val']:
+	elif AREA in ['s3dis', 'scannet', 'kitti_val']:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s.h5' % AREA)
+	elif AREA=='kitti_train':
+		all_points,all_obj_id,all_cls_id = loadFromH5('data/%s_%02d.h5' % (AREA, SEED))
 	else:
 		all_points,all_obj_id,all_cls_id = loadFromH5('data/s3dis_area%s.h5' % AREA)
 	stacked_points = []

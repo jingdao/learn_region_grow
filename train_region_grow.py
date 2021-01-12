@@ -5,7 +5,7 @@ import time
 BATCH_SIZE = 100
 NUM_INLIER_POINT = 512
 NUM_NEIGHBOR_POINT = 512
-MAX_EPOCH = 40
+MAX_EPOCH = 50
 VAL_STEP = 7
 TRAIN_AREA = ['1','2','3','4','6']
 #VAL_AREA = ['5']
@@ -72,7 +72,10 @@ for epoch in range(MAX_EPOCH):
 				f = h5py.File('data/staged_%s.h5' % AREA, 'r')
 			elif MULTISEED > 0 and AREA in TRAIN_AREA:
 				SEED = epoch % MULTISEED
-				f = h5py.File('data/multiseed/seed%d_area%s.h5'%(SEED,AREA),'r')
+				try:
+					f = h5py.File('data/multiseed/seed%d_area%s.h5'%(SEED,AREA),'r')
+				except OSError:
+					continue
 			else:
 				f = h5py.File('data/staged_area%s.h5'%(AREA),'r')
 			print('Loading %s ...'%f.filename)
@@ -131,6 +134,8 @@ for epoch in range(MAX_EPOCH):
 		val_add = [val_add[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
 		val_remove = [val_remove[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
 		val_neighbor_count = [val_neighbor_count[i] for i in range(len(val_neighbor_count)) if val_neighbor_count[i]>0]
+		if len(train_inlier_points)==0:
+			continue
 		print('train',len(train_inlier_points),train_inlier_points[0].shape, len(train_neighbor_points))
 		print('val',len(val_inlier_points), len(val_neighbor_points))
 

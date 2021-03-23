@@ -1,5 +1,9 @@
 # LRGNet: Learnable Region Growing for Point Cloud Segmentation
 
+This repository contains code for the
+[RAL paper](https://ieeexplore.ieee.org/document/9364361)
+*LRGNet: Learnable Region Growing for Class-Agnostic Point Cloud Segmentation*.
+
 ![architecture](figures/architecture.png?raw=true)
 
 ## Prerequisites
@@ -161,3 +165,16 @@ Segmentation results on Semantic KITTI dataset
 
 ![kitti-results](figures/kitti_combined.png?raw=true)
 
+Citation
+--------
+
+	@ARTICLE{chen2021ral,
+		author={J. {Chen} and Z. {Kira} and Y. K. {Cho}},
+		journal={IEEE Robotics and Automation Letters}, 
+		title={LRGNet: Learnable Region Growing for Class-Agnostic Point Cloud Segmentation}, 
+		year={2021},
+		volume={6},
+		number={2},
+		pages={2799-2806},
+		doi={10.1109/LRA.2021.3062607},
+	}

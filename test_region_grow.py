@@ -103,7 +103,7 @@ for AREA in TEST_AREAS:
 		room_names = open(room_name_file, 'r').read().split('\n')
 	else:
 		room_names = None
-	sample_file = open('/media/jd/9638A1E538A1C519/Users/jchen490/Desktop/jsis3d/data/s3dis/metadata/s3dis_sampled.txt', 'r')
+	sample_file = open('data/s3dis_sampled.txt', 'r')
 	sample_list = set(sample_file.read().split('\n'))
 	sample_file.close()
 

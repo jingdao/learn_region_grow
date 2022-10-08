@@ -8,6 +8,9 @@ This repository contains code for the
 
 ## Prerequisites
 
+Caution: The LRGNet training code is known to have issues with NVIDIA RTX series GPUs. It is suggested to
+use NVIDIA GTX series GPUs with tensorflow==1.15.4 to reproduce the results in the paper.
+
 1. numpy
 2. scipy
 3. scikit-learn

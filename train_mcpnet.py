@@ -153,13 +153,13 @@ VAL_AREA = 1
 for i in range(len(sys.argv)):
 	if sys.argv[i]=='--area':
 		VAL_AREA = int(sys.argv[i+1])
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
-sess = tf.Session(config=config)
+sess = tf.compat.v1.Session(config=config)
 net = MCPNet(batch_size, num_neighbors, feature_size, hidden_size, embedding_size)
-saver = tf.train.Saver()
+saver = tf.compat.v1.train.Saver()
 MODEL_PATH = 'models/mcpnet_model%d.ckpt'%(VAL_AREA)
 
 train_points, train_obj_id = None,None
@@ -182,7 +182,7 @@ for AREA in range(1,7):
 
 print('train',len(train_points),train_points[0].shape)
 print('val',len(val_points), val_points[0].shape)
-init = tf.global_variables_initializer()
+init = tf.compat.v1.global_variables_initializer()
 sess.run(init, {})
 for epoch in range(max_epoch):
 	loss_arr = []

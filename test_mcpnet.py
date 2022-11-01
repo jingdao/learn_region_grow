@@ -39,19 +39,19 @@ for i in range(len(sys.argv)):
 		save_results = True
 
 for AREA in TEST_AREAS:
-	tf.reset_default_graph()
-	config = tf.ConfigProto()
+	tf.compat.v1.reset_default_graph()
+	config = tf.compat.v1.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
 	config.log_device_placement = False
-	sess = tf.Session(config=config)
+	sess = tf.compat.v1.Session(config=config)
 	net = MCPNet(batch_size, num_neighbors, feature_size, hidden_size, embedding_size)
-	saver = tf.train.Saver()
+	saver = tf.compat.v1.train.Saver()
 	if AREA=='scannet':
 		MODEL_PATH = 'models/mcpnet_model5.ckpt'
 	else:
 		MODEL_PATH = 'models/mcpnet_model%s.ckpt'%AREA
-	saver = tf.train.Saver()
+	saver = tf.compat.v1.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
 

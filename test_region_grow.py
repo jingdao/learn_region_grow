@@ -65,7 +65,7 @@ for i in range(len(sys.argv)):
 		LITE = int(sys.argv[i+1])
 
 for AREA in TEST_AREAS:
-	tf.reset_default_graph()
+	tf.compat.v1.reset_default_graph()
 	if cross_domain:
 		MODEL_PATH = 'models/cross_domain/lrgnet_%s.ckpt' % TRAIN_AREA
 	else:
@@ -83,13 +83,13 @@ for AREA in TEST_AREAS:
 				MODEL_PATH = 'models/lrgnet_model%s_lite_%d.ckpt'%(AREA, LITE)
 			else:
 				MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
-	config = tf.ConfigProto()
+	config = tf.compat.v1.ConfigProto()
 	config.gpu_options.allow_growth = True
 	config.allow_soft_placement = True
 	config.log_device_placement = False
-	sess = tf.Session(config=config)
+	sess = tf.compat.v1.Session(config=config)
 	net = LrgNet(1, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE, LITE)
-	saver = tf.train.Saver()
+	saver = tf.compat.v1.train.Saver()
 	saver.restore(sess, MODEL_PATH)
 	print('Restored from %s'%MODEL_PATH)
 

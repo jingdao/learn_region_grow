@@ -151,7 +151,7 @@ if mode in ['pointnet', 'pointnet2']:
 
 for AREA in TEST_AREAS:
 	if mode in ['pointnet', 'pointnet2']:
-		tf.reset_default_graph()
+		tf.compat.v1.reset_default_graph()
 		if cross_domain:
 			MODEL_PATH = 'models/cross_domain/%s_%s.ckpt' % (mode, TRAIN_AREA)
 		else:
@@ -159,16 +159,16 @@ for AREA in TEST_AREAS:
 				MODEL_PATH = 'models/%s_model5.ckpt' % mode
 			else:
 				MODEL_PATH = 'models/%s_model%s.ckpt' % (mode, AREA)
-		config = tf.ConfigProto()
+		config = tf.compat.v1.ConfigProto()
 		config.gpu_options.allow_growth = True
 		config.allow_soft_placement = True
 		config.log_device_placement = False
-		sess = tf.Session(config=config)
+		sess = tf.compat.v1.Session(config=config)
 		if mode=='pointnet':
 			net = PointNet(1,NUM_POINT,NUM_CLASSES) 
 		else:
 			net = PointNet2(1,NUM_POINT,NUM_CLASSES) 
-		saver = tf.train.Saver()
+		saver = tf.compat.v1.train.Saver()
 		saver.restore(sess, MODEL_PATH)
 		print('Restored from %s'%MODEL_PATH)
 	elif mode=='edge':

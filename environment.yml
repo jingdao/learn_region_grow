@@ -1,0 +1,7 @@
+name: lrgnet
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - cudatoolkit=11.3.1
+  - conda-forge::tensorflow-gpu=2.6.0

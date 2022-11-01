@@ -6,17 +6,19 @@ This repository contains code for the
 
 ![architecture](figures/architecture.png?raw=true)
 
-## Prerequisites
+## Environment Setup and Dependencies
 
-Caution: The LRGNet training code is known to have issues with NVIDIA RTX series GPUs. It is suggested to
-use NVIDIA GTX series GPUs with tensorflow==1.15.4 to reproduce the results in the paper.
 
-1. numpy
-2. scipy
-3. scikit-learn
-4. tensorflow
-5. h5py
-6. networkx
+This environment setup is designed for Tensorflow 2.x with NVIDIA RTX series GPUs. For Tensorflow 1.x, it is suggested to checkout the *tensorflow-gpu==1.15.4* branch and use NVIDIA GTX series GPUs with tensorflow==1.15.4.
+This setup is known to work with NVIDIA RTX 3070 and RTX A6000 GPUs. Credits to Andre Longon from Louisiana State University for helping to port the code to Tensorflow 2.
+
+1. python==3.8
+2. tensorflow-gpu==2.6.0
+3. cudatoolkit==11.3.1
+
+    conda env create -f environment.yml -n lrgnet
+    conda activate lrgnet
+    pip install scikit-learn networkx h5py
 
 ## Data Staging
 

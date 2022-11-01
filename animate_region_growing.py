@@ -255,13 +255,13 @@ glLoadIdentity()
 gluPerspective(fov,600.0/600,1,1000)
 #glutMainLoop()
 
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
-sess = tf.Session(config=config)
+sess = tf.compat.v1.Session(config=config)
 net = LrgNet(1, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE)
-saver = tf.train.Saver()
+saver = tf.compat.v1.train.Saver()
 MODEL_PATH = 'models/lrgnet_model%s.ckpt'%AREA
 saver.restore(sess, MODEL_PATH)
 print('Restored network from %s'%MODEL_PATH)

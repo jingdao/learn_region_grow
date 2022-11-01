@@ -29,13 +29,13 @@ for i in range(len(sys.argv)):
 	if sys.argv[i]=='--lite':
 		LITE = int(sys.argv[i+1])
 
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
 config.log_device_placement = False
-sess = tf.Session(config=config)
+sess = tf.compat.v1.Session(config=config)
 net = LrgNet(BATCH_SIZE, 1, NUM_INLIER_POINT, NUM_NEIGHBOR_POINT, FEATURE_SIZE, LITE)
-saver = tf.train.Saver()
+saver = tf.compat.v1.train.Saver()
 if cross_domain:
 	MODEL_PATH = 'models/cross_domain/lrgnet_%s.ckpt'%TRAIN_AREA[0]
 elif FEATURE_SIZE==6:
@@ -54,7 +54,7 @@ else:
 		MODEL_PATH = 'models/lrgnet_model%s.ckpt'%VAL_AREA[0]
 epoch_time = []
 
-init = tf.global_variables_initializer()
+init = tf.compat.v1.global_variables_initializer()
 sess.run(init, {})
 for epoch in range(MAX_EPOCH):
 
@@ -63,7 +63,7 @@ for epoch in range(MAX_EPOCH):
 		train_inlier_points, train_inlier_count, train_neighbor_points, train_neighbor_count, train_add, train_remove = [], [], [], [], [], []
 		val_inlier_points, val_inlier_count, val_neighbor_points, val_neighbor_count, val_add, val_remove = [], [], [], [], [], []
 
-		if VAL_AREA is not None and epoch % VAL_STEP == VAL_STEP - 1:
+		if VAL_AREA is not None and (MULTISEED==0 and epoch % VAL_STEP == 0 or MULTISEED>0 and epoch % VAL_STEP == VAL_STEP-1):
 			AREA_LIST = TRAIN_AREA + VAL_AREA
 		else:
 			AREA_LIST = TRAIN_AREA
@@ -218,5 +218,5 @@ for epoch in range(MAX_EPOCH):
 		print("Validation %d loss %.2f add %.2f/%.2f rmv %.2f/%.2f"%(epoch,numpy.mean(loss_arr),numpy.mean(add_prc_arr),numpy.mean(add_rcl_arr),numpy.mean(rmv_prc_arr), numpy.mean(rmv_rcl_arr)))
 
 print("Avg Epoch Time: %.3f" % numpy.mean(epoch_time))
-print("GPU Mem: %.1f" % (sess.run(tf.contrib.memory_stats.MaxBytesInUse()) / 1.0e6))
+print("GPU Mem: " , tf.config.experimental.get_memory_info('GPU:0'))
 saver.save(sess, MODEL_PATH)

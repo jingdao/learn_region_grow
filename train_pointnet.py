@@ -32,9 +32,9 @@ class PointNet():
 	def __init__(self,batch_size,num_point,num_class):
 		#inputs
 		input_channels = 6
-		self.pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, input_channels))
-		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size, num_point))	
-		self.is_training_pl = tf.placeholder(tf.bool, shape=())
+		self.pointclouds_pl = tf.compat.v1.placeholder(tf.float32, shape=(batch_size, num_point, input_channels))
+		self.labels_pl = tf.compat.v1.placeholder(tf.int32, shape=(batch_size, num_point))	
+		self.is_training_pl = tf.compat.v1.placeholder(tf.bool, shape=())
 		self.input = tf.expand_dims(self.pointclouds_pl,-1)
 		self.conv = [None] * NUM_CONV_LAYERS
 		self.kernel = [None] * NUM_CONV_LAYERS
@@ -47,13 +47,13 @@ class PointNet():
 
 		#hidden layers
 		for i in range(NUM_CONV_LAYERS):
-			self.kernel[i] = tf.get_variable('kernel'+str(i), [1,input_channels if i==0 else 1, 1 if i==0 else NUM_FEATURE_CHANNELS[i-1], NUM_FEATURE_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-			self.bias[i] = tf.get_variable('bias'+str(i), [NUM_FEATURE_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-			self.conv[i] = tf.nn.conv2d(self.input if i==0 else self.conv[i-1], self.kernel[i], [1, 1, 1, 1], padding='VALID')
+			self.kernel[i] = tf.compat.v1.get_variable('kernel'+str(i), [1,input_channels if i==0 else 1, 1 if i==0 else NUM_FEATURE_CHANNELS[i-1], NUM_FEATURE_CHANNELS[i]], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+			self.bias[i] = tf.compat.v1.get_variable('bias'+str(i), [NUM_FEATURE_CHANNELS[i]], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+			self.conv[i] = tf.nn.conv2d(input=self.input if i==0 else self.conv[i-1], filters=self.kernel[i], strides=[1, 1, 1, 1], padding='VALID')
 			self.conv[i] = tf.nn.bias_add(self.conv[i], self.bias[i])
 			self.conv[i] = tf.nn.relu(self.conv[i])
 
-		self.pool[0] = tf.nn.max_pool(self.conv[-1],ksize=[1, num_point, 1, 1],strides=[1, num_point, 1, 1], padding='VALID', name='pool'+str(i))
+		self.pool[0] = tf.nn.max_pool2d(input=self.conv[-1],ksize=[1, num_point, 1, 1],strides=[1, num_point, 1, 1], padding='VALID', name='pool'+str(i))
 		self.tile[0] = tf.tile(tf.reshape(self.pool[0],[batch_size,-1,NUM_FEATURE_CHANNELS[-1]]) , [1,1,num_point])
 		self.tile[0] = tf.reshape(self.tile[0],[batch_size,num_point,-1])
 		self.tile[0] = tf.reshape(self.conv[-1],[batch_size,num_point,-1]) - self.tile[0]
@@ -61,53 +61,53 @@ class PointNet():
 		self.concat = tf.concat(axis=2, values=self.tile)
 
 		def batch_norm_template(inputs, is_training, moments_dims):
-			with tf.variable_scope('bn') as sc:
+			with tf.compat.v1.variable_scope('bn') as sc:
 				num_channels = inputs.get_shape()[-1].value
 				beta = tf.Variable(tf.constant(0.0, shape=[num_channels]),
 					name='beta', trainable=True)
 				gamma = tf.Variable(tf.constant(1.0, shape=[num_channels]),
 					name='gamma', trainable=True)
-				batch_mean, batch_var = tf.nn.moments(inputs, moments_dims, name='moments')
+				batch_mean, batch_var = tf.nn.moments(x=inputs, axes=moments_dims, name='moments')
 				ema = tf.train.ExponentialMovingAverage(decay=0.9)
-				ema_apply_op = tf.cond(is_training,
-					lambda: ema.apply([batch_mean, batch_var]),
-					lambda: tf.no_op())
+				ema_apply_op = tf.cond(pred=is_training,
+					true_fn=lambda: ema.apply([batch_mean, batch_var]),
+					false_fn=lambda: tf.no_op())
 
 				def mean_var_with_update():
 					with tf.control_dependencies([ema_apply_op]):
 						return tf.identity(batch_mean), tf.identity(batch_var)
 
-				mean, var = tf.cond(is_training,
-					mean_var_with_update,
-					lambda: (ema.average(batch_mean), ema.average(batch_var)))
+				mean, var = tf.cond(pred=is_training,
+					true_fn=mean_var_with_update,
+					false_fn=lambda: (ema.average(batch_mean), ema.average(batch_var)))
 				normed = tf.nn.batch_normalization(inputs, mean, var, beta, gamma, 1e-3)
 			return normed
 
 		self.fc[0] = self.concat
 		for i in range(NUM_FC_LAYERS):
-			self.fc_weights[i] = tf.get_variable('fc_weights'+str(i), [1,self.fc[i].get_shape().as_list()[2], NUM_FC_CHANNELS[i]], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-			self.fc_bias[i] = tf.get_variable('fc_bias'+str(i), [NUM_FC_CHANNELS[i]], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-			self.fc[i+1] = tf.nn.conv1d(self.fc[i], self.fc_weights[i], 1, padding='VALID')
+			self.fc_weights[i] = tf.compat.v1.get_variable('fc_weights'+str(i), [1,self.fc[i].get_shape().as_list()[2], NUM_FC_CHANNELS[i]], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+			self.fc_bias[i] = tf.compat.v1.get_variable('fc_bias'+str(i), [NUM_FC_CHANNELS[i]], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+			self.fc[i+1] = tf.nn.conv1d(input=self.fc[i], filters=self.fc_weights[i], stride=1, padding='VALID')
 			self.fc[i+1] = tf.nn.bias_add(self.fc[i+1], self.fc_bias[i])
 			self.fc[i+1] = batch_norm_template(self.fc[i+1],self.is_training_pl,[0,])
 			self.fc[i+1] = tf.nn.relu(self.fc[i+1])
 
 		#output
-		self.fc_weights[-1] = tf.get_variable('fc_weights'+str(NUM_FC_LAYERS), [1,self.fc[-1].get_shape().as_list()[2], num_class], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-		self.fc_bias[-1] = tf.get_variable('fc_bias'+str(NUM_FC_LAYERS), [num_class], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-		self.output = tf.nn.conv1d(self.fc[-1], self.fc_weights[-1], 1, padding='VALID')
+		self.fc_weights[-1] = tf.compat.v1.get_variable('fc_weights'+str(NUM_FC_LAYERS), [1,self.fc[-1].get_shape().as_list()[2], num_class], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+		self.fc_bias[-1] = tf.compat.v1.get_variable('fc_bias'+str(NUM_FC_LAYERS), [num_class], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+		self.output = tf.nn.conv1d(input=self.fc[-1], filters=self.fc_weights[-1], stride=1, padding='VALID')
 		self.output = tf.nn.bias_add(self.output, self.fc_bias[-1])
 
 		#loss functions
-		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.output, labels=self.labels_pl))
+		self.class_loss = tf.reduce_mean(input_tensor=tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.output, labels=self.labels_pl))
 		self.loss = self.class_loss
-		self.correct = tf.equal(tf.argmax(self.output, -1), tf.to_int64(self.labels_pl))
-		self.class_acc = tf.reduce_mean(tf.cast(self.correct, tf.float32)) 
+		self.correct = tf.equal(tf.argmax(input=self.output, axis=-1), tf.cast(self.labels_pl, dtype=tf.int64))
+		self.class_acc = tf.reduce_mean(input_tensor=tf.cast(self.correct, tf.float32)) 
 
 		#optimizer
 		self.batch = tf.Variable(0)
-		self.learning_rate = tf.train.exponential_decay(BASE_LEARNING_RATE,self.batch,500,0.5,staircase=True)
-		self.optimizer = tf.train.AdamOptimizer(self.learning_rate)
+		self.learning_rate = tf.compat.v1.train.exponential_decay(BASE_LEARNING_RATE,self.batch,500,0.5,staircase=True)
+		self.optimizer = tf.compat.v1.train.AdamOptimizer(self.learning_rate)
 		self.train_op = self.optimizer.minimize(self.loss, global_step=self.batch)
 
 def sample_and_group(npoint, radius, nsample, xyz, points):
@@ -125,26 +125,26 @@ def sample_and_group(npoint, radius, nsample, xyz, points):
 #PointNet Set Abstraction (SA) Module
 def pointnet_sa_module(xyz, points, npoint, radius, nsample, mlp, mlp2, group_all, is_training, bn_decay, scope):
 	data_format = 'NHWC'
-	with tf.variable_scope(scope) as sc:
+	with tf.compat.v1.variable_scope(scope) as sc:
 		new_xyz, new_points, idx, grouped_xyz = sample_and_group(npoint, radius, nsample, xyz, points)
 		kernel = [None]*len(mlp)
 		bias = [None]*len(mlp)
 		for i, num_out_channel in enumerate(mlp):
-			kernel[i] = tf.get_variable('kernel'+str(i), [1,1,new_points.get_shape()[-1].value, num_out_channel], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-			bias[i] = tf.get_variable('bias'+str(i), [num_out_channel], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-			new_points = tf.nn.conv2d(new_points, kernel[i], [1, 1, 1, 1], padding='VALID')
+			kernel[i] = tf.compat.v1.get_variable('kernel'+str(i), [1,1,new_points.get_shape()[-1].value, num_out_channel], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+			bias[i] = tf.compat.v1.get_variable('bias'+str(i), [num_out_channel], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+			new_points = tf.nn.conv2d(input=new_points, filters=kernel[i], strides=[1, 1, 1, 1], padding='VALID')
 			new_points = tf.nn.bias_add(new_points, bias[i])
 			new_points = tf.nn.relu(new_points)
-		new_points = tf.reduce_max(new_points, axis=[2], keep_dims=True, name='maxpool')
+		new_points = tf.reduce_max(input_tensor=new_points, axis=[2], keepdims=True, name='maxpool')
 		new_points = tf.squeeze(new_points, [2]) # (batch_size, npoints, mlp2[-1])
 		return new_xyz, new_points, idx
 
 #PointNet Feature Propogation (FP) Module
 def pointnet_fp_module(xyz1, xyz2, points1, points2, mlp, is_training, bn_decay, scope):
-	with tf.variable_scope(scope) as sc:
+	with tf.compat.v1.variable_scope(scope) as sc:
 		dist, idx = three_nn(xyz1, xyz2)
 		dist = tf.maximum(dist, 1e-10)
-		norm = tf.reduce_sum((1.0/dist),axis=2,keep_dims=True)
+		norm = tf.reduce_sum(input_tensor=(1.0/dist),axis=2,keepdims=True)
 		norm = tf.tile(norm,[1,1,3])
 		weight = (1.0/dist) / norm
 		interpolated_points = three_interpolate(points2, idx, weight)
@@ -158,9 +158,9 @@ def pointnet_fp_module(xyz1, xyz2, points1, points2, mlp, is_training, bn_decay,
 		kernel = [None]*len(mlp)
 		bias = [None]*len(mlp)
 		for i, num_out_channel in enumerate(mlp):
-			kernel[i] = tf.get_variable('kernel'+str(i), [1,1,new_points1.get_shape()[-1].value, num_out_channel], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-			bias[i] = tf.get_variable('bias'+str(i), [num_out_channel], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-			new_points1 = tf.nn.conv2d(new_points1, kernel[i], [1, 1, 1, 1], padding='VALID')
+			kernel[i] = tf.compat.v1.get_variable('kernel'+str(i), [1,1,new_points1.get_shape()[-1].value, num_out_channel], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+			bias[i] = tf.compat.v1.get_variable('bias'+str(i), [num_out_channel], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+			new_points1 = tf.nn.conv2d(input=new_points1, filters=kernel[i], strides=[1, 1, 1, 1], padding='VALID')
 			new_points1 = tf.nn.bias_add(new_points1, bias[i])
 			new_points1 = tf.nn.relu(new_points1)
 		new_points1 = tf.squeeze(new_points1, [2]) # B,ndataset1,mlp[-1]s
@@ -170,9 +170,9 @@ def pointnet_fp_module(xyz1, xyz2, points1, points2, mlp, is_training, bn_decay,
 class PointNet2():
 	def __init__(self,batch_size, num_point, num_class):
 		input_channels = 6
-		self.pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, input_channels))
-		self.labels_pl = tf.placeholder(tf.int32, shape=(batch_size, num_point))
-		self.is_training_pl = tf.placeholder(tf.bool, shape=())
+		self.pointclouds_pl = tf.compat.v1.placeholder(tf.float32, shape=(batch_size, num_point, input_channels))
+		self.labels_pl = tf.compat.v1.placeholder(tf.int32, shape=(batch_size, num_point))
+		self.is_training_pl = tf.compat.v1.placeholder(tf.bool, shape=())
 		l0_xyz = self.pointclouds_pl[:,:,:3]
 #		l0_points = None
 		l0_points = self.pointclouds_pl[:,:,3:]
@@ -191,23 +191,23 @@ class PointNet2():
 
 		# FC layers
 		l0_points = tf.reshape(l0_points, [batch_size, num_point, 128])
-		kernel1 = tf.get_variable('kernel1', [1, 128, 128], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-		bias1 = tf.get_variable('bias1', [128], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-		fc1 = tf.nn.conv1d(l0_points, kernel1, 1, padding='VALID')	
+		kernel1 = tf.compat.v1.get_variable('kernel1', [1, 128, 128], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+		bias1 = tf.compat.v1.get_variable('bias1', [128], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+		fc1 = tf.nn.conv1d(input=l0_points, filters=kernel1, stride=1, padding='VALID')	
 		fc1 = tf.nn.bias_add(fc1, bias1)
 		fc1 = tf.nn.relu(fc1)
-		kernel2 = tf.get_variable('kernel2', [1, 128, num_class], initializer=tf.contrib.layers.xavier_initializer(), dtype=tf.float32)
-		bias2 = tf.get_variable('bias2', [num_class], initializer=tf.constant_initializer(0.0), dtype=tf.float32)
-		fc2 = tf.nn.conv1d(fc1, kernel2, 1, padding='VALID')	
+		kernel2 = tf.compat.v1.get_variable('kernel2', [1, 128, num_class], initializer=tf.compat.v1.keras.initializers.VarianceScaling(scale=1.0, mode="fan_avg", distribution="uniform"), dtype=tf.float32)
+		bias2 = tf.compat.v1.get_variable('bias2', [num_class], initializer=tf.compat.v1.constant_initializer(0.0), dtype=tf.float32)
+		fc2 = tf.nn.conv1d(input=fc1, filters=kernel2, stride=1, padding='VALID')	
 		self.output = tf.nn.bias_add(fc2, bias2)
 
 		#LOSS FUNCTIONS
-		self.class_loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.output, labels=self.labels_pl))
-		correct = tf.equal(tf.argmax(self.output, -1), tf.to_int64(self.labels_pl))
-		self.class_acc = tf.reduce_mean(tf.cast(correct, tf.float32)) 
+		self.class_loss = tf.reduce_mean(input_tensor=tf.nn.sparse_softmax_cross_entropy_with_logits(logits=self.output, labels=self.labels_pl))
+		correct = tf.equal(tf.argmax(input=self.output, axis=-1), tf.cast(self.labels_pl, dtype=tf.int64))
+		self.class_acc = tf.reduce_mean(input_tensor=tf.cast(correct, tf.float32)) 
 		self.loss = self.class_loss
 		batch = tf.Variable(0)
-		optimizer = tf.train.AdamOptimizer(0.001)
+		optimizer = tf.compat.v1.train.AdamOptimizer(0.001)
 		self.train_op = optimizer.minimize(self.loss, global_step=batch)
 
 def loadFromH5(filename, load_labels=True):
@@ -364,14 +364,14 @@ if __name__=='__main__':
 				net = PointNet2(BATCH_SIZE,NUM_POINT,NUM_CLASSES)
 			else:
 				net = PointNet(BATCH_SIZE,NUM_POINT,NUM_CLASSES) 
-			saver = tf.train.Saver()
+			saver = tf.compat.v1.train.Saver()
 
-			config = tf.ConfigProto()
+			config = tf.compat.v1.ConfigProto()
 			config.gpu_options.allow_growth = True
 			config.allow_soft_placement = True
 			config.log_device_placement = False
-			sess = tf.Session(config=config)
-			init = tf.global_variables_initializer()
+			sess = tf.compat.v1.Session(config=config)
+			init = tf.compat.v1.global_variables_initializer()
 			sess.run(init, {net.is_training_pl: True})
 
 
